@@ -84,7 +84,11 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Welcome to pactools&#8217;s documentation!</a></li>
+<li><a class="reference internal" href="#">Welcome to pactools&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#cite">Cite</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 </ul>
@@ -122,6 +126,40 @@
   <div class="section" id="welcome-to-pactools-s-documentation">
 <h1>Welcome to pactools&#8217;s documentation!<a class="headerlink" href="#welcome-to-pactools-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
+</div>
+<p id="api-documentation">This package provides tools to estimate <strong>phase-amplitude coupling (PAC)</strong> in neural time series.</p>
+<p>In particular, it implements the <strong>driven auto-regressive (DAR)</strong> models presented in the reference below.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>We recommend the <a class="reference external" href="https://www.continuum.io/downloads">Anaconda Python distribution</a>. To install <code class="docutils literal"><span class="pre">pactools</span></code>, you first need to install its dependencies:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install numpy matplotlib scipy
+</pre></div>
+</div>
+<p>Then install pactools:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install git+https://github.com/pactools/pactools.git#egg=pactools
+</pre></div>
+</div>
+<p>If you do not have admin privileges on the computer, use the <code class="docutils literal"><span class="pre">--user</span></code> flag
+with <cite>pip</cite>. To upgrade, use the <code class="docutils literal"><span class="pre">--upgrade</span></code> flag provided by <cite>pip</cite>.</p>
+<p>To check if everything worked fine, you can do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ python -c &#39;import pactools&#39;
+</pre></div>
+</div>
+<p>and it should not give any error messages.</p>
+</div>
+<div class="section" id="cite">
+<h2>Cite<a class="headerlink" href="#cite" title="Permalink to this headline">¶</a></h2>
+<p>If you use this code in your project, please cite:</p>
+<div class="code highlight-default"><div class="highlight"><pre><span></span><span class="nd">@inproceedings</span><span class="p">{</span><span class="n">duprelatour2017parametric</span><span class="p">,</span>
+ <span class="n">title</span><span class="o">=</span><span class="p">{</span><span class="n">Parametric</span> <span class="n">estimation</span> <span class="n">of</span> <span class="n">spectrum</span> <span class="n">driven</span> <span class="n">by</span> <span class="n">an</span> <span class="n">exogenous</span> <span class="n">signal</span><span class="p">},</span>
+ <span class="n">author</span><span class="o">=</span><span class="p">{</span><span class="n">Dupr</span><span class="p">{</span>\<span class="s1">&#39;e} la Tour, Tom and Grenier, Yves and Gramfort, Alexandre},</span>
+ <span class="n">booktitle</span><span class="o">=</span><span class="p">{</span><span class="n">Acoustics</span><span class="p">,</span> <span class="n">Speech</span> <span class="ow">and</span> <span class="n">Signal</span> <span class="n">Processing</span> <span class="p">(</span><span class="n">ICASSP</span><span class="p">),</span> <span class="mi">2017</span> <span class="n">IEEE</span> <span class="n">International</span> <span class="n">Conference</span> <span class="n">on</span><span class="p">},</span>
+ <span class="n">pages</span><span class="o">=</span><span class="p">{</span><span class="mi">4301</span><span class="o">--</span><span class="mi">4305</span><span class="p">},</span>
+ <span class="n">year</span><span class="o">=</span><span class="p">{</span><span class="mi">2017</span><span class="p">},</span>
+ <span class="n">organization</span><span class="o">=</span><span class="p">{</span><span class="n">IEEE</span><span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">

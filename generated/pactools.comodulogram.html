@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pactools.comodulogram &#8212; pactools 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          pactools</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../auto_examples/index.html">Examples</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="https://github.com/pactools/pactools">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">pactools.comodulogram</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/generated/pactools.comodulogram.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container content-container">
+  
+  <div class="section" id="pactools-comodulogram">
+<h1>pactools.comodulogram<a class="headerlink" href="#pactools-comodulogram" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pactools.comodulogram">
+<code class="descclassname">pactools.</code><code class="descname">comodulogram</code><span class="sig-paren">(</span><em>fs</em>, <em>low_sig</em>, <em>high_sig=None</em>, <em>mask=None</em>, <em>low_fq_range=array([  1.</em>, <em>1.47368421</em>, <em>1.94736842</em>, <em>2.42105263</em>, <em>2.89473684</em>, <em>3.36842105</em>, <em>3.84210526</em>, <em>4.31578947</em>, <em>4.78947368</em>, <em>5.26315789</em>, <em>5.73684211</em>, <em>6.21052632</em>, <em>6.68421053</em>, <em>7.15789474</em>, <em>7.63157895</em>, <em>8.10526316</em>, <em>8.57894737</em>, <em>9.05263158</em>, <em>9.52631579</em>, <em>10.        ])</em>, <em>high_fq_range=array([  10.</em>, <em>12.85714286</em>, <em>15.71428571</em>, <em>18.57142857</em>, <em>21.42857143</em>, <em>24.28571429</em>, <em>27.14285714</em>, <em>30.</em>, <em>32.85714286</em>, <em>35.71428571</em>, <em>38.57142857</em>, <em>41.42857143</em>, <em>44.28571429</em>, <em>47.14285714</em>, <em>50.</em>, <em>52.85714286</em>, <em>55.71428571</em>, <em>58.57142857</em>, <em>61.42857143</em>, <em>64.28571429</em>, <em>67.14285714</em>, <em>70.</em>, <em>72.85714286</em>, <em>75.71428571</em>, <em>78.57142857</em>, <em>81.42857143</em>, <em>84.28571429</em>, <em>87.14285714</em>, <em>90.</em>, <em>92.85714286</em>, <em>95.71428571</em>, <em>98.57142857</em>, <em>101.42857143</em>, <em>104.28571429</em>, <em>107.14285714</em>, <em>110.</em>, <em>112.85714286</em>, <em>115.71428571</em>, <em>118.57142857</em>, <em>121.42857143</em>, <em>124.28571429</em>, <em>127.14285714</em>, <em>130.</em>, <em>132.85714286</em>, <em>135.71428571</em>, <em>138.57142857</em>, <em>141.42857143</em>, <em>144.28571429</em>, <em>147.14285714</em>, <em>150.        ])</em>, <em>low_fq_width=2.0</em>, <em>high_fq_width=20.0</em>, <em>method='tort'</em>, <em>n_surrogates=0</em>, <em>draw=False</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>progress_bar=True</em>, <em>draw_phase=False</em>, <em>minimum_shift=1.0</em>, <em>random_state=None</em>, <em>coherence_params={}</em>, <em>low_fq_width_2=4.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/comodulogram.html#comodulogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.comodulogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the comodulogram for Phase Amplitude Coupling (PAC).</p>
+<dl class="docutils">
+<dt>fs</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float,</span><dd>Sampling frequency</dd>
+<dt>low_sig</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array, shape (n_epochs, n_points)</span><dd>Input data for the phase signal</dd>
+<dt>high_sig</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array or None, shape (n_epochs, n_points)</span><dd>Input data for the amplitude signal.
+If None, we use low_sig for both signals.</dd>
+<dt>mask</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array or list of array or None, shape (n_epochs, n_points)</span><dd>The PAC is only evaluated where the mask is False.
+Masking is done after filtering and Hilbert transform.
+If the method computes the bicoherence, the mask has to be
+unidimensional (n_points, ) and the same mask is applied on all epochs.
+If a list is given, the filtering is done only once and the
+comodulogram is computed on each mask.</dd>
+<dt>low_fq_range</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array or list</span><dd>List of filtering frequencies (phase signal)</dd>
+<dt>high_fq_range</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array or list</span><dd>List of filtering frequencies (amplitude signal)</dd>
+<dt>low_fq_width</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd>Bandwidth of the band-pass filter (phase signal)</dd>
+<dt>high_fq_width</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd>Bandwidth of the band-pass filter (amplitude signal)</dd>
+<dt>method</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">string or DAR instance</span><dd><dl class="first last docutils">
+<dt>Modulation index method:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>String in (&#8216;ozkurt&#8217;, &#8216;canolty&#8217;, &#8216;tort&#8217;, &#8216;penny&#8217;, ), for a PAC</dt>
+<dd>estimation based on filtering and using the Hilbert transform.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>String in (&#8216;vanwijk&#8217;, ) for a joint AAC and PAC estimation</dt>
+<dd>based on filtering and using the Hilbert transform.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>String in (&#8216;sigl&#8217;, &#8216;nagashima&#8217;, &#8216;hagihira&#8217;, &#8216;bispectrum&#8217;, ), for</dt>
+<dd>a PAC estimation based on the bicoherence.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>String in (&#8216;colgin&#8217;, ) for a PAC estimation</dt>
+<dd>and in (&#8216;jiang&#8217;, ) for a PAC directionality estimation,
+based on filtering and computing coherence.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>String in (&#8216;dar&#8217;, ) or a DAR instance, for a PAC estimation</dt>
+<dd>based on a driven autoregressive model.</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</dd>
+<dt>n_surrogates</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Number of surrogates computed for the z-score
+If n_surrogates &lt;= 1, the z-score is not computed.</dd>
+<dt>draw</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>If True, plot the comodulogram.</dd>
+<dt>vmin, vmax</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span><dd>If not None, it define the min/max value of the plot.</dd>
+<dt>progress_bar</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>If True, a progress bar is shown in stdout.</dd>
+<dt>draw_phase</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>If True, plot the phase distribution in &#8216;tort&#8217; index.</dd>
+<dt>minimum_shift</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd>Minimum time shift (in sec) for the surrogate analysis.</dd>
+<dt>random_state</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">None, int or np.random.RandomState instance</span><dd>Seed or random number generator for the surrogate analysis.</dd>
+<dt>coherence_params</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">dict</span><dd><p class="first">Parameters for methods base on coherence or bicoherence.
+May contain:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>block_length</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int</span><dd>Block length</dd>
+<dt>fft_length</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or None</span><dd>Length of the FFT</dd>
+<dt>step</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">int or None</span><dd>Step between two blocks</dd>
+</dl>
+</div></blockquote>
+<p class="last">If the dictionary is empty, default values will be applied based on
+fs and low_fq_width, with 0.5 overlap windows and no zero-padding.</p>
+</dd>
+<dt>low_fq_width_2</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">float</span><dd>Bandwidth of the band-pass filters centered on low_fq_range, for
+the amplitude signal. Used only with &#8216;vanwijk&#8217; method.</dd>
+</dl>
+<dl class="docutils">
+<dt>comod</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">array, shape (len(low_fq_range), len(high_fq_range))</span><dd>Comodulogram for each couple of frequencies.
+If a list of mask is given, it returns a list of comodulograms.</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+</div>
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/pactools/pactools"><img style="position: absolute; top: 50px; right: 0; border: 0;"
+src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Tom Dupre la Tour.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

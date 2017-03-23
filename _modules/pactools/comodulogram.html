@@ -1,0 +1,1024 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pactools.comodulogram &#8212; pactools 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          pactools</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../auto_examples/index.html">Examples</a></li>
+                <li><a href="../../api.html">API</a></li>
+                <li><a href="https://github.com/pactools/pactools">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container content-container">
+  
+  <h1>Source code for pactools.comodulogram</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">interp1d</span><span class="p">,</span> <span class="n">interp2d</span>
+
+<span class="kn">from</span> <span class="nn">.dar_model.base_dar</span> <span class="k">import</span> <span class="n">BaseDAR</span>
+<span class="kn">from</span> <span class="nn">.dar_model.dar</span> <span class="k">import</span> <span class="n">DAR</span>
+<span class="kn">from</span> <span class="nn">.utils.progress_bar</span> <span class="k">import</span> <span class="n">ProgressBar</span>
+<span class="kn">from</span> <span class="nn">.utils.spectrum</span> <span class="k">import</span> <span class="n">Bicoherence</span><span class="p">,</span> <span class="n">Coherence</span>
+<span class="kn">from</span> <span class="nn">.utils.maths</span> <span class="k">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">argmax_2d</span>
+<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_random_state</span>
+<span class="kn">from</span> <span class="nn">.viz.plot_comodulogram</span> <span class="k">import</span> <span class="n">plot_comodulogram</span>
+<span class="kn">from</span> <span class="nn">.preprocess</span> <span class="k">import</span> <span class="n">extract</span>
+<span class="kn">from</span> <span class="nn">.bandpass_filter</span> <span class="k">import</span> <span class="n">multiple_band_pass</span>
+
+<span class="n">N_BINS_TORT</span> <span class="o">=</span> <span class="mi">18</span>
+
+<span class="n">STANDARD_PAC_METRICS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ozkurt&#39;</span><span class="p">,</span> <span class="s1">&#39;canolty&#39;</span><span class="p">,</span> <span class="s1">&#39;tort&#39;</span><span class="p">,</span> <span class="s1">&#39;penny&#39;</span><span class="p">,</span> <span class="s1">&#39;vanwijk&#39;</span><span class="p">]</span>
+<span class="n">MODEL_BASED_PAC_METRICS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;dar&#39;</span><span class="p">,</span> <span class="p">]</span>
+<span class="n">COHERENCE_PAC_METRICS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;jiang&#39;</span><span class="p">,</span> <span class="s1">&#39;colgin&#39;</span><span class="p">]</span>
+<span class="n">BICOHERENCE_PAC_METRICS</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sigl&#39;</span><span class="p">,</span> <span class="s1">&#39;nagashima&#39;</span><span class="p">,</span> <span class="s1">&#39;hagihira&#39;</span><span class="p">,</span> <span class="s1">&#39;bispectrum&#39;</span><span class="p">]</span>
+
+<span class="n">ALL_PAC_METRICS</span> <span class="o">=</span> <span class="p">(</span><span class="n">STANDARD_PAC_METRICS</span> <span class="o">+</span> <span class="n">MODEL_BASED_PAC_METRICS</span> <span class="o">+</span>
+                   <span class="n">COHERENCE_PAC_METRICS</span> <span class="o">+</span> <span class="n">BICOHERENCE_PAC_METRICS</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="comodulogram"><a class="viewcode-back" href="../../generated/pactools.comodulogram.html#pactools.comodulogram">[docs]</a><span class="k">def</span> <span class="nf">comodulogram</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">low_fq_range</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+                 <span class="n">high_fq_range</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">150.0</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+                 <span class="n">high_fq_width</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;tort&#39;</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">draw_phase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">minimum_shift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coherence_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
+                 <span class="n">low_fq_width_2</span><span class="o">=</span><span class="mf">4.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the comodulogram for Phase Amplitude Coupling (PAC).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fs : float,</span>
+<span class="sd">        Sampling frequency</span>
+
+<span class="sd">    low_sig : array, shape (n_epochs, n_points)</span>
+<span class="sd">        Input data for the phase signal</span>
+
+<span class="sd">    high_sig : array or None, shape (n_epochs, n_points)</span>
+<span class="sd">        Input data for the amplitude signal.</span>
+<span class="sd">        If None, we use low_sig for both signals.</span>
+
+<span class="sd">    mask : array or list of array or None, shape (n_epochs, n_points)</span>
+<span class="sd">        The PAC is only evaluated where the mask is False.</span>
+<span class="sd">        Masking is done after filtering and Hilbert transform.</span>
+<span class="sd">        If the method computes the bicoherence, the mask has to be</span>
+<span class="sd">        unidimensional (n_points, ) and the same mask is applied on all epochs.</span>
+<span class="sd">        If a list is given, the filtering is done only once and the</span>
+<span class="sd">        comodulogram is computed on each mask.</span>
+
+<span class="sd">    low_fq_range : array or list</span>
+<span class="sd">        List of filtering frequencies (phase signal)</span>
+
+<span class="sd">    high_fq_range : array or list</span>
+<span class="sd">        List of filtering frequencies (amplitude signal)</span>
+
+<span class="sd">    low_fq_width : float</span>
+<span class="sd">        Bandwidth of the band-pass filter (phase signal)</span>
+
+<span class="sd">    high_fq_width : float</span>
+<span class="sd">        Bandwidth of the band-pass filter (amplitude signal)</span>
+
+<span class="sd">    method : string or DAR instance</span>
+<span class="sd">        Modulation index method:</span>
+<span class="sd">            - String in (&#39;ozkurt&#39;, &#39;canolty&#39;, &#39;tort&#39;, &#39;penny&#39;, ), for a PAC</span>
+<span class="sd">                estimation based on filtering and using the Hilbert transform.</span>
+<span class="sd">            - String in (&#39;vanwijk&#39;, ) for a joint AAC and PAC estimation</span>
+<span class="sd">                based on filtering and using the Hilbert transform.</span>
+<span class="sd">            - String in (&#39;sigl&#39;, &#39;nagashima&#39;, &#39;hagihira&#39;, &#39;bispectrum&#39;, ), for</span>
+<span class="sd">                a PAC estimation based on the bicoherence.</span>
+<span class="sd">            - String in (&#39;colgin&#39;, ) for a PAC estimation</span>
+<span class="sd">                and in (&#39;jiang&#39;, ) for a PAC directionality estimation,</span>
+<span class="sd">                based on filtering and computing coherence.</span>
+<span class="sd">            - String in (&#39;dar&#39;, ) or a DAR instance, for a PAC estimation</span>
+<span class="sd">                based on a driven autoregressive model.</span>
+
+<span class="sd">    n_surrogates : int</span>
+<span class="sd">        Number of surrogates computed for the z-score</span>
+<span class="sd">        If n_surrogates &lt;= 1, the z-score is not computed.</span>
+
+<span class="sd">    draw : boolean</span>
+<span class="sd">        If True, plot the comodulogram.</span>
+
+<span class="sd">    vmin, vmax : float or None</span>
+<span class="sd">        If not None, it define the min/max value of the plot.</span>
+
+<span class="sd">    progress_bar : boolean</span>
+<span class="sd">        If True, a progress bar is shown in stdout.</span>
+
+<span class="sd">    draw_phase : boolean</span>
+<span class="sd">        If True, plot the phase distribution in &#39;tort&#39; index.</span>
+
+<span class="sd">    minimum_shift : float</span>
+<span class="sd">        Minimum time shift (in sec) for the surrogate analysis.</span>
+
+<span class="sd">    random_state : None, int or np.random.RandomState instance</span>
+<span class="sd">        Seed or random number generator for the surrogate analysis.</span>
+
+<span class="sd">    coherence_params : dict</span>
+<span class="sd">        Parameters for methods base on coherence or bicoherence.</span>
+<span class="sd">        May contain:</span>
+<span class="sd">            block_length : int</span>
+<span class="sd">                Block length</span>
+<span class="sd">            fft_length : int or None</span>
+<span class="sd">                Length of the FFT</span>
+<span class="sd">            step : int or None</span>
+<span class="sd">                Step between two blocks</span>
+<span class="sd">        If the dictionary is empty, default values will be applied based on</span>
+<span class="sd">        fs and low_fq_width, with 0.5 overlap windows and no zero-padding.</span>
+
+<span class="sd">    low_fq_width_2 : float</span>
+<span class="sd">        Bandwidth of the band-pass filters centered on low_fq_range, for</span>
+<span class="sd">        the amplitude signal. Used only with &#39;vanwijk&#39; method.</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ------</span>
+<span class="sd">    comod : array, shape (len(low_fq_range), len(high_fq_range))</span>
+<span class="sd">        Comodulogram for each couple of frequencies.</span>
+<span class="sd">        If a list of mask is given, it returns a list of comodulograms.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+    <span class="n">low_sig</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">low_sig</span><span class="p">)</span>
+    <span class="n">high_sig</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">accept_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># convert to numpy array</span>
+    <span class="n">low_fq_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">low_fq_range</span><span class="p">)</span>
+    <span class="n">high_fq_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">high_fq_range</span><span class="p">)</span>
+
+    <span class="n">multiple_masks</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span>
+                      <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">mask</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multiple_masks</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">check_array</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">accept_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mask</span><span class="p">]</span>
+    <span class="n">n_masks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">STANDARD_PAC_METRICS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">high_sig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">high_sig</span> <span class="o">=</span> <span class="n">low_sig</span>
+
+        <span class="k">if</span> <span class="n">progress_bar</span><span class="p">:</span>
+            <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="s1">&#39;comodulogram: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">method</span><span class="p">,</span>
+                                       <span class="n">max_value</span><span class="o">=</span><span class="n">low_fq_range</span><span class="o">.</span><span class="n">size</span> <span class="o">*</span> <span class="n">n_masks</span><span class="p">)</span>
+
+        <span class="c1"># compute a number of band-pass filtered and Hilbert filtered signals</span>
+        <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">multiple_band_pass</span><span class="p">(</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="p">,</span>
+                                           <span class="n">high_fq_width</span><span class="p">)</span>
+        <span class="n">filtered_low</span> <span class="o">=</span> <span class="n">multiple_band_pass</span><span class="p">(</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span>
+                                          <span class="n">low_fq_width</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;vanwijk&#39;</span><span class="p">:</span>
+            <span class="n">filtered_low_2</span> <span class="o">=</span> <span class="n">multiple_band_pass</span><span class="p">(</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span>
+                                                <span class="n">low_fq_width_2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filtered_low_2</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">comod_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">this_mask</span> <span class="ow">in</span> <span class="n">mask</span><span class="p">:</span>
+            <span class="n">comod</span> <span class="o">=</span> <span class="n">_comodulogram</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">filtered_low</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">this_mask</span><span class="p">,</span>
+                                  <span class="n">method</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">,</span>
+                                  <span class="n">draw_phase</span><span class="p">,</span> <span class="n">minimum_shift</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span>
+                                  <span class="n">filtered_low_2</span><span class="p">)</span>
+            <span class="n">comod_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comod</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">COHERENCE_PAC_METRICS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">high_sig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">high_sig</span> <span class="o">=</span> <span class="n">low_sig</span>
+
+        <span class="k">if</span> <span class="n">progress_bar</span><span class="p">:</span>
+            <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="s1">&#39;coherence: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">method</span><span class="p">,</span>
+                                       <span class="n">max_value</span><span class="o">=</span><span class="n">n_masks</span><span class="p">)</span>
+
+        <span class="c1"># compute a number of band-pass filtered and Hilbert filtered signals</span>
+        <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">multiple_band_pass</span><span class="p">(</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="p">,</span>
+                                           <span class="n">high_fq_width</span><span class="p">)</span>
+
+        <span class="n">comod_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">this_mask</span> <span class="ow">in</span> <span class="n">mask</span><span class="p">:</span>
+            <span class="n">comod</span> <span class="o">=</span> <span class="n">_coherence</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">this_mask</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
+                               <span class="n">low_fq_range</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="p">,</span>
+                               <span class="n">minimum_shift</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span> <span class="n">progress_bar</span><span class="p">,</span>
+                               <span class="n">coherence_params</span><span class="p">)</span>
+            <span class="n">comod_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comod</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">progress_bar</span><span class="p">:</span>
+                <span class="n">progress_bar</span><span class="o">.</span><span class="n">update_with_increment_value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># compute PAC with the bispectrum/bicoherence</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">BICOHERENCE_PAC_METRICS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">high_sig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Impossible to use a bicoherence method (</span><span class="si">%s</span><span class="s2">) on two signals, &quot;</span>
+                <span class="s2">&quot;please try another method.&quot;</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n_surrogates</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                <span class="s2">&quot;Surrogate analysis with a bicoherence method (</span><span class="si">%s</span><span class="s2">) &quot;</span>
+                <span class="s2">&quot;is not implemented.&quot;</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">progress_bar</span><span class="p">:</span>
+            <span class="n">progress_bar</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="s1">&#39;bicoherence: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">method</span><span class="p">,</span>
+                                       <span class="n">max_value</span><span class="o">=</span><span class="n">n_masks</span><span class="p">)</span>
+
+        <span class="n">comod_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">this_mask</span> <span class="ow">in</span> <span class="n">mask</span><span class="p">:</span>
+            <span class="n">comod</span> <span class="o">=</span> <span class="n">_bicoherence</span><span class="p">(</span>
+                <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">sig</span><span class="o">=</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">this_mask</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                <span class="n">low_fq_range</span><span class="o">=</span><span class="n">low_fq_range</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
+                <span class="n">high_fq_range</span><span class="o">=</span><span class="n">high_fq_range</span><span class="p">,</span> <span class="n">coherence_params</span><span class="o">=</span><span class="n">coherence_params</span><span class="p">)</span>
+            <span class="n">comod_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comod</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">progress_bar</span><span class="p">:</span>
+                <span class="n">progress_bar</span><span class="o">.</span><span class="n">update_with_increment_value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">BaseDAR</span><span class="p">)</span> <span class="ow">or</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">MODEL_BASED_PAC_METRICS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;dar&#39;</span><span class="p">:</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="n">DAR</span><span class="p">(</span><span class="n">ordar</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">comod_list</span> <span class="o">=</span> <span class="n">driven_comodulogram</span><span class="p">(</span>
+            <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_sig</span><span class="o">=</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="o">=</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+            <span class="n">low_fq_range</span><span class="o">=</span><span class="n">low_fq_range</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
+            <span class="n">high_fq_range</span><span class="o">=</span><span class="n">high_fq_range</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span>
+            <span class="n">n_surrogates</span><span class="o">=</span><span class="n">n_surrogates</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">minimum_shift</span><span class="o">=</span><span class="n">minimum_shift</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;unknown method: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">draw</span><span class="p">:</span>
+        <span class="n">contours</span> <span class="o">=</span> <span class="mf">4.0</span> <span class="k">if</span> <span class="n">n_surrogates</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">plot_comodulogram</span><span class="p">(</span><span class="n">comod_list</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="p">,</span>
+                          <span class="n">contours</span><span class="o">=</span><span class="n">contours</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multiple_masks</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">comod_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">comod_list</span></div>
+
+
+<span class="k">def</span> <span class="nf">driven_comodulogram</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span>
+                        <span class="n">high_fq_range</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="p">,</span> <span class="n">dar_method</span><span class="o">=</span><span class="s1">&#39;kl&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                        <span class="n">ordar</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">enf</span><span class="o">=</span><span class="mf">50.</span><span class="p">,</span> <span class="n">random_noise</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">whitening</span><span class="o">=</span><span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                        <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">minimum_shift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the comodulogram with a DAR model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fs : float,</span>
+<span class="sd">        Sampling frequency</span>
+
+<span class="sd">    low_sig : array, shape (n_epochs, n_points)</span>
+<span class="sd">        Input data for the phase signal</span>
+
+<span class="sd">    high_sig : array or None, shape (n_epochs, n_points)</span>
+<span class="sd">        Input data for the amplitude signal.</span>
+<span class="sd">        If None, we use low_sig for both signals.</span>
+
+<span class="sd">    mask : array or list of array or None, shape (n_epochs, n_points)</span>
+<span class="sd">        The PAC is only evaluated where the mask is False.</span>
+<span class="sd">        Masking is done after filtering and Hilbert transform.</span>
+<span class="sd">        If a list is given, the filtering is done only once and the</span>
+<span class="sd">        comodulogram is computed on each mask.</span>
+
+<span class="sd">    model : DAR instance</span>
+<span class="sd">        DAR model to be used for the comodulogram</span>
+
+<span class="sd">    low_fq_range : array or list</span>
+<span class="sd">        List of filtering frequencies (phase signal)</span>
+
+<span class="sd">    high_fq_range : array or list</span>
+<span class="sd">        List of filtering frequencies (amplitude signal). This is not used for</span>
+<span class="sd">        filtering since DAR models do not need filtering of high frequencies.</span>
+<span class="sd">        This is only used to interpolate the spectrum, in order to</span>
+<span class="sd">        match the results of ``comodulogram``.</span>
+
+<span class="sd">    low_fq_width : float</span>
+<span class="sd">        Bandwidth of the band-pass filter (phase signal)</span>
+
+<span class="sd">    dar_method : string in (&#39;kl&#39;, firstlast&#39;, &#39;minmax&#39;)</span>
+<span class="sd">        Method for extracting a PAC metric from a DAR model</span>
+
+<span class="sd">    fill : int in (0, 1, 2, 3, 4, 5)</span>
+<span class="sd">        Method to fill the spectral gap when removing the low frequencies</span>
+
+<span class="sd">    ordar : int</span>
+<span class="sd">        Order of the AR model used for whitening</span>
+
+<span class="sd">    enf : float</span>
+<span class="sd">        Electric network frequency, that will be removed</span>
+
+<span class="sd">    random_noise : array or None, shape (n_points)</span>
+<span class="sd">        Noise to be used to in the filling strategy</span>
+
+<span class="sd">    normalize : boolean</span>
+<span class="sd">        If True, the filtered signal is normalized</span>
+
+<span class="sd">    whitening : boolean</span>
+<span class="sd">        If True, the filtered signal is whitened</span>
+
+<span class="sd">    progress_bar : boolean</span>
+<span class="sd">        If True, a progress bar is shown in stdout</span>
+
+<span class="sd">    n_surrogates : int</span>
+<span class="sd">        Number of surrogates computed for the z-score</span>
+<span class="sd">        If n_surrogates &lt;= 1, the z-score is not computed.</span>
+
+<span class="sd">    minimum_shift : float</span>
+<span class="sd">        Minimum time shift (in sec) for the surrogate analysis</span>
+
+<span class="sd">    random_state : None, int or np.random.RandomState instance</span>
+<span class="sd">        Seed or random number generator for the surrogate analysis</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ------</span>
+<span class="sd">    comod : array, shape (len(low_fq_range), len(high_fq_range))</span>
+<span class="sd">        Comodulogram for each couple of frequencies</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">random_state</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">low_sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">low_sig</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">high_sig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sigs</span> <span class="o">=</span> <span class="n">low_sig</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># hack to call only once extract</span>
+        <span class="n">high_sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">high_sig</span><span class="p">)</span>
+        <span class="n">sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">]</span>
+        <span class="n">n_epochs</span> <span class="o">=</span> <span class="n">low_sig</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigs</span><span class="p">)</span>
+
+    <span class="n">multiple_masks</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span>
+                      <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">mask</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multiple_masks</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">check_array</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span> <span class="n">accept_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mask</span><span class="p">]</span>
+
+    <span class="n">extract_complex</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">comod_list</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">progress_bar</span><span class="p">:</span>
+        <span class="n">bar</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="n">max_value</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">low_fq_range</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span>
+                          <span class="n">title</span><span class="o">=</span><span class="s1">&#39;comodulogram: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                          <span class="n">model</span><span class="o">.</span><span class="n">get_title</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">filtered_signals</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+            <span class="n">extract</span><span class="p">(</span><span class="n">sigs</span><span class="o">=</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="o">=</span><span class="n">low_fq_range</span><span class="p">,</span>
+                    <span class="n">bandwidth</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="n">ordar</span><span class="p">,</span> <span class="n">enf</span><span class="o">=</span><span class="n">enf</span><span class="p">,</span>
+                    <span class="n">random_noise</span><span class="o">=</span><span class="n">random_noise</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span>
+                    <span class="n">whitening</span><span class="o">=</span><span class="n">whitening</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                    <span class="n">extract_complex</span><span class="o">=</span><span class="n">extract_complex</span><span class="p">,</span>
+                    <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)):</span>
+
+        <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
+            <span class="n">filtered_low</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">filtered_low_imag</span> <span class="o">=</span> <span class="n">filtered_signals</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filtered_low</span><span class="p">,</span> <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">filtered_signals</span>
+
+        <span class="k">if</span> <span class="n">high_sig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">)</span>
+            <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
+                <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low_imag</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sigin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">[</span><span class="n">n_epochs</span><span class="p">:])</span>
+            <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[:</span><span class="n">n_epochs</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
+                <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low_imag</span><span class="p">[:</span><span class="n">n_epochs</span><span class="p">])</span>
+
+        <span class="n">sigin</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
+        <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sigdriv</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="k">for</span> <span class="n">i_mask</span><span class="p">,</span> <span class="n">this_mask</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mask</span><span class="p">):</span>
+
+            <span class="k">def</span> <span class="nf">comod_function</span><span class="p">(</span><span class="n">shift</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_one_driven_modulation_index</span><span class="p">(</span>
+                    <span class="n">fs</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">this_mask</span><span class="p">,</span>
+                    <span class="n">dar_method</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+
+            <span class="n">comod</span> <span class="o">=</span> <span class="n">_surrogate_analysis</span><span class="p">(</span><span class="n">comod_function</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span>
+                                        <span class="n">minimum_shift</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span>
+                                        <span class="n">n_surrogates</span><span class="p">)</span>
+
+            <span class="c1"># initialize the comodulogram arrays</span>
+            <span class="k">if</span> <span class="n">comod_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">comod_list</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">mask</span><span class="p">:</span>
+                    <span class="n">comod_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">low_fq_range</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">comod</span><span class="o">.</span><span class="n">size</span><span class="p">)))</span>
+            <span class="n">comod_list</span><span class="p">[</span><span class="n">i_mask</span><span class="p">][</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">comod</span>
+
+            <span class="k">if</span> <span class="n">progress_bar</span><span class="p">:</span>
+                <span class="n">bar</span><span class="o">.</span><span class="n">update_with_increment_value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">multiple_masks</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">comod_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">comod_list</span>
+
+
+<span class="k">def</span> <span class="nf">_comodulogram</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">filtered_low</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="p">,</span>
+                  <span class="n">progress_bar</span><span class="p">,</span> <span class="n">draw_phase</span><span class="p">,</span> <span class="n">minimum_shift</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span>
+                  <span class="n">filtered_low_2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function to compute the comodulogram.</span>
+<span class="sd">    Used by PAC method in STANDARD_PAC_METRICS.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The modulation index is only computed where mask is True</span>
+    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">filtered_low</span> <span class="o">=</span> <span class="n">filtered_low</span><span class="p">[:,</span> <span class="o">~</span><span class="n">mask</span><span class="p">]</span>
+        <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">filtered_high</span><span class="p">[:,</span> <span class="o">~</span><span class="n">mask</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;vanwijk&#39;</span><span class="p">:</span>
+            <span class="n">filtered_low_2</span> <span class="o">=</span> <span class="n">filtered_low_2</span><span class="p">[:,</span> <span class="o">~</span><span class="n">mask</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">filtered_low</span> <span class="o">=</span> <span class="n">filtered_low</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">filtered_low</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">filtered_high</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">filtered_high</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;vanwijk&#39;</span><span class="p">:</span>
+            <span class="n">filtered_low_2</span> <span class="o">=</span> <span class="n">filtered_low_2</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">filtered_low_2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                    <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">n_low</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">filtered_low</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">n_high</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">filtered_high</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1"># phase of the low frequency signals</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_low</span><span class="p">):</span>
+        <span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">filtered_low</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">)</span>
+
+    <span class="c1"># amplitude of the high frequency signals</span>
+    <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">))</span>
+    <span class="n">norm_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_high</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;ozkurt&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_high</span><span class="p">):</span>
+            <span class="n">norm_a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+
+    <span class="c1"># amplitude of the low frequency signals</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;vanwijk&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_low</span><span class="p">):</span>
+            <span class="n">filtered_low_2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">filtered_low_2</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">filtered_low_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">filtered_low_2</span><span class="p">)</span>
+
+    <span class="c1"># Calculate the modulation index for each couple</span>
+    <span class="n">comod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_low</span><span class="p">,</span> <span class="n">n_high</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_low</span><span class="p">):</span>
+        <span class="c1"># preproces the phase array</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;tort&#39;</span><span class="p">:</span>
+            <span class="n">n_bins</span> <span class="o">=</span> <span class="n">N_BINS_TORT</span>
+            <span class="n">phase_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n_bins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># get the indices of the bins to which each value in input belongs</span>
+            <span class="n">phase_preprocessed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">phase_bins</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;penny&#39;</span><span class="p">:</span>
+            <span class="n">phase_preprocessed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span>
+                <span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">])]</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;vanwijk&#39;</span><span class="p">:</span>
+            <span class="n">phase_preprocessed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span>
+                <span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span> <span class="n">filtered_low_2</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;canolty&#39;</span><span class="p">,</span> <span class="s1">&#39;ozkurt&#39;</span><span class="p">):</span>
+            <span class="n">phase_preprocessed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown method </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_high</span><span class="p">):</span>
+
+            <span class="k">def</span> <span class="nf">comod_function</span><span class="p">(</span><span class="n">shift</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">_one_modulation_index</span><span class="p">(</span>
+                    <span class="n">amplitude</span><span class="o">=</span><span class="n">filtered_high</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
+                    <span class="n">phase_preprocessed</span><span class="o">=</span><span class="n">phase_preprocessed</span><span class="p">,</span> <span class="n">norm_a</span><span class="o">=</span><span class="n">norm_a</span><span class="p">[</span><span class="n">j</span><span class="p">],</span>
+                    <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="n">shift</span><span class="p">,</span> <span class="n">draw_phase</span><span class="o">=</span><span class="n">draw_phase</span><span class="p">)</span>
+
+            <span class="n">comod</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">_surrogate_analysis</span><span class="p">(</span><span class="n">comod_function</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span>
+                                              <span class="n">minimum_shift</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span>
+                                              <span class="n">n_surrogates</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">progress_bar</span><span class="p">:</span>
+            <span class="n">progress_bar</span><span class="o">.</span><span class="n">update_with_increment_value</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">comod</span>
+
+
+<span class="k">def</span> <span class="nf">_one_modulation_index</span><span class="p">(</span><span class="n">amplitude</span><span class="p">,</span> <span class="n">phase_preprocessed</span><span class="p">,</span> <span class="n">norm_a</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">shift</span><span class="p">,</span>
+                          <span class="n">draw_phase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute one modulation index.</span>
+<span class="sd">    Used by PAC method in STANDARD_PAC_METRICS.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># shift for the surrogate analysis</span>
+    <span class="k">if</span> <span class="n">shift</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">phase_preprocessed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">phase_preprocessed</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+
+    <span class="c1"># Modulation index as in [Ozkurt &amp; al 2011]</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;ozkurt&#39;</span><span class="p">:</span>
+        <span class="n">MI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">phase_preprocessed</span><span class="p">))</span>
+        <span class="n">MI</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">amplitude</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">/</span> <span class="n">norm_a</span>
+
+    <span class="c1"># Generalized linear models as in [Penny &amp; al 2008] or [van Wijk &amp; al 2015]</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;penny&#39;</span><span class="p">,</span> <span class="s1">&#39;vanwijk&#39;</span><span class="p">):</span>
+        <span class="c1"># solve a linear regression problem:</span>
+        <span class="c1"># amplitude = np.dot(phase_preprocessed) * beta</span>
+        <span class="n">PtP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phase_preprocessed</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">phase_preprocessed</span><span class="p">)</span>
+        <span class="n">PtA</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phase_preprocessed</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">amplitude</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">])</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">PtP</span><span class="p">,</span> <span class="n">PtA</span><span class="p">)</span>
+        <span class="n">residual</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phase_preprocessed</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="n">variance_amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">amplitude</span><span class="p">)</span>
+        <span class="n">variance_residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">var</span><span class="p">(</span><span class="n">residual</span><span class="p">)</span>
+        <span class="n">MI</span> <span class="o">=</span> <span class="p">(</span><span class="n">variance_amplitude</span> <span class="o">-</span> <span class="n">variance_residual</span><span class="p">)</span> <span class="o">/</span> <span class="n">variance_amplitude</span>
+
+    <span class="c1"># Modulation index as in [Canolty &amp; al 2006]</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;canolty&#39;</span><span class="p">:</span>
+        <span class="n">MI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">amplitude</span> <span class="o">*</span> <span class="n">phase_preprocessed</span><span class="p">))</span>
+
+    <span class="c1"># Modulation index as in [Tort &amp; al 2010]</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;tort&#39;</span><span class="p">:</span>
+        <span class="c1"># mean amplitude distribution along phase bins</span>
+        <span class="n">n_bins</span> <span class="o">=</span> <span class="n">N_BINS_TORT</span>
+        <span class="n">amplitude_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_bins</span><span class="p">)</span>  <span class="c1"># default is 1 to avoid log(0)</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">phase_preprocessed</span><span class="p">):</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="n">amplitude</span><span class="p">[</span><span class="n">phase_preprocessed</span> <span class="o">==</span> <span class="n">b</span><span class="p">]</span>
+            <span class="n">amplitude_dist</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">selection</span><span class="p">)</span>
+
+        <span class="c1"># Kullback-Leibler divergence of the distribution vs uniform</span>
+        <span class="n">amplitude_dist</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">amplitude_dist</span><span class="p">)</span>
+        <span class="n">divergence_kl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">amplitude_dist</span> <span class="o">*</span>
+                               <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">amplitude_dist</span> <span class="o">*</span> <span class="n">n_bins</span><span class="p">))</span>
+
+        <span class="n">MI</span> <span class="o">=</span> <span class="n">divergence_kl</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n_bins</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">draw_phase</span> <span class="ow">and</span> <span class="n">shift</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">phase_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n_bins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">phase_bins</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">phase_bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">phase_bins</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">180</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phase_bins</span><span class="p">,</span> <span class="n">amplitude_dist</span><span class="p">,</span> <span class="s1">&#39;.-&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phase_bins</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_bins</span><span class="p">)</span> <span class="o">/</span> <span class="n">n_bins</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mf">2.</span> <span class="o">/</span> <span class="n">n_bins</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="o">-</span><span class="mi">180</span><span class="p">,</span> <span class="mi">180</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Normalized mean amplitude&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Phase (in degree)&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Tort index: </span><span class="si">%.3f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">MI</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown method: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">MI</span>
+
+
+<span class="k">def</span> <span class="nf">_same_mask_on_all_epochs</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    PAC metrics based on coherence or bicoherence,</span>
+<span class="sd">    the same mask is applied on all epochs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;For coherence methods (e.g. </span><span class="si">%s</span><span class="s2">) the mask has &quot;</span>
+                      <span class="s2">&quot;to be unidimensional, and the same mask is &quot;</span>
+                      <span class="s2">&quot;applied on all epochs. Got shape </span><span class="si">%s</span><span class="s2">, so only the &quot;</span>
+                      <span class="s2">&quot;first row of the mask is used.&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                          <span class="n">method</span><span class="p">,</span>
+                          <span class="n">mask</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="p">),</span> <span class="ne">UserWarning</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">sig</span> <span class="o">=</span> <span class="n">sig</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="o">~</span><span class="n">mask</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">sig</span>
+
+
+<span class="k">def</span> <span class="nf">_bicoherence</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="p">,</span>
+                 <span class="n">high_fq_range</span><span class="p">,</span> <span class="n">coherence_params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function for the comodulogram.</span>
+<span class="sd">    Used by PAC method in BICOHERENCE_PAC_METRICS.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The modulation index is only computed where mask is True</span>
+    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sig</span> <span class="o">=</span> <span class="n">_same_mask_on_all_epochs</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+
+    <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">coherence_params</span> <span class="o">=</span> <span class="n">_define_default_params</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
+                                              <span class="o">**</span><span class="n">coherence_params</span><span class="p">)</span>
+
+    <span class="n">estimator</span> <span class="o">=</span> <span class="n">Bicoherence</span><span class="p">(</span><span class="o">**</span><span class="n">coherence_params</span><span class="p">)</span>
+    <span class="n">bicoh</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sigs</span><span class="o">=</span><span class="n">sig</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+
+    <span class="c1"># remove the redundant part</span>
+    <span class="n">n_freq</span> <span class="o">=</span> <span class="n">bicoh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">bicoh</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">n_freq</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">bicoh</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">n_freq</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">)</span>
+    <span class="n">comod</span> <span class="o">=</span> <span class="n">_interpolate</span><span class="p">(</span><span class="n">frequencies</span><span class="p">,</span> <span class="n">frequencies</span><span class="p">,</span> <span class="n">bicoh</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="p">,</span>
+                         <span class="n">low_fq_range</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">comod</span>
+
+
+<span class="k">def</span> <span class="nf">_define_default_params</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">user_params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Define default values for Coherence and Bicoherence classes,</span>
+<span class="sd">    if not defined in user_params dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># the FFT length is chosen to have a frequency resolution of low_fq_width</span>
+    <span class="n">fft_length</span> <span class="o">=</span> <span class="n">fs</span> <span class="o">/</span> <span class="n">low_fq_width</span>
+    <span class="c1"># but it is faster if it is a power of 2</span>
+    <span class="n">fft_length</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">fft_length</span><span class="p">)))</span>
+
+    <span class="c1"># smoothing for bicoherence methods</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">BICOHERENCE_PAC_METRICS</span><span class="p">:</span>
+        <span class="n">fft_length</span> <span class="o">/=</span> <span class="mi">4</span>
+    <span class="c1"># not smoothed for because we convolve after</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;jiang&#39;</span><span class="p">:</span>
+        <span class="n">fft_length</span> <span class="o">*=</span> <span class="mi">2</span>
+
+    <span class="c1"># the block length is chosen to avoid zero-padding</span>
+    <span class="n">block_length</span> <span class="o">=</span> <span class="n">fft_length</span>
+
+    <span class="k">if</span> <span class="s1">&#39;block_length&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">user_params</span> <span class="ow">and</span> <span class="s1">&#39;fft_length&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">user_params</span><span class="p">:</span>
+        <span class="n">user_params</span><span class="p">[</span><span class="s1">&#39;block_length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">block_length</span>
+        <span class="n">user_params</span><span class="p">[</span><span class="s1">&#39;fft_length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fft_length</span>
+    <span class="k">elif</span> <span class="s1">&#39;block_length&#39;</span> <span class="ow">in</span> <span class="n">user_params</span> <span class="ow">and</span> <span class="s1">&#39;fft_length&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">user_params</span><span class="p">:</span>
+        <span class="n">user_params</span><span class="p">[</span><span class="s1">&#39;fft_length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_params</span><span class="p">[</span><span class="s1">&#39;block_length&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s1">&#39;block_length&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">user_params</span> <span class="ow">and</span> <span class="s1">&#39;fft_length&#39;</span> <span class="ow">in</span> <span class="n">user_params</span><span class="p">:</span>
+        <span class="n">user_params</span><span class="p">[</span><span class="s1">&#39;block_length&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">user_params</span><span class="p">[</span><span class="s1">&#39;fft_length&#39;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="s1">&#39;fs&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">user_params</span><span class="p">:</span>
+        <span class="n">user_params</span><span class="p">[</span><span class="s1">&#39;fs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fs</span>
+    <span class="k">if</span> <span class="s1">&#39;step&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">user_params</span><span class="p">:</span>
+        <span class="n">user_params</span><span class="p">[</span><span class="s1">&#39;step&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">user_params</span>
+
+
+<span class="k">def</span> <span class="nf">_coherence</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span>
+               <span class="n">low_fq_width</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="p">,</span> <span class="n">minimum_shift</span><span class="p">,</span> <span class="n">random_state</span><span class="p">,</span>
+               <span class="n">progress_bar</span><span class="p">,</span> <span class="n">coherence_params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper function to compute the comodulogram.</span>
+<span class="sd">    Used by PAC method in COHERENCE_PAC_METRICS.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">low_sig</span> <span class="o">=</span> <span class="n">_same_mask_on_all_epochs</span><span class="p">(</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+        <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">_same_mask_on_all_epochs</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+
+    <span class="c1"># amplitude of the high frequency signals</span>
+    <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">))</span>
+
+    <span class="n">coherence_params</span> <span class="o">=</span> <span class="n">_define_default_params</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
+                                              <span class="o">**</span><span class="n">coherence_params</span><span class="p">)</span>
+
+    <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">low_sig</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="k">def</span> <span class="nf">comod_function</span><span class="p">(</span><span class="n">shift</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_one_coherence_modulation_index</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span>
+                                               <span class="n">method</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span>
+                                               <span class="n">coherence_params</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+
+    <span class="n">comod</span> <span class="o">=</span> <span class="n">_surrogate_analysis</span><span class="p">(</span><span class="n">comod_function</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">minimum_shift</span><span class="p">,</span>
+                                <span class="n">random_state</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">comod</span>
+
+
+<span class="k">def</span> <span class="nf">_one_coherence_modulation_index</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span>
+                                    <span class="n">low_fq_range</span><span class="p">,</span> <span class="n">coherence_params</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute one modulation index.</span>
+<span class="sd">    Used by PAC method in COHERENCE_PAC_METRICS.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">shift</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">low_sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+
+    <span class="c1"># the actual frequency resolution is computed here</span>
+    <span class="n">delta_freq</span> <span class="o">=</span> <span class="n">fs</span> <span class="o">/</span> <span class="n">coherence_params</span><span class="p">[</span><span class="s1">&#39;fft_length&#39;</span><span class="p">]</span>
+
+    <span class="n">estimator</span> <span class="o">=</span> <span class="n">Coherence</span><span class="p">(</span><span class="o">**</span><span class="n">coherence_params</span><span class="p">)</span>
+    <span class="n">coherence</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">low_sig</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">filtered_high</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_high</span><span class="p">,</span> <span class="n">n_freq</span> <span class="o">=</span> <span class="n">coherence</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">)</span>
+
+    <span class="c1"># Coherence as in [Colgin &amp; al 2009]</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;colgin&#39;</span><span class="p">:</span>
+        <span class="n">coherence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">coherence</span><span class="p">))</span>
+
+        <span class="n">comod</span> <span class="o">=</span> <span class="n">_interpolate</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_high</span><span class="p">),</span> <span class="n">frequencies</span><span class="p">,</span> <span class="n">coherence</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_high</span><span class="p">),</span> <span class="n">low_fq_range</span><span class="p">)</span>
+
+    <span class="c1"># Phase slope index as in [Jiang &amp; al 2015]</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;jiang&#39;</span><span class="p">:</span>
+        <span class="n">product</span> <span class="o">=</span> <span class="n">coherence</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">coherence</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># we use a kernel of (ker * 2) with respect to the product,</span>
+        <span class="c1"># i.e. a kernel of (ker * 2 +1) with respect to the coherence.</span>
+        <span class="n">ker</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ker</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ker</span><span class="p">)</span>
+        <span class="n">phase_slope_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_high</span><span class="p">,</span> <span class="n">n_freq</span> <span class="o">-</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">ker</span><span class="p">)),</span>
+                                     <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_high</span><span class="p">):</span>
+            <span class="n">phase_slope_index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">convolve</span><span class="p">(</span><span class="n">product</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">kernel</span><span class="p">,</span> <span class="s1">&#39;valid&#39;</span><span class="p">)</span>
+        <span class="n">phase_slope_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">imag</span><span class="p">(</span><span class="n">phase_slope_index</span><span class="p">)</span>
+        <span class="n">frequencies</span> <span class="o">=</span> <span class="n">frequencies</span><span class="p">[</span><span class="n">ker</span><span class="p">:</span><span class="o">-</span><span class="n">ker</span><span class="p">]</span>
+
+        <span class="c1"># transform the phase slope index into an approximated delay</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="n">phase_slope_index</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">delta_freq</span><span class="p">)</span>
+
+        <span class="n">comod</span> <span class="o">=</span> <span class="n">_interpolate</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_high</span><span class="p">),</span> <span class="n">frequencies</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_high</span><span class="p">),</span> <span class="n">low_fq_range</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown method </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">comod</span>
+
+
+<span class="k">def</span> <span class="nf">_interpolate</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Helper to interpolate in 1d or 2d</span>
+
+<span class="sd">    We interpolate to get the same shape than with other methods.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">x1</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">y1</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">interp2d</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">z2</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">x2</span><span class="p">,</span> <span class="n">y2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">x1</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">y1</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">z1</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">z2</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">y1</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">x1</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">z1</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">z2</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Can&#39;t interpolate a scalar.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># interp2d is not intuitive and return this shape:</span>
+    <span class="n">z2</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">y2</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">x2</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">z2</span>
+
+
+<span class="k">def</span> <span class="nf">_one_driven_modulation_index</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
+                                 <span class="n">dar_method</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
+
+    <span class="c1"># shift for the surrogate analysis</span>
+    <span class="k">if</span> <span class="n">shift</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+
+    <span class="c1"># fit the model DAR on the data</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">sigin</span><span class="o">=</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">,</span>
+              <span class="n">train_mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+    <span class="c1"># get PSD difference</span>
+    <span class="n">spec</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">amplitude_frequency</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">dar_method</span> <span class="o">==</span> <span class="s1">&#39;minmax&#39;</span><span class="p">:</span>
+        <span class="n">spec_diff</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">spec</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">dar_method</span> <span class="o">==</span> <span class="s1">&#39;firstlast&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">ordriv_d_</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># min and max of driver&#39;s values</span>
+            <span class="n">spec_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">spec</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">spec</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># largest PSD difference with a phase difference of np.pi</span>
+            <span class="n">n_freq</span><span class="p">,</span> <span class="n">n_phases</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">spec_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">spec</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">n_phases</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">argmax_2d</span><span class="p">(</span><span class="n">spec_diff</span><span class="p">)</span>
+            <span class="n">spec_diff</span> <span class="o">=</span> <span class="n">spec_diff</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">dar_method</span> <span class="o">==</span> <span class="s1">&#39;kl&#39;</span><span class="p">:</span>
+        <span class="c1"># KL divergence for each phase, as in Tort &amp; al 2010</span>
+        <span class="n">n_freq</span><span class="p">,</span> <span class="n">n_phases</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">spec</span> <span class="o">/</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="n">spec_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">spec</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">spec</span> <span class="o">*</span> <span class="n">n_phases</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">spec_diff</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">n_phases</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Wrong DAR dar_method </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">dar_method</span><span class="p">)</span>
+
+    <span class="c1"># crop the spectrum to high_fq_range</span>
+    <span class="n">frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fs</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">spec_diff</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">spec_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">high_fq_range</span><span class="p">,</span> <span class="n">frequencies</span><span class="p">,</span> <span class="n">spec_diff</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">spec_diff</span>
+
+
+<span class="k">def</span> <span class="nf">_get_shifts</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">minimum_shift</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">n_iterations</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Compute the shifts for the surrogate analysis&quot;&quot;&quot;</span>
+    <span class="n">n_minimum_shift</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">fs</span> <span class="o">*</span> <span class="n">minimum_shift</span><span class="p">))</span>
+    <span class="c1"># shift at least minimum_shift seconds, i.e. n_minimum_shift points</span>
+    <span class="k">if</span> <span class="n">n_iterations</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">n_points</span> <span class="o">-</span> <span class="n">n_minimum_shift</span> <span class="o">&lt;</span> <span class="n">n_minimum_shift</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The minimum shift is longer than half the &quot;</span>
+                             <span class="s2">&quot;visible data.&quot;</span><span class="p">)</span>
+
+        <span class="n">shifts</span> <span class="o">=</span> <span class="n">random_state</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span>
+            <span class="n">n_minimum_shift</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">-</span> <span class="n">n_minimum_shift</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">n_iterations</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">shifts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># the first has no shift since this is for the initial computation</span>
+    <span class="n">shifts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">shifts</span>
+
+
+<span class="k">def</span> <span class="nf">_surrogate_analysis</span><span class="p">(</span><span class="n">comod_function</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">minimum_shift</span><span class="p">,</span>
+                        <span class="n">random_state</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Call the comod function for several random time shifts,</span>
+<span class="sd">    then compute the z-score of the result distribution.&quot;&quot;&quot;</span>
+    <span class="c1"># number of  surrogates MIs</span>
+    <span class="n">n_iterations</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">n_surrogates</span><span class="p">)</span>
+
+    <span class="c1"># pre compute all the random time shifts</span>
+    <span class="n">shifts</span> <span class="o">=</span> <span class="n">_get_shifts</span><span class="p">(</span><span class="n">random_state</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">minimum_shift</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span>
+                         <span class="n">n_iterations</span><span class="p">)</span>
+
+    <span class="n">comod_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">shift</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">shifts</span><span class="p">):</span>
+        <span class="n">comod_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">comod_function</span><span class="p">(</span><span class="n">shift</span><span class="p">))</span>
+    <span class="n">comod_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">comod_list</span><span class="p">)</span>
+
+    <span class="c1"># the first has no shift</span>
+    <span class="n">comod</span> <span class="o">=</span> <span class="n">comod_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
+
+    <span class="c1"># here we compute the z-score</span>
+    <span class="k">if</span> <span class="n">n_iterations</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">comod</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">comod_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="o">...</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">comod</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">comod_list</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="o">...</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">comod</span>
+
+
+<span class="k">def</span> <span class="nf">get_maximum_pac</span><span class="p">(</span><span class="n">comodulograms</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get maximum PAC value in a comodulogram.</span>
+<span class="sd">    &#39;low_fq_range&#39; and &#39;high_fq_range&#39; must be the same than used in the</span>
+<span class="sd">    modulation_index function that computed &#39;comodulograms&#39;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    comodulograms : array, shape (n_low, n_high) or (n_comod, n_low, n_high)</span>
+<span class="sd">        Comodulograms containing PAC values.</span>
+<span class="sd">        If a list or array or a 3D array is given, it returns an array of</span>
+<span class="sd">        each value for each comodulogram.</span>
+
+<span class="sd">    low_fq_range : list of array, shape (n_low, )</span>
+<span class="sd">        Low frequency range (phase signal)</span>
+
+<span class="sd">    high_fq_range : list of array, shape (n_high, )</span>
+<span class="sd">        High frequency range (amplitude signal)</span>
+
+<span class="sd">    Return</span>
+<span class="sd">    ------</span>
+<span class="sd">    low_fq : float or array, shape (n_comod, )</span>
+<span class="sd">        Low frequency of maximum PAC</span>
+
+<span class="sd">    high_fq : float or array, shape (n_comod, )</span>
+<span class="sd">        High frequency of maximum PAC</span>
+
+<span class="sd">    pac_value : float or array, shape (n_comod, )</span>
+<span class="sd">        Maximum PAC value</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">comodulograms</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">comodulograms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">comodulograms</span><span class="p">)</span>
+
+    <span class="c1"># only one comodulogram</span>
+    <span class="n">return_array</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">comodulograms</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">comodulograms</span> <span class="o">=</span> <span class="n">comodulograms</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="n">return_array</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># check that the sizes match</span>
+    <span class="n">n_comod</span><span class="p">,</span> <span class="n">n_low</span><span class="p">,</span> <span class="n">n_high</span> <span class="o">=</span> <span class="n">comodulograms</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">n_low_2</span><span class="p">,</span> <span class="n">n_high_2</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">low_fq_range</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">high_fq_range</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n_low_2</span> <span class="o">!=</span> <span class="n">n_low</span> <span class="ow">or</span> <span class="n">n_high_2</span> <span class="o">!=</span> <span class="n">n_high</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Array shapes do not match: (</span><span class="si">%d</span><span class="s2">, </span><span class="si">%d</span><span class="s2">) and (</span><span class="si">%d</span><span class="s2">, </span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span>
+                         <span class="p">(</span><span class="n">n_low</span><span class="p">,</span> <span class="n">n_high</span><span class="p">,</span> <span class="n">n_low_2</span><span class="p">,</span> <span class="n">n_high_2</span><span class="p">))</span>
+
+    <span class="c1"># compute the maximum of the comodulogram, and get the frequencies</span>
+    <span class="n">max_pac_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_comod</span><span class="p">)</span>
+    <span class="n">low_fq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_comod</span><span class="p">)</span>
+    <span class="n">high_fq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_comod</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">comodulogram</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">comodulograms</span><span class="p">):</span>
+        <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="o">=</span> <span class="n">argmax_2d</span><span class="p">(</span><span class="n">comodulogram</span><span class="p">)</span>
+        <span class="n">max_pac_value</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">comodulogram</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+        <span class="n">low_fq</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">low_fq_range</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">high_fq</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">high_fq_range</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+
+    <span class="c1"># return arrays or floats</span>
+    <span class="k">if</span> <span class="n">return_array</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">high_fq</span><span class="p">,</span> <span class="n">max_pac_value</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">low_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">high_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_pac_value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+</div>
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/pactools/pactools"><img style="position: absolute; top: 50px; right: 0; border: 0;"
+src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Tom Dupre la Tour.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

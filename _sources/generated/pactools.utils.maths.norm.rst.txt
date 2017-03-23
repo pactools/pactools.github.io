@@ -1,0 +1,6 @@
+pactools.utils.maths.norm
+=========================
+
+.. currentmodule:: pactools.utils.maths
+
+.. autofunction:: norm

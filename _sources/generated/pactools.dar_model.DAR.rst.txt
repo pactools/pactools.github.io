@@ -1,0 +1,58 @@
+pactools.dar_model.DAR
+======================
+
+.. currentmodule:: pactools.dar_model
+
+.. autoclass:: DAR
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DAR.__init__
+      ~DAR.amplitude_frequency
+      ~DAR.check_all_arrays
+      ~DAR.compute_cross_orders
+      ~DAR.copy
+      ~DAR.degrees_of_freedom
+      ~DAR.develop
+      ~DAR.develop_all
+      ~DAR.develop_gain
+      ~DAR.estimate_ar
+      ~DAR.estimate_error
+      ~DAR.estimate_fixed_gain
+      ~DAR.estimate_gain
+      ~DAR.fit
+      ~DAR.fit_transform
+      ~DAR.get_criterion
+      ~DAR.get_test_data
+      ~DAR.get_title
+      ~DAR.get_train_data
+      ~DAR.last_model
+      ~DAR.likelihood_ratio
+      ~DAR.log_likelihood
+      ~DAR.make_basis
+      ~DAR.next_model
+      ~DAR.order_selection
+      ~DAR.reset_criterions
+      ~DAR.to_dict
+      ~DAR.transform
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~DAR.aic
+      ~DAR.bic
+      ~DAR.logl
+      ~DAR.ordar_
+   
+   
