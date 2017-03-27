@@ -5,13 +5,13 @@
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="with a sin">
+    <div class="sphx-glr-thumbcontainer" tooltip="Note the effect of the bandwidth `low_fq_width` on the number of oscillations in the results. ">
 
 .. only:: html
 
-    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_example_thumb.png
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_peak_locking_thumb.png
 
-        :ref:`sphx_glr_auto_examples_plot_example.py`
+        :ref:`sphx_glr_auto_examples_plot_peak_locking.py`
 
 .. raw:: html
 
@@ -21,7 +21,27 @@
 .. toctree::
    :hidden:
 
-   /auto_examples/plot_example
+   /auto_examples/plot_peak_locking
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="A comodulogram shows the estimated PAC metric on a grid of frequency bands. ">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_comodulogram_thumb.png
+
+        :ref:`sphx_glr_auto_examples_plot_comodulogram.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_comodulogram
 .. raw:: html
 
     <div style='clear:both'></div>
@@ -33,13 +53,13 @@
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/tom/work/github/pactools/doc/auto_examples/auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//cal/homes/tdupre/work/src/pactools/doc/auto_examples/auto_examples_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/tom/work/github/pactools/doc/auto_examples/auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//cal/homes/tdupre/work/src/pactools/doc/auto_examples/auto_examples_jupyter.zip>`
 
 .. rst-class:: sphx-glr-signature
 

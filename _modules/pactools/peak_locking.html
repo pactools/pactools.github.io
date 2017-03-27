@@ -1,0 +1,520 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pactools.peak_locking &#8212; pactools 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          pactools</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../auto_examples/index.html">Examples</a></li>
+                <li><a href="../../api.html">API</a></li>
+                <li><a href="https://github.com/pactools/pactools">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container content-container">
+  
+  <h1>Source code for pactools.peak_locking</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+
+<span class="kn">from</span> <span class="nn">.comodulogram</span> <span class="k">import</span> <span class="n">multiple_band_pass</span>
+<span class="kn">from</span> <span class="nn">.utils.peak_finder</span> <span class="k">import</span> <span class="n">peak_finder</span>
+<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_consistent_shape</span><span class="p">,</span> <span class="n">check_array</span>
+<span class="kn">from</span> <span class="nn">.utils.viz</span> <span class="k">import</span> <span class="n">add_colorbar</span><span class="p">,</span> <span class="n">mpl_palette</span>
+
+
+<div class="viewcode-block" id="PeakLocking"><a class="viewcode-back" href="../../generated/pactools.PeakLocking.html#pactools.PeakLocking">[docs]</a><span class="k">class</span> <span class="nc">PeakLocking</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="PeakLocking.__init__"><a class="viewcode-back" href="../../generated/pactools.PeakLocking.html#pactools.PeakLocking.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+                 <span class="n">high_fq_width</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                 <span class="n">filter_method</span><span class="o">=</span><span class="s1">&#39;carrier&#39;</span><span class="p">,</span> <span class="n">peak_or_trough</span><span class="o">=</span><span class="s1">&#39;peak&#39;</span><span class="p">,</span>
+                 <span class="n">percentiles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;std+&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std-&#39;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fs : float</span>
+<span class="sd">            Sampling frequency</span>
+
+<span class="sd">        low_fq : float</span>
+<span class="sd">            Filtering frequency (phase signal)</span>
+
+<span class="sd">        low_fq_width : float</span>
+<span class="sd">            Bandwidth of the band-pass filter (phase signal)</span>
+
+<span class="sd">        high_fq_range : array or list, shape (n_high, ), or &#39;auto&#39;</span>
+<span class="sd">            List of filtering frequencies (amplitude signal)</span>
+<span class="sd">            If &#39;auto&#39;, it uses np.linspace(low_fq, fs / 2, 40).</span>
+
+<span class="sd">        high_fq_width : float or &#39;auto&#39;</span>
+<span class="sd">            Bandwidth of the band-pass filter (amplitude signal)</span>
+<span class="sd">            If &#39;auto&#39;, it uses 2 * low_fq.</span>
+
+<span class="sd">        t_plot : float</span>
+<span class="sd">            Time to plot around the peaks (in second)</span>
+
+<span class="sd">        filter_method : in {&#39;mne&#39;, &#39;carrier&#39;}</span>
+<span class="sd">            Choose band pass filtering method (in multiple_band_pass)</span>
+<span class="sd">            &#39;mne&#39;: with mne.filter.band_pass_filter</span>
+<span class="sd">            &#39;carrier&#39;: with pactools.Carrier (default)</span>
+
+<span class="sd">        peak_or_trough: in {&#39;peak&#39;, &#39;trough&#39;}</span>
+<span class="sd">            Lock to the maximum (peak) of minimum (trough) of the slow</span>
+<span class="sd">            oscillation.</span>
+
+<span class="sd">        percentiles : list of float or string, shape (n_percentiles, )</span>
+<span class="sd">            Percentile to compute for the time representation.</span>
+<span class="sd">            It can also include &#39;mean&#39;, &#39;std&#39; or &#39;ste&#39;</span>
+<span class="sd">            (resp. mean, standard deviation or standard error).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span> <span class="o">=</span> <span class="n">low_fq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span> <span class="o">=</span> <span class="n">high_fq_range</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low_fq_width</span> <span class="o">=</span> <span class="n">low_fq_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_width</span> <span class="o">=</span> <span class="n">high_fq_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_plot</span> <span class="o">=</span> <span class="n">t_plot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filter_method</span> <span class="o">=</span> <span class="n">filter_method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">peak_or_trough</span> <span class="o">=</span> <span class="n">peak_or_trough</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">percentiles</span> <span class="o">=</span> <span class="n">percentiles</span></div>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute peak-locked time-averaged and time-frequency representations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        low_sig : array, shape (n_epochs, n_points)</span>
+<span class="sd">            Input data for the phase signal</span>
+
+<span class="sd">        high_sig : array or None, shape (n_epochs, n_points)</span>
+<span class="sd">            Input data for the amplitude signal.</span>
+<span class="sd">            If None, we use low_sig for both signals</span>
+
+<span class="sd">        mask : array or None, shape (n_epochs, n_points)</span>
+<span class="sd">            The locking is only evaluated where the mask is False.</span>
+<span class="sd">            Masking is done after filtering and Hilbert transform.</span>
+
+<span class="sd">        ax_draw_peaks : boolean or matplotlib.axes.Axes instance</span>
+<span class="sd">            If True, plot the first peaks/troughs in the phase signal</span>
+<span class="sd">            Plot on the matplotlib.axes.Axes instance if given, or on a</span>
+<span class="sd">            new figure.</span>
+
+<span class="sd">        Attributes</span>
+<span class="sd">        ----------</span>
+<span class="sd">        time_frequency_ : array, shape (n_high, n_window)</span>
+<span class="sd">            Time-frequency representation, averaged with peak-locking.</span>
+<span class="sd">            (n_window is the number of point in t_plot seconds)</span>
+
+<span class="sd">        time_average_ : array, shape (n_percentiles, n_window)</span>
+<span class="sd">            Time representation, averaged with peak-locking.</span>
+<span class="sd">            (n_window is the number of point in t_plot seconds)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_width</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_width</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">low_sig</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">low_sig</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_sig</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">accept_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_sig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">high_sig</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">low_sig</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">accept_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">check_consistent_shape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_sig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_sig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span>
+
+        <span class="c1"># compute the slow oscillation</span>
+        <span class="c1"># 1, n_epochs, n_points = filtered_low.shape</span>
+        <span class="n">filtered_low</span> <span class="o">=</span> <span class="n">multiple_band_pass</span><span class="p">(</span><span class="n">low_sig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span><span class="p">,</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">low_fq_width</span><span class="p">,</span>
+                                          <span class="n">filter_method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_method</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_low_</span> <span class="o">=</span> <span class="n">filtered_low</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">filtered_low_real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_low_</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="c1"># find the peak in the filtered_low_real</span>
+            <span class="n">extrema</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">peak_or_trough</span> <span class="o">==</span> <span class="s1">&#39;peak&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="n">thresh</span> <span class="o">=</span> <span class="p">(</span><span class="n">filtered_low_real</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">filtered_low_real</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="mf">10.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">peak_loc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">peak_mag</span> <span class="o">=</span> <span class="n">peak_finder_multi_epochs</span><span class="p">(</span>
+                <span class="n">filtered_low_real</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_plot</span><span class="p">,</span>
+                <span class="n">mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="n">thresh</span><span class="p">,</span> <span class="n">extrema</span><span class="o">=</span><span class="n">extrema</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># find the peak in the phase of filtered_low</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_low_</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">peak_or_trough</span> <span class="o">==</span> <span class="s1">&#39;peak&#39;</span><span class="p">:</span>
+                <span class="n">phase</span> <span class="o">=</span> <span class="p">(</span><span class="n">phase</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">%</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">peak_loc</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">peak_finder_multi_epochs</span><span class="p">(</span>
+                <span class="n">phase</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_plot</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span>
+                <span class="n">extrema</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">peak_mag</span> <span class="o">=</span> <span class="n">filtered_low_real</span><span class="o">.</span><span class="n">ravel</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">peak_loc</span><span class="p">]</span>
+
+        <span class="c1"># extract several signals with band-pass filters</span>
+        <span class="c1"># n_high, n_epochs, n_points = filtered_high.shape</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filtered_high_</span> <span class="o">=</span> <span class="n">multiple_band_pass</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">high_sig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_width</span><span class="p">,</span>
+            <span class="n">n_cycles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_method</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_method</span><span class="p">)</span>
+
+        <span class="c1"># compute the peak locked time-frequency representation</span>
+        <span class="n">time_frequency_</span> <span class="o">=</span> <span class="n">peak_locked_time_frequency</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filtered_high_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span><span class="p">,</span>
+            <span class="n">peak_loc</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">peak_loc</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">t_plot</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span>
+
+        <span class="c1"># compute the peak locked time representation</span>
+        <span class="c1"># we don&#39;t need the mask here, since only the valid peak locations are</span>
+        <span class="c1"># kept in peak_finder_multi_epochs</span>
+        <span class="n">time_average_</span> <span class="o">=</span> <span class="n">peak_locked_percentile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_sig</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">peak_loc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_plot</span><span class="p">,</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">percentiles</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_frequency_</span> <span class="o">=</span> <span class="n">time_frequency_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_average_</span> <span class="o">=</span> <span class="n">time_average_</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">plot_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># plot the filtered_low_real peaks</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="n">n_point_plot</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">low_sig</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_point_plot</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
+
+        <span class="n">filtered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filtered_low_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">n_point_plot</span><span class="p">])</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">low_sig</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">n_point_plot</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">filtered</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;driver&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">peak_loc</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">peak_loc</span> <span class="o">&lt;</span> <span class="n">n_point_plot</span><span class="p">]</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">peak_mag</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">peak_loc</span> <span class="o">&lt;</span> <span class="n">n_point_plot</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="s1">&#39;peaks&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (sec)&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Driver&#39;s peak detection&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        fig : matplotlib.figure.Figure</span>
+<span class="sd">            Figure instance containing the plot.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+            <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">figure</span>
+
+        <span class="c1"># plot the peak-locked time-frequency</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_frequency_</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">vmax</span>
+        <span class="n">vmin</span> <span class="o">=</span> <span class="o">-</span><span class="n">vmax</span>
+        <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">t_plot</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">t_plot</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">)</span>
+        <span class="n">cax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_frequency_</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">),</span>
+                        <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span>
+                        <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+
+        <span class="c1"># ax.set_xlabel(&#39;Time (sec)&#39;)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Driver peak-locked Time-frequency decomposition&#39;</span><span class="p">)</span>
+
+        <span class="c1"># plot the colorbar</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mf">0.85</span><span class="p">)</span>
+        <span class="n">add_colorbar</span><span class="p">(</span><span class="n">fig</span><span class="p">,</span> <span class="n">cax</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># plot the peak-locked time</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;std+&#39;</span><span class="p">:</span> <span class="s1">r&#39;$\mu+\sigma$&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;std-&#39;</span><span class="p">:</span> <span class="s1">r&#39;$\mu-\sigma$&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;ste+&#39;</span><span class="p">:</span> <span class="s1">r&#39;$\mu+\sigma/\sqrt</span><span class="si">{n}</span><span class="s1">$&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;ste-&#39;</span><span class="p">:</span> <span class="s1">r&#39;$\mu-\sigma/\sqrt</span><span class="si">{n}</span><span class="s1">$&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="s1">r&#39;$\mu$&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="n">mpl_palette</span><span class="p">(</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">n_colors</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">percentiles</span><span class="p">))</span>
+
+        <span class="n">n_signals</span><span class="p">,</span> <span class="n">n_percentiles</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_average_</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_points</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_points</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">percentiles</span><span class="p">):</span>
+            <span class="n">label</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> </span><span class="si">%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">p</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">labels</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_average_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (sec)&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Driver peak-locked average of raw signal&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;lower center&#39;</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">labelspacing</span><span class="o">=</span><span class="mf">0.</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s1">&#39;on&#39;</span><span class="p">)</span>
+
+        <span class="c1"># make room for the legend or apply specified ylim</span>
+        <span class="k">if</span> <span class="n">ylim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ylim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+            <span class="n">ylim</span> <span class="o">=</span> <span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
+
+        <span class="k">return</span> <span class="n">fig</span></div>
+
+
+<span class="k">def</span> <span class="nf">peak_finder_multi_epochs</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                             <span class="n">extrema</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Call peak_finder for multiple epochs, and fill only one array</span>
+<span class="sd">    as if peak_finder was called with the ravelled array.</span>
+<span class="sd">    Also remove the peaks that are too close to the start or the end</span>
+<span class="sd">    of each epoch, and the peaks that are masked by the mask.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">x0</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">peak_inds_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">peak_mags_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i_epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+        <span class="n">peak_inds</span><span class="p">,</span> <span class="n">peak_mags</span> <span class="o">=</span> <span class="n">peak_finder</span><span class="p">(</span><span class="n">x0</span><span class="p">[</span><span class="n">i_epoch</span><span class="p">],</span> <span class="n">thresh</span><span class="o">=</span><span class="n">thresh</span><span class="p">,</span>
+                                           <span class="n">extrema</span><span class="o">=</span><span class="n">extrema</span><span class="p">)</span>
+
+        <span class="c1"># remove the peaks too close to the start or the end</span>
+        <span class="k">if</span> <span class="n">t_plot</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">fs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">n_half_window</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fs</span> <span class="o">*</span> <span class="n">t_plot</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">peak_inds</span> <span class="o">&gt;</span> <span class="n">n_half_window</span><span class="p">,</span>
+                                       <span class="n">peak_inds</span> <span class="o">&lt;</span> <span class="n">n_points</span> <span class="o">-</span> <span class="n">n_half_window</span><span class="p">)</span>
+            <span class="n">peak_inds</span> <span class="o">=</span> <span class="n">peak_inds</span><span class="p">[</span><span class="n">selection</span><span class="p">]</span>
+            <span class="n">peak_mags</span> <span class="o">=</span> <span class="n">peak_mags</span><span class="p">[</span><span class="n">selection</span><span class="p">]</span>
+
+        <span class="c1"># remove the masked peaks</span>
+        <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">selection</span> <span class="o">=</span> <span class="n">mask</span><span class="p">[</span><span class="n">i_epoch</span><span class="p">,</span> <span class="n">peak_inds</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="n">peak_inds</span> <span class="o">=</span> <span class="n">peak_inds</span><span class="p">[</span><span class="n">selection</span><span class="p">]</span>
+            <span class="n">peak_mags</span> <span class="o">=</span> <span class="n">peak_mags</span><span class="p">[</span><span class="n">selection</span><span class="p">]</span>
+
+        <span class="n">peak_inds_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">peak_inds</span> <span class="o">+</span> <span class="n">i_epoch</span> <span class="o">*</span> <span class="n">n_points</span><span class="p">)</span>
+        <span class="n">peak_mags_list</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">peak_mags</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">peak_inds_list</span> <span class="o">==</span> <span class="p">[]:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No </span><span class="si">%s</span><span class="s2"> detected. The signal might be to short, &quot;</span>
+                         <span class="s2">&quot;or the mask to strong. You can also try to reduce &quot;</span>
+                         <span class="s2">&quot;the plotted time window `t_plot`.&quot;</span> <span class="o">%</span>
+                         <span class="p">[</span><span class="s2">&quot;trough&quot;</span><span class="p">,</span> <span class="s2">&quot;peak&quot;</span><span class="p">][(</span><span class="n">extrema</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">peak_inds_list</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">peak_mags_list</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">peak_locked_time_frequency</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="p">,</span> <span class="n">peak_loc</span><span class="p">,</span>
+                               <span class="n">t_plot</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the peak-locked Time-frequency</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># normalize each signal independently</span>
+    <span class="n">n_high</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">filtered_high</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="c1"># normalization is done everywhere, but mean is computed</span>
+    <span class="c1">#  only where mask == 1</span>
+    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">masked_filtered_high</span> <span class="o">=</span> <span class="n">filtered_high</span><span class="p">[:,</span> <span class="n">mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">masked_filtered_high</span> <span class="o">=</span> <span class="n">filtered_high</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_high</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">masked_filtered_high</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="n">masked_filtered_high</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+
+    <span class="n">filtered_high</span> <span class="o">-=</span> <span class="n">mean</span>
+    <span class="n">filtered_high</span> <span class="o">/=</span> <span class="n">std</span>
+
+    <span class="c1"># get the power (np.abs(filtered_high) ** 2)</span>
+    <span class="n">filtered_high</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">)</span>
+    <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">)</span>
+
+    <span class="c1"># subtract the mean power.</span>
+    <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">masked_filtered_high</span> <span class="o">=</span> <span class="n">filtered_high</span><span class="p">[:,</span> <span class="n">mask</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">masked_filtered_high</span> <span class="o">=</span> <span class="n">filtered_high</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_high</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">masked_filtered_high</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="n">filtered_high</span> <span class="o">-=</span> <span class="n">mean</span>
+
+    <span class="c1"># compute the evoked signals (peak-locked mean)</span>
+    <span class="n">evoked_signals</span> <span class="o">=</span> <span class="n">peak_locked_percentile</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">peak_loc</span><span class="p">,</span>
+                                            <span class="n">t_plot</span><span class="p">)</span>
+    <span class="n">evoked_signals</span> <span class="o">=</span> <span class="n">evoked_signals</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+
+    <span class="k">return</span> <span class="n">evoked_signals</span>
+
+
+<span class="k">def</span> <span class="nf">peak_locked_percentile</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">peak_loc</span><span class="p">,</span> <span class="n">t_plot</span><span class="p">,</span>
+                           <span class="n">percentiles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute the mean of each signal in signals, locked to the peaks</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    signals    : shape (n_signals, n_epochs, n_points)</span>
+<span class="sd">    fs         : sampling frequency</span>
+<span class="sd">    peak_loc   : indices of the peak locations</span>
+<span class="sd">    t_plot     : in second, time to plot around the peaks</span>
+<span class="sd">    percentiles: list of precentile to compute. It can also include &#39;mean&#39;,</span>
+<span class="sd">                 &#39;std&#39; or &#39;ste&#39; (mean, standard deviation or standard error).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    evoked_signals : array, shape (n_signals, n_percentiles, n_window)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">n_signals</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">n_window</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fs</span> <span class="o">*</span> <span class="n">t_plot</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">n_percentiles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">percentiles</span><span class="p">)</span>
+
+    <span class="c1"># build indices matrix: each line is a index range around peak locations</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">peak_loc</span><span class="p">,</span> <span class="p">(</span><span class="n">n_window</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">indices</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_window</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_window</span> <span class="o">//</span> <span class="mi">2</span>
+
+    <span class="c1"># ravel the epochs since we now have isolated events</span>
+    <span class="n">signals</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_signals</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">n_peaks</span> <span class="o">=</span> <span class="n">indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">n_peaks</span> <span class="o">&gt;</span> <span class="mi">0</span>
+
+    <span class="c1"># compute the evoked signals (peak-locked mean)</span>
+    <span class="n">evoked_signals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_signals</span><span class="p">,</span> <span class="n">n_percentiles</span><span class="p">,</span> <span class="n">n_window</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i_s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_signals</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i_p</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">percentiles</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">evoked_signals</span><span class="p">[</span><span class="n">i_s</span><span class="p">,</span> <span class="n">i_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="n">i_s</span><span class="p">][</span><span class="n">indices</span><span class="p">],</span>
+                                                         <span class="n">p</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="n">mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="n">i_s</span><span class="p">][</span><span class="n">indices</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="s1">&#39;mean&#39;</span><span class="p">:</span>
+                <span class="n">evoked_signals</span><span class="p">[</span><span class="n">i_s</span><span class="p">,</span> <span class="n">i_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">signals</span><span class="p">[</span><span class="n">i_s</span><span class="p">][</span><span class="n">indices</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="s1">&#39;std+&#39;</span><span class="p">:</span>
+                    <span class="n">evoked_signals</span><span class="p">[</span><span class="n">i_s</span><span class="p">,</span> <span class="n">i_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">+</span> <span class="n">std</span>
+                <span class="k">elif</span> <span class="n">p</span> <span class="o">==</span> <span class="s1">&#39;std-&#39;</span><span class="p">:</span>
+                    <span class="n">evoked_signals</span><span class="p">[</span><span class="n">i_s</span><span class="p">,</span> <span class="n">i_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">-</span> <span class="n">std</span>
+                <span class="k">elif</span> <span class="n">p</span> <span class="o">==</span> <span class="s1">&#39;ste+&#39;</span><span class="p">:</span>
+                    <span class="n">evoked_signals</span><span class="p">[</span><span class="n">i_s</span><span class="p">,</span> <span class="n">i_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">+</span> <span class="n">std</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_peaks</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">p</span> <span class="o">==</span> <span class="s1">&#39;ste-&#39;</span><span class="p">:</span>
+                    <span class="n">evoked_signals</span><span class="p">[</span><span class="n">i_s</span><span class="p">,</span> <span class="n">i_p</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean</span> <span class="o">-</span> <span class="n">std</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_peaks</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="s1">&#39;wrong percentile string: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">p</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">evoked_signals</span>
+</pre></div>
+
+</div>
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/pactools/pactools"><img style="position: absolute; top: 50px; right: 0; border: 0;"
+src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Tom Dupre la Tour.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

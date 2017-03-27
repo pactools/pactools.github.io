@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pactools.utils.maths.norm &#8212; pactools 0.1 documentation</title>
+    <title>pactools.utils.peak_finder.peak_finder &#8212; pactools 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -84,7 +84,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">pactools.utils.maths.norm</a></li>
+<li><a class="reference internal" href="#">pactools.utils.peak_finder.peak_finder</a></li>
 </ul>
 </ul>
 </li>
@@ -96,7 +96,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="../_sources/generated/pactools.utils.maths.norm.rst.txt"
+  <a href="../_sources/generated/pactools.utils.peak_finder.peak_finder.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -118,14 +118,32 @@
 
 <div class="container content-container">
   
-  <div class="section" id="pactools-utils-maths-norm">
-<h1>pactools.utils.maths.norm<a class="headerlink" href="#pactools-utils-maths-norm" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pactools-utils-peak-finder-peak-finder">
+<h1>pactools.utils.peak_finder.peak_finder<a class="headerlink" href="#pactools-utils-peak-finder-peak-finder" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pactools.utils.maths.norm">
-<code class="descclassname">pactools.utils.maths.</code><code class="descname">norm</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/maths.html#norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.maths.norm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the Euclidean or Frobenius norm of x.</p>
-<p>Returns the Euclidean norm when x is a vector, the Frobenius norm when x
-is a matrix (2-d array). More precise than sqrt(squared_norm(x)).</p>
+<dt id="pactools.utils.peak_finder.peak_finder">
+<code class="descclassname">pactools.utils.peak_finder.</code><code class="descname">peak_finder</code><span class="sig-paren">(</span><em>x0</em>, <em>thresh=None</em>, <em>extrema=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/peak_finder.html#peak_finder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.peak_finder.peak_finder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Noise tolerant fast peak finding algorithm</p>
+<dl class="docutils">
+<dt>x0 <span class="classifier-delimiter">:</span> <span class="classifier">1d array</span></dt>
+<dd>A real vector from the maxima will be found (required).</dd>
+<dt>thresh <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>The amount above surrounding data for a peak to be
+identified (default = (max(x0)-min(x0))/4). Larger values mean
+the algorithm is more selective in finding peaks.</dd>
+<dt>extrema <span class="classifier-delimiter">:</span> <span class="classifier">{-1, 1}</span></dt>
+<dd>1 if maxima are desired, -1 if minima are desired
+(default = maxima, 1).</dd>
+</dl>
+<dl class="docutils">
+<dt>peak_loc <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>The indices of the identified peaks in x0</dd>
+<dt>peak_mag <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>The magnitude of the identified peaks</dd>
+</dl>
+<p>If repeated values are found the first is identified as the peak.
+Conversion from initial Matlab code from:
+Nathanael C. Yoder (<a class="reference external" href="mailto:ncyoder&#37;&#52;&#48;purdue&#46;edu">ncyoder<span>&#64;</span>purdue<span>&#46;</span>edu</a>)</p>
 </dd></dl>
 
 </div>
@@ -146,7 +164,7 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_
     </p>
     <p>
         &copy; Copyright 2017, Tom Dupre la Tour.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
     </p>
   </div>
 </footer>

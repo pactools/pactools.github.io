@@ -12,7 +12,8 @@ Phase amplitude coupling
 .. autosummary::
    :toctree: generated/
 
-   comodulogram
+   Comodulogram
+   PeakLocking
 
 
 DAR models
@@ -26,24 +27,12 @@ DAR models
    DAR
 
 
-Visualization
-=============
-
-.. currentmodule:: pactools.viz
-
-.. autosummary::
-   :toctree: generated/
-
-   plot_comodulogram
-   plot_dar_models
-   plot_trough_locked_time_frequency
-
 Utilities
 =========
 
-.. currentmodule:: pactools.utils
+.. currentmodule:: pactools.utils.peak_finder
 
 .. autosummary::
    :toctree: generated/
 
-   norm
+   peak_finder

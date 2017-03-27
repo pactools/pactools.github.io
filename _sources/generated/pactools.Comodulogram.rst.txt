@@ -1,0 +1,25 @@
+pactools.Comodulogram
+=====================
+
+.. currentmodule:: pactools
+
+.. autoclass:: Comodulogram
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Comodulogram.__init__
+      ~Comodulogram.fit
+      ~Comodulogram.get_maximum_pac
+      ~Comodulogram.plot
+   
+   
+
+   
+   
+   

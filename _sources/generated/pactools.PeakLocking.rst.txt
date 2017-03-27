@@ -1,0 +1,25 @@
+pactools.PeakLocking
+====================
+
+.. currentmodule:: pactools
+
+.. autoclass:: PeakLocking
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PeakLocking.__init__
+      ~PeakLocking.fit
+      ~PeakLocking.plot
+      ~PeakLocking.plot_peaks
+   
+   
+
+   
+   
+   

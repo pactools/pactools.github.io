@@ -127,24 +127,24 @@
 <dt id="pactools.dar_model.DAR.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.DAR.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
-<dt>ordar</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">int &gt; 0</span><dd>Order of the autoregressive model</dd>
-<dt>ordriv</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">int &gt;= 0</span><dd>Order of the taylor expansion for sigdriv</dd>
-<dt>criterion</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">None or string in (&#8216;bic&#8217;, &#8216;aic&#8217;, &#8216;logl&#8217;)</span><dd>If not None, select the criterion used for model selection.</dd>
-<dt>normalize</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>If True, the basis vectors are normalized to unit energy.</dd>
-<dt>ortho</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>If True, the basis vectors are orthogonalized.</dd>
-<dt>center</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>If True, we subtract the mean in sigin</dd>
-<dt>iter_gain</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">int &gt;=0</span><dd>Maximum number of iteration in gain estimation</dd>
-<dt>eps_gain</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">float &gt;= 0</span><dd>Threshold to stop iterations in gain estimation</dd>
-<dt>use_driver_phase</dt>
- <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span><dd>If True, we divide the driver by its instantaneous amplitude.</dd>
+<dt>ordar <span class="classifier-delimiter">:</span> <span class="classifier">int &gt; 0</span></dt>
+<dd>Order of the autoregressive model</dd>
+<dt>ordriv <span class="classifier-delimiter">:</span> <span class="classifier">int &gt;= 0</span></dt>
+<dd>Order of the taylor expansion for sigdriv</dd>
+<dt>criterion <span class="classifier-delimiter">:</span> <span class="classifier">None or string in (&#8216;bic&#8217;, &#8216;aic&#8217;, &#8216;logl&#8217;)</span></dt>
+<dd>If not None, select the criterion used for model selection.</dd>
+<dt>normalize <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>If True, the basis vectors are normalized to unit energy.</dd>
+<dt>ortho <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>If True, the basis vectors are orthogonalized.</dd>
+<dt>center <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>If True, we subtract the mean in sigin</dd>
+<dt>iter_gain <span class="classifier-delimiter">:</span> <span class="classifier">int &gt;=0</span></dt>
+<dd>Maximum number of iteration in gain estimation</dd>
+<dt>eps_gain <span class="classifier-delimiter">:</span> <span class="classifier">float &gt;= 0</span></dt>
+<dd>Threshold to stop iterations in gain estimation</dd>
+<dt>use_driver_phase <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
+<dd>If True, we divide the driver by its instantaneous amplitude.</dd>
 </dl>
 </dd></dl>
 
@@ -282,7 +282,7 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_
     </p>
     <p>
         &copy; Copyright 2017, Tom Dupre la Tour.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
     </p>
   </div>
 </footer>

@@ -1,0 +1,6 @@
+pactools.utils.peak_finder.peak_finder
+======================================
+
+.. currentmodule:: pactools.utils.peak_finder
+
+.. autofunction:: peak_finder

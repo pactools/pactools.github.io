@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>This is just an example &#8212; pactools 0.1 documentation</title>
+    <title>pactools.PeakLocking &#8212; pactools 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -59,7 +59,7 @@
         <div class="collapse navbar-collapse nav-collapse">
           <ul class="nav navbar-nav">
             
-                <li><a href="index.html">Examples</a></li>
+                <li><a href="../auto_examples/index.html">Examples</a></li>
                 <li><a href="../api.html">API</a></li>
                 <li><a href="https://github.com/pactools/pactools">GitHub</a></li>
             
@@ -84,7 +84,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">This is just an example</a></li>
+<li><a class="reference internal" href="#">pactools.PeakLocking</a></li>
 </ul>
 </ul>
 </li>
@@ -96,7 +96,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="../_sources/auto_examples/plot_example.rst.txt"
+  <a href="../_sources/generated/pactools.PeakLocking.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -118,30 +118,66 @@
 
 <div class="container content-container">
   
-  <div class="section" id="this-is-just-an-example">
-<span id="sphx-glr-auto-examples-plot-example-py"></span><h1>This is just an example<a class="headerlink" href="#this-is-just-an-example" title="Permalink to this headline">¶</a></h1>
-<p>with a sin</p>
-<img alt="../_images/sphx_glr_plot_example_001.png" class="align-center" src="../_images/sphx_glr_plot_example_001.png" />
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+  <div class="section" id="pactools-peaklocking">
+<h1>pactools.PeakLocking<a class="headerlink" href="#pactools-peaklocking" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pactools.PeakLocking">
+<em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">PeakLocking</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='carrier', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="pactools.PeakLocking.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='carrier', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>fs <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Sampling frequency</dd>
+<dt>low_fq <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Filtering frequency (phase signal)</dd>
+<dt>low_fq_width <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Bandwidth of the band-pass filter (phase signal)</dd>
+<dt>high_fq_range <span class="classifier-delimiter">:</span> <span class="classifier">array or list, shape (n_high, ), or &#8216;auto&#8217;</span></dt>
+<dd>List of filtering frequencies (amplitude signal)
+If &#8216;auto&#8217;, it uses np.linspace(low_fq, fs / 2, 40).</dd>
+<dt>high_fq_width <span class="classifier-delimiter">:</span> <span class="classifier">float or &#8216;auto&#8217;</span></dt>
+<dd>Bandwidth of the band-pass filter (amplitude signal)
+If &#8216;auto&#8217;, it uses 2 * low_fq.</dd>
+<dt>t_plot <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
+<dd>Time to plot around the peaks (in second)</dd>
+<dt>filter_method <span class="classifier-delimiter">:</span> <span class="classifier">in {&#8216;mne&#8217;, &#8216;carrier&#8217;}</span></dt>
+<dd>Choose band pass filtering method (in multiple_band_pass)
+&#8216;mne&#8217;: with mne.filter.band_pass_filter
+&#8216;carrier&#8217;: with pactools.Carrier (default)</dd>
+<dt>peak_or_trough: in {&#8216;peak&#8217;, &#8216;trough&#8217;}</dt>
+<dd>Lock to the maximum (peak) of minimum (trough) of the slow
+oscillation.</dd>
+<dt>percentiles <span class="classifier-delimiter">:</span> <span class="classifier">list of float or string, shape (n_percentiles, )</span></dt>
+<dd>Percentile to compute for the time representation.
+It can also include &#8216;mean&#8217;, &#8216;std&#8217; or &#8216;ste&#8217;
+(resp. mean, standard deviation or standard error).</dd>
+</dl>
+</dd></dl>
 
-<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.sin.html#numpy.sin" title="View documentation for numpy.sin"><span class="n">np</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pactools.PeakLocking.__init__" title="pactools.PeakLocking.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;low_fq[,&nbsp;low_fq_width,&nbsp;...])</td>
+<td>Parameters</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(low_sig[,&nbsp;high_sig,&nbsp;mask])</td>
+<td>Compute peak-locked time-averaged and time-frequency representations.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([axs,&nbsp;vmin,&nbsp;vmax,&nbsp;ylim])</td>
+<td>Returns &#8212;&#8212;- fig : matplotlib.figure.Figure     Figure instance containing the plot.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_peaks</span></code>([ax])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$\sin(x)$&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.062 seconds)</p>
-<div class="sphx-glr-footer docutils container">
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/plot_example.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_example.py</span></code></a></div>
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/plot_example.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_example.ipynb</span></code></a></div>
-</div>
-<p class="sphx-glr-signature"><a class="reference external" href="http://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
 </div>
 
 
@@ -160,7 +196,7 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_
     </p>
     <p>
         &copy; Copyright 2017, Tom Dupre la Tour.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
     </p>
   </div>
 </footer>
