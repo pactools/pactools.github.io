@@ -34,6 +34,7 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="API Documentation" href="../api.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -72,7 +73,13 @@
      href="../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_peak_locking.html">Example of peak-locking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_comodulogram.html">Example of comodulogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_dar_model.html">Example of fitting a DAR model</a></li>
+</ul>
+</ul>
 </li>
               
                 <li class="dropdown">
@@ -122,29 +129,43 @@
 <h1>pactools.Comodulogram<a class="headerlink" href="#pactools-comodulogram" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pactools.Comodulogram">
-<em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">Comodulogram</code><span class="sig-paren">(</span><em>fs</em>, <em>low_fq_range</em>, <em>low_fq_width=2.0</em>, <em>high_fq_range='auto'</em>, <em>high_fq_width='auto'</em>, <em>method='tort'</em>, <em>n_surrogates=0</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>progress_bar=True</em>, <em>draw_phase=False</em>, <em>minimum_shift=1.0</em>, <em>random_state=None</em>, <em>coherence_params={}</em>, <em>low_fq_width_2=4.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/comodulogram.html#Comodulogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.Comodulogram" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="pactools.Comodulogram.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs</em>, <em>low_fq_range</em>, <em>low_fq_width=2.0</em>, <em>high_fq_range='auto'</em>, <em>high_fq_width='auto'</em>, <em>method='tort'</em>, <em>n_surrogates=0</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>progress_bar=True</em>, <em>draw_phase=False</em>, <em>minimum_shift=1.0</em>, <em>random_state=None</em>, <em>coherence_params={}</em>, <em>low_fq_width_2=4.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/comodulogram.html#Comodulogram.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.Comodulogram.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>fs <span class="classifier-delimiter">:</span> <span class="classifier">float,</span></dt>
-<dd>Sampling frequency</dd>
-<dt>low_fq_range <span class="classifier-delimiter">:</span> <span class="classifier">array or list</span></dt>
-<dd>List of filtering frequencies (phase signal)</dd>
-<dt>high_fq_range <span class="classifier-delimiter">:</span> <span class="classifier">array or list or &#8216;auto&#8217;</span></dt>
-<dd>List of filtering frequencies (amplitude signal)
-If &#8216;auto&#8217;, it uses np.linspace(max(low_fq_range), fs / 2.0, 40).</dd>
-<dt>low_fq_width <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Bandwidth of the band-pass filter (phase signal)</dd>
-<dt>high_fq_width <span class="classifier-delimiter">:</span> <span class="classifier">float or &#8216;auto&#8217;</span></dt>
-<dd>Bandwidth of the band-pass filter (amplitude signal)
-If &#8216;auto&#8217;, it uses 2 * max(low_fq_range).</dd>
-<dt>method <span class="classifier-delimiter">:</span> <span class="classifier">string or DAR instance</span></dt>
-<dd><p class="first">Modulation index method:
-- String in (&#8216;ozkurt&#8217;, &#8216;canolty&#8217;, &#8216;tort&#8217;, &#8216;penny&#8217;, ), for a PAC</p>
+<em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">Comodulogram</code><span class="sig-paren">(</span><em>fs</em>, <em>low_fq_range</em>, <em>low_fq_width=2.0</em>, <em>high_fq_range='auto'</em>, <em>high_fq_width='auto'</em>, <em>method='tort'</em>, <em>n_surrogates=0</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>progress_bar=True</em>, <em>ax_special=None</em>, <em>minimum_shift=1.0</em>, <em>random_state=None</em>, <em>coherence_params={}</em>, <em>low_fq_width_2=4.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/comodulogram.html#Comodulogram"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.Comodulogram" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object to compute the comodulogram for phase-amplitude coupling.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fs</strong> : float</p>
 <blockquote>
-<div>estimation based on filtering and using the Hilbert transform.</div></blockquote>
-<ul class="last simple">
+<div><p>Sampling frequency</p>
+</div></blockquote>
+<p><strong>low_fq_range</strong> : array or list</p>
+<blockquote>
+<div><p>List of filtering frequencies (phase signal)</p>
+</div></blockquote>
+<p><strong>high_fq_range</strong> : array or list or &#8216;auto&#8217;</p>
+<blockquote>
+<div><p>List of filtering frequencies (amplitude signal)
+If &#8216;auto&#8217;, it uses np.linspace(max(low_fq_range), fs / 2.0, 40).</p>
+</div></blockquote>
+<p><strong>low_fq_width</strong> : float</p>
+<blockquote>
+<div><p>Bandwidth of the band-pass filter (phase signal)</p>
+</div></blockquote>
+<p><strong>high_fq_width</strong> : float or &#8216;auto&#8217;</p>
+<blockquote>
+<div><p>Bandwidth of the band-pass filter (amplitude signal)
+If &#8216;auto&#8217;, it uses 2 * max(low_fq_range).</p>
+</div></blockquote>
+<p><strong>method</strong> : string or DAR instance</p>
+<blockquote>
+<div><p>Modulation index method:</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>String in (&#8216;ozkurt&#8217;, &#8216;canolty&#8217;, &#8216;tort&#8217;, &#8216;penny&#8217;, ), for a PAC</dt>
+<dd>estimation based on filtering and using the Hilbert transform.</dd>
+</dl>
+</li>
 <li><dl class="first docutils">
 <dt>String in (&#8216;vanwijk&#8217;, ) for a joint AAC and PAC estimation</dt>
 <dd>based on filtering and using the Hilbert transform.</dd>
@@ -167,41 +188,82 @@ based on filtering and computing coherence.</dd>
 </dl>
 </li>
 </ul>
-</dd>
-<dt>n_surrogates <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Number of surrogates computed for the z-score
-If n_surrogates &lt;= 1, the z-score is not computed.</dd>
-<dt>vmin, vmax <span class="classifier-delimiter">:</span> <span class="classifier">float or None</span></dt>
-<dd>If not None, it define the min/max value of the plot.</dd>
-<dt>progress_bar <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
-<dd>If True, a progress bar is shown in stdout.</dd>
-<dt>draw_phase <span class="classifier-delimiter">:</span> <span class="classifier">boolean</span></dt>
-<dd>If True, plot the phase distribution in &#8216;tort&#8217; index.</dd>
-<dt>minimum_shift <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Minimum time shift (in sec) for the surrogate analysis.</dd>
-<dt>random_state <span class="classifier-delimiter">:</span> <span class="classifier">None, int or np.random.RandomState instance</span></dt>
-<dd>Seed or random number generator for the surrogate analysis.</dd>
-<dt>coherence_params <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd><p class="first">Parameters for methods base on coherence or bicoherence.
-May contain:</p>
-<blockquote>
-<div><dl class="docutils">
-<dt>block_length <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Block length</dd>
-<dt>fft_length <span class="classifier-delimiter">:</span> <span class="classifier">int or None</span></dt>
-<dd>Length of the FFT</dd>
-<dt>step <span class="classifier-delimiter">:</span> <span class="classifier">int or None</span></dt>
-<dd>Step between two blocks</dd>
-</dl>
 </div></blockquote>
-<p class="last">If the dictionary is empty, default values will be applied based on
-fs and low_fq_width, with 0.5 overlap windows and no zero-padding.</p>
+<p><strong>n_surrogates</strong> : int</p>
+<blockquote>
+<div><p>Number of surrogates computed for the z-score
+If n_surrogates &lt;= 1, the z-score is not computed.</p>
+</div></blockquote>
+<p><strong>vmin, vmax</strong> : float or None</p>
+<blockquote>
+<div><p>If not None, it define the min/max value of the plot.</p>
+</div></blockquote>
+<p><strong>progress_bar</strong> : boolean</p>
+<blockquote>
+<div><p>If True, a progress bar is shown in stdout.</p>
+</div></blockquote>
+<p><strong>ax_special</strong> : matplotlib.axes.Axes or None</p>
+<blockquote>
+<div><p>If not None, a special figure is drawn on it, depending on
+the PAC method used.</p>
+</div></blockquote>
+<p><strong>minimum_shift</strong> : float</p>
+<blockquote>
+<div><p>Minimum time shift (in sec) for the surrogate analysis.</p>
+</div></blockquote>
+<p><strong>random_state</strong> : None, int or np.random.RandomState instance</p>
+<blockquote>
+<div><p>Seed or random number generator for the surrogate analysis.</p>
+</div></blockquote>
+<p><strong>coherence_params</strong> : dict</p>
+<blockquote>
+<div><p>Parameters for methods base on coherence or bicoherence.
+May contain:</p>
+<dl class="docutils">
+<dt>-block_length <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd><p class="first last">Block length</p>
 </dd>
-<dt>low_fq_width_2 <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Bandwidth of the band-pass filters centered on low_fq_range, for
-the amplitude signal. Used only with &#8216;vanwijk&#8217; method.</dd>
+<dt>-fft_length <span class="classifier-delimiter">:</span> <span class="classifier">int or None</span></dt>
+<dd><p class="first last">Length of the FFT</p>
+</dd>
+<dt>-step <span class="classifier-delimiter">:</span> <span class="classifier">int or None</span></dt>
+<dd><p class="first last">Step between two blocks</p>
+</dd>
 </dl>
-</dd></dl>
+<p>If the dictionary is empty, default values will be applied based on
+fs and low_fq_width, with 0.5 overlap windows and no zero-padding.</p>
+</div></blockquote>
+<p><strong>low_fq_width_2</strong> : float</p>
+<blockquote class="last">
+<div><p>Bandwidth of the band-pass filters centered on low_fq_range, for
+the amplitude signal. Used only with &#8216;vanwijk&#8217; method.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(low_sig[,&nbsp;high_sig,&nbsp;mask])</td>
+<td>Call fit to compute the comodulogram.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_maximum_pac</span></code>()</td>
+<td>Get maximum PAC value in a comodulogram.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([titles,&nbsp;fig,&nbsp;axs,&nbsp;cmap,&nbsp;vmin,&nbsp;vmax,&nbsp;...])</td>
+<td>Plot one or more comodulograms.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pactools.Comodulogram.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs</em>, <em>low_fq_range</em>, <em>low_fq_width=2.0</em>, <em>high_fq_range='auto'</em>, <em>high_fq_width='auto'</em>, <em>method='tort'</em>, <em>n_surrogates=0</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>progress_bar=True</em>, <em>ax_special=None</em>, <em>minimum_shift=1.0</em>, <em>random_state=None</em>, <em>coherence_params={}</em>, <em>low_fq_width_2=4.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/comodulogram.html#Comodulogram.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.Comodulogram.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -211,10 +273,10 @@ the amplitude signal. Used only with &#8216;vanwijk&#8217; method.</dd>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#pactools.Comodulogram.__init__" title="pactools.Comodulogram.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;low_fq_range[,&nbsp;low_fq_width,&nbsp;...])</td>
-<td>Parameters</td>
+<td></td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(low_sig[,&nbsp;high_sig,&nbsp;mask])</td>
-<td>Compute the comodulogram for Phase Amplitude Coupling (PAC).</td>
+<td>Call fit to compute the comodulogram.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_maximum_pac</span></code>()</td>
 <td>Get maximum PAC value in a comodulogram.</td>

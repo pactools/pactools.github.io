@@ -72,7 +72,13 @@
      href="../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_peak_locking.html">Example of peak-locking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_comodulogram.html">Example of comodulogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_dar_model.html">Example of fitting a DAR model</a></li>
+</ul>
+</ul>
 </li>
               
                 <li class="dropdown">
@@ -123,37 +129,89 @@
 <dl class="class">
 <dt id="pactools.PeakLocking">
 <em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">PeakLocking</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='carrier', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
+<dd><p>An object to compute time average and time-frequency averaged with
+peak-locking, to analyze phase-amplitude coupling.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fs</strong> : float</p>
+<blockquote>
+<div><p>Sampling frequency</p>
+</div></blockquote>
+<p><strong>low_fq</strong> : float</p>
+<blockquote>
+<div><p>Filtering frequency (phase signal)</p>
+</div></blockquote>
+<p><strong>low_fq_width</strong> : float</p>
+<blockquote>
+<div><p>Bandwidth of the band-pass filter (phase signal)</p>
+</div></blockquote>
+<p><strong>high_fq_range</strong> : array or list, shape (n_high, ), or &#8216;auto&#8217;</p>
+<blockquote>
+<div><p>List of filtering frequencies (amplitude signal)
+If &#8216;auto&#8217;, it uses np.linspace(low_fq, fs / 2, 40).</p>
+</div></blockquote>
+<p><strong>high_fq_width</strong> : float or &#8216;auto&#8217;</p>
+<blockquote>
+<div><p>Bandwidth of the band-pass filter (amplitude signal)
+If &#8216;auto&#8217;, it uses 2 * low_fq.</p>
+</div></blockquote>
+<p><strong>t_plot</strong> : float</p>
+<blockquote>
+<div><p>Time to plot around the peaks (in second)</p>
+</div></blockquote>
+<p><strong>filter_method</strong> : in {&#8216;mne&#8217;, &#8216;carrier&#8217;}</p>
+<blockquote>
+<div><p>Choose band pass filtering method (in multiple_band_pass)
+&#8216;mne&#8217;: with mne.filter.band_pass_filter
+&#8216;carrier&#8217;: with pactools.Carrier (default)</p>
+</div></blockquote>
+<p><strong>peak_or_trough: in {&#8216;peak&#8217;, &#8216;trough&#8217;}</strong></p>
+<blockquote>
+<div><p>Lock to the maximum (peak) of minimum (trough) of the slow
+oscillation.</p>
+</div></blockquote>
+<p><strong>percentiles</strong> : list of float or string, shape (n_percentiles, )</p>
+<blockquote class="last">
+<div><p>Percentile to compute for the time representation.
+It can also include &#8216;mean&#8217;, &#8216;std&#8217; or &#8216;ste&#8217;
+(resp. mean, standard deviation or standard error).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(low_sig[,&nbsp;high_sig,&nbsp;mask])</td>
+<td>Compute peak-locked time-averaged and time-frequency representations.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([axs,&nbsp;vmin,&nbsp;vmax,&nbsp;ylim])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_peaks</span></code>([ax])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
 <dt id="pactools.PeakLocking.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='carrier', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>fs <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Sampling frequency</dd>
-<dt>low_fq <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Filtering frequency (phase signal)</dd>
-<dt>low_fq_width <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Bandwidth of the band-pass filter (phase signal)</dd>
-<dt>high_fq_range <span class="classifier-delimiter">:</span> <span class="classifier">array or list, shape (n_high, ), or &#8216;auto&#8217;</span></dt>
-<dd>List of filtering frequencies (amplitude signal)
-If &#8216;auto&#8217;, it uses np.linspace(low_fq, fs / 2, 40).</dd>
-<dt>high_fq_width <span class="classifier-delimiter">:</span> <span class="classifier">float or &#8216;auto&#8217;</span></dt>
-<dd>Bandwidth of the band-pass filter (amplitude signal)
-If &#8216;auto&#8217;, it uses 2 * low_fq.</dd>
-<dt>t_plot <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Time to plot around the peaks (in second)</dd>
-<dt>filter_method <span class="classifier-delimiter">:</span> <span class="classifier">in {&#8216;mne&#8217;, &#8216;carrier&#8217;}</span></dt>
-<dd>Choose band pass filtering method (in multiple_band_pass)
-&#8216;mne&#8217;: with mne.filter.band_pass_filter
-&#8216;carrier&#8217;: with pactools.Carrier (default)</dd>
-<dt>peak_or_trough: in {&#8216;peak&#8217;, &#8216;trough&#8217;}</dt>
-<dd>Lock to the maximum (peak) of minimum (trough) of the slow
-oscillation.</dd>
-<dt>percentiles <span class="classifier-delimiter">:</span> <span class="classifier">list of float or string, shape (n_percentiles, )</span></dt>
-<dd>Percentile to compute for the time representation.
-It can also include &#8216;mean&#8217;, &#8216;std&#8217; or &#8216;ste&#8217;
-(resp. mean, standard deviation or standard error).</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -163,13 +221,21 @@ It can also include &#8216;mean&#8217;, &#8216;std&#8217; or &#8216;ste&#8217;
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#pactools.PeakLocking.__init__" title="pactools.PeakLocking.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;low_fq[,&nbsp;low_fq_width,&nbsp;...])</td>
-<td>Parameters</td>
+<td></td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(low_sig[,&nbsp;high_sig,&nbsp;mask])</td>
 <td>Compute peak-locked time-averaged and time-frequency representations.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([axs,&nbsp;vmin,&nbsp;vmax,&nbsp;ylim])</td>
-<td>Returns &#8212;&#8212;- fig : matplotlib.figure.Figure     Figure instance containing the plot.</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_peaks</span></code>([ax])</td>
 <td></td>

@@ -1,6 +1,0 @@
-pactools.comodulogram
-=====================
-
-.. currentmodule:: pactools
-
-.. autofunction:: comodulogram

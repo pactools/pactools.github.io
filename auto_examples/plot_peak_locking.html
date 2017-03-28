@@ -34,6 +34,8 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example of comodulogram" href="plot_comodulogram.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -72,7 +74,13 @@
      href="../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example of peak-locking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_comodulogram.html">Example of comodulogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="plot_dar_model.html">Example of fitting a DAR model</a></li>
+</ul>
+</ul>
 </li>
               
                 <li class="dropdown">
@@ -132,7 +140,7 @@ oscillations in the results.</p>
 </ul>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <span class="n">PeakLocking</span>
+<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.PeakLocking.html#pactools.PeakLocking" title="View documentation for pactools.PeakLocking"><span class="n">PeakLocking</span></a>
 <span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <span class="n">create_signal</span>
 
 <span class="n">fs</span> <span class="o">=</span> <span class="mf">200.</span>  <span class="c1"># Hz</span>
@@ -148,18 +156,18 @@ oscillations in the results.</p>
                        <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
                        <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-<span class="n">estimator</span> <span class="o">=</span> <span class="n">PeakLocking</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="n">t_plot</span><span class="p">)</span>
+<span class="n">estimator</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.PeakLocking.html#pactools.PeakLocking" title="View documentation for pactools.PeakLocking"><span class="n">PeakLocking</span></a><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="n">t_plot</span><span class="p">)</span>
 <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 <span class="n">estimator</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
-<span class="n">estimator</span> <span class="o">=</span> <span class="n">PeakLocking</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="n">t_plot</span><span class="p">)</span>
+<span class="n">estimator</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.PeakLocking.html#pactools.PeakLocking" title="View documentation for pactools.PeakLocking"><span class="n">PeakLocking</span></a><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="n">t_plot</span><span class="p">)</span>
 <span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 <span class="n">estimator</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.821 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.789 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_peak_locking.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_peak_locking.py</span></code></a></div>

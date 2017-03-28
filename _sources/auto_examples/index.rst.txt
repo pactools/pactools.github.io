@@ -42,6 +42,26 @@
    :hidden:
 
    /auto_examples/plot_comodulogram
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="It also shows the comodulogram computed with a DAR model. ">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_dar_model_thumb.png
+
+        :ref:`sphx_glr_auto_examples_plot_dar_model.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_dar_model
 .. raw:: html
 
     <div style='clear:both'></div>

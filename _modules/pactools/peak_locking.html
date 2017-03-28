@@ -72,7 +72,13 @@
      href="../../index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"></ul>
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_peak_locking.html">Example of peak-locking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_comodulogram.html">Example of comodulogram</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_dar_model.html">Example of fitting a DAR model</a></li>
+</ul>
+</ul>
 </li>
               
                 <li class="dropdown">
@@ -123,47 +129,48 @@
 
 
 <div class="viewcode-block" id="PeakLocking"><a class="viewcode-back" href="../../generated/pactools.PeakLocking.html#pactools.PeakLocking">[docs]</a><span class="k">class</span> <span class="nc">PeakLocking</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An object to compute time average and time-frequency averaged with</span>
+<span class="sd">    peak-locking, to analyze phase-amplitude coupling.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fs : float</span>
+<span class="sd">        Sampling frequency</span>
+
+<span class="sd">    low_fq : float</span>
+<span class="sd">        Filtering frequency (phase signal)</span>
+
+<span class="sd">    low_fq_width : float</span>
+<span class="sd">        Bandwidth of the band-pass filter (phase signal)</span>
+
+<span class="sd">    high_fq_range : array or list, shape (n_high, ), or &#39;auto&#39;</span>
+<span class="sd">        List of filtering frequencies (amplitude signal)</span>
+<span class="sd">        If &#39;auto&#39;, it uses np.linspace(low_fq, fs / 2, 40).</span>
+
+<span class="sd">    high_fq_width : float or &#39;auto&#39;</span>
+<span class="sd">        Bandwidth of the band-pass filter (amplitude signal)</span>
+<span class="sd">        If &#39;auto&#39;, it uses 2 * low_fq.</span>
+
+<span class="sd">    t_plot : float</span>
+<span class="sd">        Time to plot around the peaks (in second)</span>
+
+<span class="sd">    filter_method : in {&#39;mne&#39;, &#39;carrier&#39;}</span>
+<span class="sd">        Choose band pass filtering method (in multiple_band_pass)</span>
+<span class="sd">        &#39;mne&#39;: with mne.filter.band_pass_filter</span>
+<span class="sd">        &#39;carrier&#39;: with pactools.Carrier (default)</span>
+
+<span class="sd">    peak_or_trough: in {&#39;peak&#39;, &#39;trough&#39;}</span>
+<span class="sd">        Lock to the maximum (peak) of minimum (trough) of the slow</span>
+<span class="sd">        oscillation.</span>
+
+<span class="sd">    percentiles : list of float or string, shape (n_percentiles, )</span>
+<span class="sd">        Percentile to compute for the time representation.</span>
+<span class="sd">        It can also include &#39;mean&#39;, &#39;std&#39; or &#39;ste&#39;</span>
+<span class="sd">        (resp. mean, standard deviation or standard error).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="PeakLocking.__init__"><a class="viewcode-back" href="../../generated/pactools.PeakLocking.html#pactools.PeakLocking.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
-                 <span class="n">high_fq_width</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-                 <span class="n">filter_method</span><span class="o">=</span><span class="s1">&#39;carrier&#39;</span><span class="p">,</span> <span class="n">peak_or_trough</span><span class="o">=</span><span class="s1">&#39;peak&#39;</span><span class="p">,</span>
-                 <span class="n">percentiles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;std+&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std-&#39;</span><span class="p">]):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        fs : float</span>
-<span class="sd">            Sampling frequency</span>
-
-<span class="sd">        low_fq : float</span>
-<span class="sd">            Filtering frequency (phase signal)</span>
-
-<span class="sd">        low_fq_width : float</span>
-<span class="sd">            Bandwidth of the band-pass filter (phase signal)</span>
-
-<span class="sd">        high_fq_range : array or list, shape (n_high, ), or &#39;auto&#39;</span>
-<span class="sd">            List of filtering frequencies (amplitude signal)</span>
-<span class="sd">            If &#39;auto&#39;, it uses np.linspace(low_fq, fs / 2, 40).</span>
-
-<span class="sd">        high_fq_width : float or &#39;auto&#39;</span>
-<span class="sd">            Bandwidth of the band-pass filter (amplitude signal)</span>
-<span class="sd">            If &#39;auto&#39;, it uses 2 * low_fq.</span>
-
-<span class="sd">        t_plot : float</span>
-<span class="sd">            Time to plot around the peaks (in second)</span>
-
-<span class="sd">        filter_method : in {&#39;mne&#39;, &#39;carrier&#39;}</span>
-<span class="sd">            Choose band pass filtering method (in multiple_band_pass)</span>
-<span class="sd">            &#39;mne&#39;: with mne.filter.band_pass_filter</span>
-<span class="sd">            &#39;carrier&#39;: with pactools.Carrier (default)</span>
-
-<span class="sd">        peak_or_trough: in {&#39;peak&#39;, &#39;trough&#39;}</span>
-<span class="sd">            Lock to the maximum (peak) of minimum (trough) of the slow</span>
-<span class="sd">            oscillation.</span>
-
-<span class="sd">        percentiles : list of float or string, shape (n_percentiles, )</span>
-<span class="sd">            Percentile to compute for the time representation.</span>
-<span class="sd">            It can also include &#39;mean&#39;, &#39;std&#39; or &#39;ste&#39;</span>
-<span class="sd">            (resp. mean, standard deviation or standard error).</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+                 <span class="n">high_fq_width</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">filter_method</span><span class="o">=</span><span class="s1">&#39;carrier&#39;</span><span class="p">,</span>
+                 <span class="n">peak_or_trough</span><span class="o">=</span><span class="s1">&#39;peak&#39;</span><span class="p">,</span> <span class="n">percentiles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;std+&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std-&#39;</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span> <span class="o">=</span> <span class="n">low_fq</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span> <span class="o">=</span> <span class="n">high_fq_range</span>
@@ -211,6 +218,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_width</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_width</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">high_fq_range</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">low_sig</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">low_sig</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">high_sig</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">accept_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -262,6 +270,7 @@
         <span class="n">time_average_</span> <span class="o">=</span> <span class="n">peak_locked_percentile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">low_sig</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
                                                <span class="bp">self</span><span class="o">.</span><span class="n">peak_loc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_plot</span><span class="p">,</span>
                                                <span class="bp">self</span><span class="o">.</span><span class="n">percentiles</span><span class="p">)</span>
+        <span class="n">time_average_</span> <span class="o">=</span> <span class="n">time_average_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">time_frequency_</span> <span class="o">=</span> <span class="n">time_frequency_</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time_average_</span> <span class="o">=</span> <span class="n">time_average_</span>
@@ -302,6 +311,7 @@
 
         <span class="c1"># plot the peak-locked time-frequency</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">n_high</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_average_</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time_frequency_</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">vmax</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="o">-</span><span class="n">vmax</span>
         <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span>
@@ -334,11 +344,12 @@
         <span class="p">}</span>
         <span class="n">colors</span> <span class="o">=</span> <span class="n">mpl_palette</span><span class="p">(</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">n_colors</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">percentiles</span><span class="p">))</span>
 
-        <span class="n">n_signals</span><span class="p">,</span> <span class="n">n_percentiles</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_average_</span><span class="o">.</span><span class="n">shape</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_points</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_points</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
+        <span class="n">n_percentiles</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_average_</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_points</span><span class="p">)</span> <span class="o">-</span> <span class="n">n_points</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">percentiles</span><span class="p">):</span>
             <span class="n">label</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> </span><span class="si">%%</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">p</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="k">else</span> <span class="n">labels</span><span class="p">[</span><span class="n">p</span><span class="p">]</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_average_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_average_</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                    <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
 
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (sec)&#39;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Driver peak-locked average of raw signal&#39;</span><span class="p">)</span>
@@ -350,7 +361,6 @@
             <span class="n">ylim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
             <span class="n">ylim</span> <span class="o">=</span> <span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">ylim</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylim</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]])</span>
 
         <span class="k">return</span> <span class="n">fig</span></div>
 
