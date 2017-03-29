@@ -1,0 +1,635 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pactools.utils.spectrum &#8212; pactools 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          pactools</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../auto_examples/index.html">Examples</a></li>
+                <li><a href="../../../api.html">API</a></li>
+                <li><a href="https://github.com/pactools/pactools">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container content-container">
+  
+  <h1>Source code for pactools.utils.spectrum</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">hankel</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="k">import</span> <span class="n">hilbert</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">.maths</span> <span class="k">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">is_power2</span><span class="p">,</span> <span class="n">prime_factors</span><span class="p">,</span> <span class="n">compute_n_fft</span>
+<span class="kn">from</span> <span class="nn">.viz</span> <span class="k">import</span> <span class="n">compute_vmin_vmax</span>
+
+
+<div class="viewcode-block" id="Spectrum"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum">[docs]</a><span class="k">class</span> <span class="nc">Spectrum</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Spectrum.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">donorm</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Spectral estimator</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_length : int</span>
+<span class="sd">            Length of each signal block, on which we estimate the spectrum</span>
+
+<span class="sd">        fft_length : int or None</span>
+<span class="sd">            Length of FFT, should be greater or equal to block_length.</span>
+<span class="sd">            If None, it is set to block_length</span>
+
+<span class="sd">        step : int or None</span>
+<span class="sd">            Step between successive blocks</span>
+<span class="sd">            If None, it is set to half the block length (i.e. 0.5 overlap)</span>
+
+<span class="sd">        wfunc : function</span>
+<span class="sd">            Function used to compute the weitghting window on each block.</span>
+<span class="sd">            Examples: np.ones, np.hamming, np.bartlett, np.blackman, ...</span>
+
+<span class="sd">        fs : float</span>
+<span class="sd">            Sampling frequency</span>
+
+<span class="sd">        donorm : boolean</span>
+<span class="sd">            If True, the amplitude is normalized</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_length</span> <span class="o">=</span> <span class="n">block_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fft_length</span> <span class="o">=</span> <span class="n">fft_length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="n">step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span> <span class="o">=</span> <span class="n">wfunc</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">donorm</span> <span class="o">=</span> <span class="n">donorm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psd</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+    <span class="k">def</span> <span class="nf">check_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># block_length</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_length</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Block length is negative&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+
+        <span class="c1"># fft_length</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fft_length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fft_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fft_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_length</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">is_power2</span><span class="p">(</span><span class="n">fft_length</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;FFT length should be a power of 2&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fft_length</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Block length is greater than FFT length&#39;</span><span class="p">)</span>
+
+        <span class="c1"># step</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">step</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">step</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid step between blocks: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span>
+
+    <span class="k">def</span> <span class="nf">periodogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the estimation (in dB) for each epoch in a signal</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        signals : array, shape (n_epochs, n_points)</span>
+<span class="sd">            Signals from which one computes the power spectrum</span>
+
+<span class="sd">        hold : boolean, default = False</span>
+<span class="sd">            If True, the estimation is appended to the list of previous</span>
+<span class="sd">            estimations, else, the list is emptied and only the current</span>
+<span class="sd">            estimation is stored.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        psd : array, shape (n_epochs, n_freq)</span>
+<span class="sd">            Power spectrum estimated with a Welsh method on each epoch</span>
+<span class="sd">            n_freq = fft_length // 2 + 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_params</span><span class="p">()</span>
+
+        <span class="n">signals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+
+        <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+        <span class="n">n_epochs</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">n_freq</span> <span class="o">=</span> <span class="n">fft_length</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">psd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">signals</span><span class="p">):</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+
+            <span class="c1"># iterate on blocks</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">sig</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+                <span class="n">psd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sig</span><span class="p">[</span><span class="n">block</span><span class="p">],</span> <span class="n">fft_length</span><span class="p">,</span>
+                                        <span class="mi">0</span><span class="p">))[:</span><span class="n">n_freq</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">block</span> <span class="o">=</span> <span class="n">block</span> <span class="o">+</span> <span class="n">step</span>
+            <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
+                    <span class="s1">&#39;spectrum: first block has </span><span class="si">%d</span><span class="s1"> samples but sig has </span><span class="si">%d</span><span class="s1"> &#39;</span>
+                    <span class="s1">&#39;samples&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+
+            <span class="c1"># normalize</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">donorm</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">count</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">window</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">count</span>
+            <span class="n">psd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">scale</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">hold</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">psd</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">psd</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">psd</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">fscale</span><span class="o">=</span><span class="s1">&#39;lin&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">replicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        plots the power spectral density</span>
+<span class="sd">        warning: the plot will only appear after plt.show()</span>
+
+<span class="sd">        returns the figure instance</span>
+
+<span class="sd">        title  : title of the plot (and the window)</span>
+<span class="sd">        fscale : kind of frequency scale (&#39;lin&#39; or &#39;log&#39;)</span>
+<span class="sd">        labels : list of label of the plots</span>
+<span class="sd">        replicate: number of replication of the spectrum across frequencies</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fft_length</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_params</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">plot_legend</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psd</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plot_legend</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">replicate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">replicate</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;bgrcmyk&#39;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)[:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psd</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">title</span><span class="p">)</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fscale</span> <span class="o">=</span> <span class="n">fscale</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fscale</span> <span class="o">==</span> <span class="s1">&#39;log&#39;</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+
+        <span class="n">fmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">fft_length</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">label_</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">psd</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psd</span><span class="p">):</span>
+            <span class="n">psd</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">psd</span><span class="p">,</span> <span class="mf">1.0e-16</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">replicate</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">label_</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+                <span class="n">fig</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">psd</span><span class="o">.</span><span class="n">T</span><span class="p">[::(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+                         <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Amplitude (dB)&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">plot_legend</span><span class="p">:</span>
+            <span class="n">fig</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span>
+
+    <span class="k">def</span> <span class="nf">main_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Extract the frequency of the maximum in the spectrum&quot;&quot;&quot;</span>
+        <span class="n">fft_length</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_params</span><span class="p">()</span>
+        <span class="n">n_freq</span> <span class="o">=</span> <span class="n">fft_length</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">freq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">)</span>
+        <span class="n">psd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">psd</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">return</span> <span class="n">freq</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">psd</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Coherence"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence">[docs]</a><span class="k">class</span> <span class="nc">Coherence</span><span class="p">(</span><span class="n">Spectrum</span><span class="p">):</span>
+<div class="viewcode-block" id="Coherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Coherence estimator</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_length : int</span>
+<span class="sd">            Length of each signal block, on which we estimate the spectrum</span>
+
+<span class="sd">        fft_length : int or None</span>
+<span class="sd">            Length of FFT, should be greater or equal to block_length.</span>
+<span class="sd">            If None, it is set to block_length</span>
+
+<span class="sd">        step : int or None</span>
+<span class="sd">            Step between successive blocks</span>
+<span class="sd">            If None, it is set to half the block length (i.e. 0.5 overlap)</span>
+
+<span class="sd">        wfunc : function</span>
+<span class="sd">            Function used to compute the weitghting window on each block.</span>
+<span class="sd">            Examples: np.ones, np.hamming, np.bartlett, np.blackman, ...</span>
+
+<span class="sd">        fs : float</span>
+<span class="sd">            Sampling frequency</span>
+
+<span class="sd">        donorm : boolean</span>
+<span class="sd">            If True, the amplitude is normalized</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Coherence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">block_length</span><span class="o">=</span><span class="n">block_length</span><span class="p">,</span>
+                                        <span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
+                                        <span class="n">wfunc</span><span class="o">=</span><span class="n">wfunc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coherence</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigs_a</span><span class="p">,</span> <span class="n">sigs_b</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the coherence for two signals.</span>
+<span class="sd">        It is symmetrical, and slightly faster if n_signals_a &lt; n_signals_b.</span>
+
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sigs_a : array, shape (n_signals_a, n_epochs, n_points)</span>
+<span class="sd">            Signal from which one computes the coherence</span>
+
+<span class="sd">        sigs_b : array, shape (n_signals_b, n_epochs, n_points)</span>
+<span class="sd">            Signal from which one computes the coherence</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        coherence : array, shape (n_signals_a, n_signals_b, n_freqs)</span>
+<span class="sd">            Complex coherence of sigs_a and sigs_b over all epochs.</span>
+<span class="sd">            n_freqs = fft_length // 2 + 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_params</span><span class="p">()</span>
+
+        <span class="n">n_signals_a</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sigs_a</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">n_signals_b</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sigs_b</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">if</span> <span class="n">sigs_a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">!=</span> <span class="n">sigs_b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Incompatible shapes: </span><span class="si">%s</span><span class="s1"> and </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                             <span class="p">(</span><span class="n">sigs_a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">sigs_b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+
+        <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+        <span class="n">n_freq</span> <span class="o">=</span> <span class="n">fft_length</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">coherence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_signals_a</span><span class="p">,</span> <span class="n">n_signals_b</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">),</span>
+                             <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="n">norm_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_signals_a</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+        <span class="n">norm_b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_signals_b</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="c1"># iterate on blocks</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i_epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n_points</span><span class="p">:</span>
+
+                <span class="k">for</span> <span class="n">i_a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_signals_a</span><span class="p">):</span>
+                    <span class="n">F_a</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs_a</span><span class="p">[</span><span class="n">i_a</span><span class="p">,</span> <span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span>
+                                 <span class="n">fft_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
+                    <span class="n">norm_a</span><span class="p">[</span><span class="n">i_a</span><span class="p">]</span> <span class="o">+=</span> <span class="n">square</span><span class="p">(</span><span class="n">F_a</span><span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">i_b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_signals_b</span><span class="p">):</span>
+                        <span class="n">F_b</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs_b</span><span class="p">[</span><span class="n">i_b</span><span class="p">,</span> <span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span>
+                                     <span class="n">fft_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
+                        <span class="c1"># compute only once</span>
+                        <span class="k">if</span> <span class="n">i_a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                            <span class="n">norm_b</span><span class="p">[</span><span class="n">i_b</span><span class="p">]</span> <span class="o">+=</span> <span class="n">square</span><span class="p">(</span><span class="n">F_b</span><span class="p">)</span>
+
+                        <span class="n">coherence</span><span class="p">[</span><span class="n">i_a</span><span class="p">,</span> <span class="n">i_b</span><span class="p">]</span> <span class="o">+=</span> <span class="n">F_a</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">F_b</span><span class="p">)</span>
+
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">block</span> <span class="o">=</span> <span class="n">block</span> <span class="o">+</span> <span class="n">step</span>
+
+        <span class="n">normalization</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">norm_a</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">norm_b</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+        <span class="n">coherence</span> <span class="o">/=</span> <span class="n">normalization</span>
+
+        <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
+                <span class="s1">&#39;bicoherence: first block needs </span><span class="si">%d</span><span class="s1"> samples but sigs has shape &#39;</span>
+                <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">,</span> <span class="n">sigs_a</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coherence</span> <span class="o">=</span> <span class="n">coherence</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coherence</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Not Implemented&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">fig</span>
+
+    <span class="k">def</span> <span class="nf">main_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Bicoherence"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence">[docs]</a><span class="k">class</span> <span class="nc">Bicoherence</span><span class="p">(</span><span class="n">Spectrum</span><span class="p">):</span>
+<div class="viewcode-block" id="Bicoherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Bicoherence estimator</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        block_length : int</span>
+<span class="sd">            Length of each signal block, on which we estimate the spectrum</span>
+
+<span class="sd">        fft_length : int or None</span>
+<span class="sd">            Length of FFT, should be greater or equal to block_length.</span>
+<span class="sd">            If None, it is set to block_length</span>
+
+<span class="sd">        step : int or None</span>
+<span class="sd">            Step between successive blocks</span>
+<span class="sd">            If None, it is set to half the block length (i.e. 0.5 overlap)</span>
+
+<span class="sd">        wfunc : function</span>
+<span class="sd">            Function used to compute the weitghting window on each block.</span>
+<span class="sd">            Examples: np.ones, np.hamming, np.bartlett, np.blackman, ...</span>
+
+<span class="sd">        fs : float</span>
+<span class="sd">            Sampling frequency</span>
+
+<span class="sd">        donorm : boolean</span>
+<span class="sd">            If True, the amplitude is normalized</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Bicoherence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">block_length</span><span class="o">=</span><span class="n">block_length</span><span class="p">,</span>
+                                          <span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
+                                          <span class="n">wfunc</span><span class="o">=</span><span class="n">wfunc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;hagihira&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the bicoherence for one signal</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sigs : array, shape (n_epochs, n_points)</span>
+<span class="sd">            Signal from which one computes the bicoherence</span>
+
+<span class="sd">        method : string in (&#39;hagihira&#39;, &#39;sigl&#39;, &#39;nagashima&#39;, &#39;bispectrum&#39;)</span>
+<span class="sd">            Normalization used for the bicoherence</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bicoherence : array, shape (n_freq, n_freq)</span>
+<span class="sd">            Complex bicoherence computed on the input signal.</span>
+<span class="sd">            n_freq = fft_length // 2 + 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_params</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="n">method</span>
+
+        <span class="n">sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigs</span><span class="p">)</span>
+        <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sigs</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+        <span class="n">n_freq</span> <span class="o">=</span> <span class="n">fft_length</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">bicoherence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_freq</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
+        <span class="n">normalization</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_freq</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+        <span class="c1"># iterate on blocks</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i_epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n_points</span><span class="p">:</span>
+                <span class="n">F</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs</span><span class="p">[</span><span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span> <span class="n">fft_length</span><span class="p">,</span>
+                           <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
+                <span class="n">F1</span> <span class="o">=</span> <span class="n">F</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">F2</span> <span class="o">=</span> <span class="n">F1</span><span class="o">.</span><span class="n">T</span>
+                <span class="n">mask</span> <span class="o">=</span> <span class="n">hankel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_freq</span><span class="p">))</span>
+                <span class="n">F12</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">conjugate</span><span class="p">(</span><span class="n">F</span><span class="p">)[</span><span class="n">mask</span><span class="p">]</span>
+
+                <span class="n">product</span> <span class="o">=</span> <span class="n">F1</span> <span class="o">*</span> <span class="n">F2</span> <span class="o">*</span> <span class="n">F12</span>
+                <span class="n">bicoherence</span> <span class="o">+=</span> <span class="n">product</span>
+                <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;sigl&#39;</span><span class="p">:</span>
+                    <span class="n">normalization</span> <span class="o">+=</span> <span class="n">square</span><span class="p">(</span><span class="n">F1</span><span class="p">)</span> <span class="o">*</span> <span class="n">square</span><span class="p">(</span><span class="n">F2</span><span class="p">)</span> <span class="o">*</span> <span class="n">square</span><span class="p">(</span><span class="n">F12</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;nagashima&#39;</span><span class="p">:</span>
+                    <span class="n">normalization</span> <span class="o">+=</span> <span class="n">square</span><span class="p">(</span><span class="n">F1</span> <span class="o">*</span> <span class="n">F2</span><span class="p">)</span> <span class="o">*</span> <span class="n">square</span><span class="p">(</span><span class="n">F12</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;hagihira&#39;</span><span class="p">:</span>
+                    <span class="n">normalization</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">product</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;bispectrum&#39;</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Method &#39;</span><span class="si">%s</span><span class="s2">&#39; unkown.&quot;</span> <span class="o">%</span> <span class="n">method</span><span class="p">))</span>
+
+                <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">block</span> <span class="o">=</span> <span class="n">block</span> <span class="o">+</span> <span class="n">step</span>
+
+        <span class="n">bicoherence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">bicoherence</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sigl&#39;</span><span class="p">,</span> <span class="s1">&#39;nagashima&#39;</span><span class="p">]:</span>
+            <span class="n">normalization</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">normalization</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">method</span> <span class="o">!=</span> <span class="s1">&#39;bispectrum&#39;</span><span class="p">:</span>
+            <span class="n">bicoherence</span> <span class="o">/=</span> <span class="n">normalization</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bicoherence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">bicoherence</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
+                <span class="s1">&#39;bicoherence: first block needs </span><span class="si">%d</span><span class="s1"> samples but sigs has shape &#39;</span>
+                <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">,</span> <span class="n">sigs</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">bicoherence</span> <span class="o">=</span> <span class="n">bicoherence</span>
+        <span class="k">return</span> <span class="n">bicoherence</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+        <span class="n">fmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="n">bicoherence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bicoherence</span><span class="p">)</span>
+        <span class="n">n_freq</span> <span class="o">=</span> <span class="n">bicoherence</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">flipud</span><span class="p">(</span><span class="n">bicoherence</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">n_freq</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">bicoherence</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices</span><span class="p">(</span><span class="n">n_freq</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">bicoherence</span> <span class="o">=</span> <span class="n">bicoherence</span><span class="p">[:,</span> <span class="p">:</span><span class="n">n_freq</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">compute_vmin_vmax</span><span class="p">(</span><span class="n">bicoherence</span><span class="p">,</span> <span class="n">tick</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">bicoherence</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+                  <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">fmax</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fmax</span><span class="p">),</span>
+                  <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Bicoherence (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Frequency (Hz)&#39;</span><span class="p">)</span>
+        <span class="c1"># add_colorbar(fig, cax, vmin, vmax, unit=&#39;&#39;, ax=ax)</span>
+        <span class="k">return</span> <span class="n">ax</span>
+
+    <span class="k">def</span> <span class="nf">main_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<span class="k">def</span> <span class="nf">phase_amplitude</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">amplitude</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract instantaneous phase and amplitude with Hilbert transform&quot;&quot;&quot;</span>
+    <span class="c1"># one dimension array</span>
+    <span class="k">if</span> <span class="n">signals</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">signals</span> <span class="o">=</span> <span class="n">signals</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">one_dim</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">signals</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">one_dim</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Impossible to compute phase_amplitude with ndim =&#39;</span>
+                         <span class="s1">&#39; </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">signals</span><span class="o">.</span><span class="n">ndim</span><span class="p">,</span> <span class="p">))</span>
+
+    <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">n_fft</span> <span class="o">=</span> <span class="n">compute_n_fft</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+
+    <span class="n">sig_phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">signals</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="k">if</span> <span class="n">phase</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">sig_amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">signals</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="k">if</span> <span class="n">amplitude</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">signals</span><span class="p">):</span>
+        <span class="n">sig_complex</span> <span class="o">=</span> <span class="n">hilbert</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">n_fft</span><span class="p">)[:</span><span class="n">n_points</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">phase</span><span class="p">:</span>
+            <span class="n">sig_phase</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span><span class="n">sig_complex</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">amplitude</span><span class="p">:</span>
+            <span class="n">sig_amplitude</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sig_complex</span><span class="p">)</span>
+
+    <span class="c1"># one dimension array</span>
+    <span class="k">if</span> <span class="n">one_dim</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">phase</span><span class="p">:</span>
+            <span class="n">sig_phase</span> <span class="o">=</span> <span class="n">sig_phase</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">amplitude</span><span class="p">:</span>
+            <span class="n">sig_amplitude</span> <span class="o">=</span> <span class="n">sig_amplitude</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">sig_phase</span><span class="p">,</span> <span class="n">sig_amplitude</span>
+
+
+<span class="k">def</span> <span class="nf">crop_for_fast_hilbert</span><span class="p">(</span><span class="n">signals</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Crop the signal to have a good prime decomposition, for hilbert filter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">signals</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">tmax</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">prime_factors</span><span class="p">(</span><span class="n">tmax</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">tmax</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">signals</span><span class="p">[:</span><span class="n">tmax</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">tmax</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">prime_factors</span><span class="p">(</span><span class="n">tmax</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="n">tmax</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">signals</span><span class="p">[:,</span> <span class="p">:</span><span class="n">tmax</span><span class="p">]</span>
+</pre></div>
+
+</div>
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/pactools/pactools"><img style="position: absolute; top: 50px; right: 0; border: 0;"
+src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Tom Dupre la Tour.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

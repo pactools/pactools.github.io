@@ -38,6 +38,8 @@ pactools.dar_model.DAR
       ~DAR.make_basis
       ~DAR.next_model
       ~DAR.order_selection
+      ~DAR.plot
+      ~DAR.plot_lines
       ~DAR.reset_criterions
       ~DAR.to_dict
       ~DAR.transform

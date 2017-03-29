@@ -34,6 +34,8 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pactools.dar_model.extract_driver" href="pactools.dar_model.extract_driver.html" />
+    <link rel="prev" title="pactools.create_signal" href="pactools.create_signal.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -74,9 +76,6 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_peak_locking.html">Example of peak-locking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_comodulogram.html">Example of comodulogram</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../auto_examples/plot_dar_model.html">Example of fitting a DAR model</a></li>
 </ul>
 </ul>
 </li>
@@ -90,9 +89,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">pactools.dar_model.DAR</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#">pactools.dar_model.DAR</a></li>
 </ul>
 </ul>
 </li>
@@ -131,124 +128,7 @@
 <dl class="class">
 <dt id="pactools.dar_model.DAR">
 <em class="property">class </em><code class="descclassname">pactools.dar_model.</code><code class="descname">DAR</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/dar.html#DAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.DAR" title="Permalink to this definition">¶</a></dt>
-<dd><p class="rubric">Attributes</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">aic</span></code></td>
-<td>Akaike information criterion (AIC) of the model</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">bic</span></code></td>
-<td>Bayesian information criterion (BIC) of the model</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">logl</span></code></td>
-<td>Log likelihood of the model</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">ordar_</span></code></td>
-<td>AR order of the model, different from self.ordar if a model</td>
-</tr>
-</tbody>
-</table>
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">amplitude_frequency</span></code>([nbcols,&nbsp;frange,&nbsp;mode,&nbsp;xlim])</td>
-<td>Computes an amplitude-frequency power spectral density</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">check_all_arrays</span></code>(sigin,&nbsp;sigdriv,&nbsp;...)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">compute_cross_orders</span></code>(ordriv)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>()</td>
-<td>Creates a (deep) copy of a model</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">degrees_of_freedom</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">develop</span></code>(basis)</td>
-<td>Compute the AR models and gains at instants fixed by newcols</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">develop_all</span></code>([sigdriv,&nbsp;sigdriv_imag])</td>
-<td>Compute the AR models and gains for every instant of sigdriv</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">develop_gain</span></code>(basis[,&nbsp;sigdriv,&nbsp;squared,&nbsp;log])</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_ar</span></code>()</td>
-<td>Estimates the AR model on a signal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_error</span></code>([recompute])</td>
-<td>Estimates the prediction error</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_fixed_gain</span></code>()</td>
-<td>Estimates a fixed gain from the predicton error <a href="#id1"><span class="problematic" id="id2">self.residual_</span></a>.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_gain</span></code>([regul])</td>
-<td>helper to handle failure in gain estimation</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;sigdriv_imag,&nbsp;...])</td>
-<td>Estimate a DAR model from input signals.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit_transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;...])</td>
-<td>Same as fit, but return the residual instead of the model object</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_criterion</span></code>(criterion[,&nbsp;train])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_test_data</span></code>(sig_list)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_title</span></code>([name,&nbsp;criterion])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_train_data</span></code>(sig_list)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">last_model</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">likelihood_ratio</span></code>(ar0)</td>
-<td>Computation of the likelihood ratio test the null hypothesis H0 is given by model ar0; the current model (self) is tested against this model ar0 which may be either an invariant AR model (ordriv=0) or a hybrid one (invariant AR part, with driven gain).</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">log_likelihood</span></code>([train,&nbsp;skip])</td>
-<td>Approximate computation of the logarithm of the likelihood</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">make_basis</span></code>([sigdriv,&nbsp;sigdriv_imag,&nbsp;ordriv])</td>
-<td>Creates a basis from the driving signal, with the successive powers of sigdriv and sigdriv_imag.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">next_model</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">order_selection</span></code>()</td>
-<td>Fit several models with a grid-search over self.ordar and</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;vmin,&nbsp;vmax,&nbsp;ax,&nbsp;...])</td>
-<td>represent the power spectral density as a function of</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_lines</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;ax,&nbsp;xlim,&nbsp;...])</td>
-<td>Represent the power spectral density as a function of</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">reset_criterions</span></code>()</td>
-<td>Reset stored criterions (negative log_likelihood, AIC or BIC)</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">to_dict</span></code>()</td>
-<td>Convert the model attributes to dict</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;...])</td>
-<td>Whiten a signal with the already fitted model</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
+<dd><dl class="method">
 <dt id="pactools.dar_model.DAR.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.DAR.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
@@ -346,7 +226,7 @@
 <td>Estimates the prediction error</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_fixed_gain</span></code>()</td>
-<td>Estimates a fixed gain from the predicton error <a href="#id3"><span class="problematic" id="id4">self.residual_</span></a>.</td>
+<td>Estimates a fixed gain from the predicton error <a href="#id1"><span class="problematic" id="id2">self.residual_</span></a>.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_gain</span></code>([regul])</td>
 <td>helper to handle failure in gain estimation</td>
@@ -386,6 +266,12 @@
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">order_selection</span></code>()</td>
 <td>Fit several models with a grid-search over self.ordar and</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;vmin,&nbsp;vmax,&nbsp;ax,&nbsp;...])</td>
+<td>represent the power spectral density as a function of</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_lines</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;ax,&nbsp;xlim,&nbsp;...])</td>
+<td>Represent the power spectral density as a function of</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">reset_criterions</span></code>()</td>
 <td>Reset stored criterions (negative log_likelihood, AIC or BIC)</td>

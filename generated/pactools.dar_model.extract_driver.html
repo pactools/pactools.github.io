@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pactools.PeakLocking &#8212; pactools 0.1 documentation</title>
+    <title>pactools.dar_model.extract_driver &#8212; pactools 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -34,8 +34,8 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pactools.create_signal" href="pactools.create_signal.html" />
-    <link rel="prev" title="pactools.Comodulogram" href="pactools.Comodulogram.html" />
+    <link rel="next" title="pactools.utils.carrier.Carrier" href="pactools.utils.carrier.Carrier.html" />
+    <link rel="prev" title="pactools.dar_model.DAR" href="pactools.dar_model.DAR.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -89,7 +89,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">pactools.PeakLocking</a></li>
+<li><a class="reference internal" href="#">pactools.dar_model.extract_driver</a></li>
 </ul>
 </ul>
 </li>
@@ -101,7 +101,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="../_sources/generated/pactools.PeakLocking.rst.txt"
+  <a href="../_sources/generated/pactools.dar_model.extract_driver.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -123,98 +123,103 @@
 
 <div class="container content-container">
   
-  <div class="section" id="pactools-peaklocking">
-<h1>pactools.PeakLocking<a class="headerlink" href="#pactools-peaklocking" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="pactools.PeakLocking">
-<em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">PeakLocking</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='carrier', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking" title="Permalink to this definition">¶</a></dt>
-<dd><p>An object to compute time average and time-frequency averaged with
-peak-locking, to analyze phase-amplitude coupling.</p>
+  <div class="section" id="pactools-dar-model-extract-driver">
+<h1>pactools.dar_model.extract_driver<a class="headerlink" href="#pactools-dar-model-extract-driver" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pactools.dar_model.extract_driver">
+<code class="descclassname">pactools.dar_model.</code><code class="descname">extract_driver</code><span class="sig-paren">(</span><em>sigs</em>, <em>fs</em>, <em>low_fq</em>, <em>n_cycles=None</em>, <em>bandwidth=1.0</em>, <em>fill=2</em>, <em>whitening='after'</em>, <em>ordar=10</em>, <em>normalize=False</em>, <em>extract_complex=True</em>, <em>random_state=None</em>, <em>draw=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/preprocess.html#extract_driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.extract_driver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the driver with filtering and fill the rest of the signal.</p>
+<p>The driver is extracted with a bandpass filter, subtracted from the signal,
+and the frequency gap is filled with filtered white noise.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fs</strong> : float</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sigs</strong> : array, shape (n_epochs, n_points)</p>
+<blockquote>
+<div><p>Input array to filter</p>
+</div></blockquote>
+<p><strong>fs</strong> : float</p>
 <blockquote>
 <div><p>Sampling frequency</p>
 </div></blockquote>
 <p><strong>low_fq</strong> : float</p>
 <blockquote>
-<div><p>Filtering frequency (phase signal)</p>
+<div><p>Center frequency of bandpass filters.</p>
 </div></blockquote>
-<p><strong>low_fq_width</strong> : float</p>
+<p><strong>bandwidth</strong> : float</p>
 <blockquote>
-<div><p>Bandwidth of the band-pass filter (phase signal)</p>
+<div><p>Bandwidth of the bandpass filters.
+Use it to have a constant bandwidth for all filters.
+Should be None if n_cycles is not None.</p>
 </div></blockquote>
-<p><strong>high_fq_range</strong> : array or list, shape (n_high, ), or &#8216;auto&#8217;</p>
+<p><strong>n_cycles</strong> : float</p>
 <blockquote>
-<div><p>List of filtering frequencies (amplitude signal)
-If &#8216;auto&#8217;, it uses np.linspace(low_fq, fs / 2, 40).</p>
+<div><p>Number of cycles of the bandpass filters.
+Use it to have a bandwidth proportional to the center frequency.
+Should be None if bandwidth is not None.</p>
 </div></blockquote>
-<p><strong>high_fq_width</strong> : float or &#8216;auto&#8217;</p>
+<p><strong>fill</strong> : in {0, 1, 2}</p>
 <blockquote>
-<div><p>Bandwidth of the band-pass filter (amplitude signal)
-If &#8216;auto&#8217;, it uses 2 * low_fq.</p>
+<div><p>Filling strategy for the full band signal high_sigs:
+0 : keep the signal unchanged: high_sigs = sigs
+1 : remove the bandpass filtered signal: high_sigs = sigs - low_sigs
+2 : remove and replace by bandpass filtered Gaussian white noise</p>
 </div></blockquote>
-<p><strong>t_plot</strong> : float</p>
+<p><strong>whitening</strong> : in {&#8216;before&#8217;, &#8216;after&#8217;, None}</p>
 <blockquote>
-<div><p>Time to plot around the peaks (in second)</p>
+<div><p>Define when the whitening is done compared to the filtering.</p>
 </div></blockquote>
-<p><strong>filter_method</strong> : in {&#8216;mne&#8217;, &#8216;carrier&#8217;}</p>
+<p><strong>ordar</strong> : int &gt;= 0</p>
 <blockquote>
-<div><p>Choose band pass filtering method (in multiple_band_pass)
-&#8216;mne&#8217;: with mne.filter.band_pass_filter
-&#8216;carrier&#8217;: with pactools.Carrier (default)</p>
+<div><p>Order of the AR model used for whitening</p>
 </div></blockquote>
-<p><strong>peak_or_trough: in {&#8216;peak&#8217;, &#8216;trough&#8217;}</strong></p>
+<p><strong>normalize</strong> : boolean</p>
 <blockquote>
-<div><p>Lock to the maximum (peak) of minimum (trough) of the slow
-oscillation.</p>
+<div><p>Whether to scale the signals to have unit norm high_sigs.
+The low_sigs are scaled with the same scales.</p>
 </div></blockquote>
-<p><strong>percentiles</strong> : list of float or string, shape (n_percentiles, )</p>
+<p><strong>extract_complex</strong> : boolean</p>
+<blockquote>
+<div><p>Whether to extract a complex driver (low_sigs and low_sigs_imag)</p>
+</div></blockquote>
+<p><strong>random_state</strong> : None, int or np.random.RandomState instance</p>
+<blockquote>
+<div><p>Seed or random number generator for the white noise filling strategy.</p>
+</div></blockquote>
+<p><strong>draw</strong> : string</p>
+<blockquote>
+<div><p>Add a letter to the string to draw the corresponding figures:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&#8216;e&#8217; : extraction of the driver</li>
+<li>&#8216;g&#8217; : gap filling</li>
+<li>&#8216;w&#8217; : whitening step</li>
+<li>&#8216;z&#8217; : all</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>low_sigs</strong> : array, shape (n_epochs, n_points)</p>
+<blockquote>
+<div><p>Bandpass filtered signal (aka driver)</p>
+</div></blockquote>
+<p><strong>high_sigs</strong> : array, shape (n_epochs, n_points)</p>
+<blockquote>
+<div><p>Bandstop filtered signal</p>
+</div></blockquote>
+<p><strong>low_sigs_imag</strong> : array, shape (n_epochs, n_points)</p>
 <blockquote class="last">
-<div><p>Percentile to compute for the time representation.
-It can also include &#8216;mean&#8217;, &#8216;std&#8217; or &#8216;ste&#8217;
-(resp. mean, standard deviation or standard error).</p>
+<div><p>Imaginary part of the bandpass filtered signal
+Returned only if extract_complex is True.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="method">
-<dt id="pactools.PeakLocking.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='carrier', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.PeakLocking.__init__" title="pactools.PeakLocking.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;low_fq[,&nbsp;low_fq_width,&nbsp;...])</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(low_sig[,&nbsp;high_sig,&nbsp;mask])</td>
-<td>Compute peak-locked time-averaged and time-frequency representations.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([axs,&nbsp;vmin,&nbsp;vmax,&nbsp;ylim])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_peaks</span></code>([ax])</td>
-<td></td>
-</tr>
-</tbody>
-</table>
+<p class="rubric">Examples</p>
+<p>low_sig, high_sig = extract_driver(sigs, fs, 3.0):</p>
 </dd></dl>
 
 </div>

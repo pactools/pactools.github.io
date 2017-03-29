@@ -74,9 +74,6 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_peak_locking.html">Example of peak-locking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_comodulogram.html">Example of comodulogram</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/plot_dar_model.html">Example of fitting a DAR model</a></li>
 </ul>
 </ul>
 </li>
@@ -127,13 +124,13 @@
 
 <span class="kn">from</span> <span class="nn">.dar_model.base_dar</span> <span class="k">import</span> <span class="n">BaseDAR</span>
 <span class="kn">from</span> <span class="nn">.dar_model.dar</span> <span class="k">import</span> <span class="n">DAR</span>
+<span class="kn">from</span> <span class="nn">.dar_model.preprocess</span> <span class="k">import</span> <span class="n">multiple_extract_driver</span>
 <span class="kn">from</span> <span class="nn">.utils.progress_bar</span> <span class="k">import</span> <span class="n">ProgressBar</span>
 <span class="kn">from</span> <span class="nn">.utils.spectrum</span> <span class="k">import</span> <span class="n">Bicoherence</span><span class="p">,</span> <span class="n">Coherence</span>
 <span class="kn">from</span> <span class="nn">.utils.maths</span> <span class="k">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">argmax_2d</span>
 <span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_random_state</span>
 <span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_consistent_shape</span>
 <span class="kn">from</span> <span class="nn">.utils.viz</span> <span class="k">import</span> <span class="n">add_colorbar</span>
-<span class="kn">from</span> <span class="nn">.preprocess</span> <span class="k">import</span> <span class="n">multiple_extract</span>
 <span class="kn">from</span> <span class="nn">.bandpass_filter</span> <span class="k">import</span> <span class="n">multiple_band_pass</span>
 
 <span class="n">N_BINS_TORT</span> <span class="o">=</span> <span class="mi">18</span>
@@ -233,6 +230,9 @@
 <span class="sd">        If the dictionary is empty, default values will be applied based on</span>
 <span class="sd">        fs and low_fq_width, with 0.5 overlap windows and no zero-padding.</span>
 
+<span class="sd">    extract_params : dict</span>
+<span class="sd">        Parameters for DAR models driver extraction</span>
+
 <span class="sd">    low_fq_width_2 : float</span>
 <span class="sd">        Bandwidth of the band-pass filters centered on low_fq_range, for</span>
 <span class="sd">        the amplitude signal. Used only with &#39;vanwijk&#39; method.</span>
@@ -243,7 +243,7 @@
                  <span class="n">high_fq_width</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;tort&#39;</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax_special</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">minimum_shift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coherence_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
-                 <span class="n">low_fq_width_2</span><span class="o">=</span><span class="mf">4.0</span><span class="p">):</span>
+                 <span class="n">extract_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span> <span class="n">low_fq_width_2</span><span class="o">=</span><span class="mf">4.0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">low_fq_range</span> <span class="o">=</span> <span class="n">low_fq_range</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">low_fq_width</span> <span class="o">=</span> <span class="n">low_fq_width</span>
@@ -258,6 +258,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">minimum_shift</span> <span class="o">=</span> <span class="n">minimum_shift</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coherence_params</span> <span class="o">=</span> <span class="n">coherence_params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract_params</span> <span class="o">=</span> <span class="n">extract_params</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">low_fq_width_2</span> <span class="o">=</span> <span class="n">low_fq_width_2</span></div>
 
     <span class="k">def</span> <span class="nf">_check_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -506,8 +507,8 @@
 <span class="sd">        &#39;low_fq_range&#39; and &#39;high_fq_range&#39; must be the same than used in the</span>
 <span class="sd">        modulation_index function that computed &#39;comodulograms&#39;.</span>
 
-<span class="sd">        Return</span>
-<span class="sd">        ------</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
 <span class="sd">        low_fq : float or array, shape (n_comod, )</span>
 <span class="sd">            Low frequency of maximum PAC</span>
 
@@ -887,8 +888,7 @@
     <span class="k">return</span> <span class="n">z2</span>
 
 
-<span class="k">def</span> <span class="nf">_driven_comodulogram</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
-                         <span class="n">extract_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">()):</span>
+<span class="k">def</span> <span class="nf">_driven_comodulogram</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function for the comodulogram.</span>
 <span class="sd">    Used by PAC method in DAR_BASED_PAC_METRICS.</span>
@@ -906,7 +906,7 @@
         <span class="n">sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">]</span>
         <span class="n">n_epochs</span> <span class="o">=</span> <span class="n">low_sig</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="n">extract_complex</span> <span class="o">=</span> <span class="n">extract_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;extract_complex&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">extract_complex</span> <span class="o">=</span> <span class="n">estimator</span><span class="o">.</span><span class="n">extract_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;extract_complex&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="n">comod_list</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">estimator</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">:</span>
@@ -914,10 +914,10 @@
                           <span class="n">title</span><span class="o">=</span><span class="s1">&#39;comodulogram: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
                           <span class="n">model</span><span class="o">.</span><span class="n">get_title</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
     <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">filtered_signals</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
-            <span class="n">multiple_extract</span><span class="p">(</span>
+            <span class="n">multiple_extract_driver</span><span class="p">(</span>
                 <span class="n">sigs</span><span class="o">=</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">estimator</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">estimator</span><span class="o">.</span><span class="n">low_fq_width</span><span class="p">,</span>
-                <span class="n">low_fq_range</span><span class="o">=</span><span class="n">estimator</span><span class="o">.</span><span class="n">low_fq_range</span><span class="p">,</span>
-                <span class="n">random_state</span><span class="o">=</span><span class="n">estimator</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">extract_params</span><span class="p">)):</span>
+                <span class="n">frequency_range</span><span class="o">=</span><span class="n">estimator</span><span class="o">.</span><span class="n">low_fq_range</span><span class="p">,</span>
+                <span class="n">random_state</span><span class="o">=</span><span class="n">estimator</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span> <span class="o">**</span><span class="n">estimator</span><span class="o">.</span><span class="n">extract_params</span><span class="p">)):</span>
 
         <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
             <span class="n">filtered_low</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">filtered_low_imag</span> <span class="o">=</span> <span class="n">filtered_signals</span>

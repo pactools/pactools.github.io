@@ -1,0 +1,27 @@
+pactools.utils.spectrum.Coherence
+=================================
+
+.. currentmodule:: pactools.utils.spectrum
+
+.. autoclass:: Coherence
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Coherence.__init__
+      ~Coherence.check_params
+      ~Coherence.fit
+      ~Coherence.main_frequency
+      ~Coherence.periodogram
+      ~Coherence.plot
+   
+   
+
+   
+   
+   

@@ -1,0 +1,25 @@
+pactools.utils.carrier.LowPass
+==============================
+
+.. currentmodule:: pactools.utils.carrier
+
+.. autoclass:: LowPass
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LowPass.__init__
+      ~LowPass.design
+      ~LowPass.direct
+      ~LowPass.plot
+   
+   
+
+   
+   
+   

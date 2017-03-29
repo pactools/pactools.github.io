@@ -1,0 +1,27 @@
+pactools.utils.spectrum.Bicoherence
+===================================
+
+.. currentmodule:: pactools.utils.spectrum
+
+.. autoclass:: Bicoherence
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Bicoherence.__init__
+      ~Bicoherence.check_params
+      ~Bicoherence.fit
+      ~Bicoherence.main_frequency
+      ~Bicoherence.periodogram
+      ~Bicoherence.plot
+   
+   
+
+   
+   
+   

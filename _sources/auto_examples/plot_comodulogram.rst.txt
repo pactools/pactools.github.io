@@ -78,7 +78,7 @@ A comodulogram shows the estimated PAC metric on a grid of frequency bands.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  9.957 seconds)
+**Total running time of the script:** ( 0 minutes  9.435 seconds)
 
 
 

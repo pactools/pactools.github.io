@@ -76,9 +76,6 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_peak_locking.html">Example of peak-locking</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_comodulogram.html">Example of comodulogram</a></li>
-<li class="toctree-l1"><a class="reference internal" href="auto_examples/plot_dar_model.html">Example of fitting a DAR model</a></li>
 </ul>
 </ul>
 </li>
@@ -147,6 +144,9 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pactools.PeakLocking.html#pactools.PeakLocking" title="pactools.PeakLocking"><code class="xref py py-obj docutils literal"><span class="pre">PeakLocking</span></code></a>(fs,&nbsp;low_fq[,&nbsp;low_fq_width,&nbsp;...])</td>
 <td>An object to compute time average and time-frequency averaged with peak-locking, to analyze phase-amplitude coupling.</td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.create_signal.html#pactools.create_signal" title="pactools.create_signal"><code class="xref py py-obj docutils literal"><span class="pre">create_signal</span></code></a>(n_points,&nbsp;fs,&nbsp;high_fq,&nbsp;low_fq,&nbsp;...)</td>
+<td>Simulate a 1D signal with artificial phase amplitude coupling (PAC).</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -159,8 +159,10 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR"><code class="xref py py-obj docutils literal"><span class="pre">DAR</span></code></a>([ordar,&nbsp;ordriv,&nbsp;criterion,&nbsp;normalize,&nbsp;...])</td>
-<td><p class="rubric">Attributes</p>
-</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="pactools.dar_model.extract_driver"><code class="xref py py-obj docutils literal"><span class="pre">extract_driver</span></code></a>(sigs,&nbsp;fs,&nbsp;low_fq[,&nbsp;n_cycles,&nbsp;...])</td>
+<td>Extract the driver with filtering and fill the rest of the signal.</td>
 </tr>
 </tbody>
 </table>
@@ -173,7 +175,22 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.utils.peak_finder.peak_finder.html#pactools.utils.peak_finder.peak_finder" title="pactools.utils.peak_finder.peak_finder"><code class="xref py py-obj docutils literal"><span class="pre">peak_finder</span></code></a>(x0[,&nbsp;thresh,&nbsp;extrema])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.utils.carrier.Carrier.html#pactools.utils.carrier.Carrier" title="pactools.utils.carrier.Carrier"><code class="xref py py-obj docutils literal"><span class="pre">carrier.Carrier</span></code></a>([fir,&nbsp;fs,&nbsp;extract_complex])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pactools.utils.carrier.LowPass.html#pactools.utils.carrier.LowPass" title="pactools.utils.carrier.LowPass"><code class="xref py py-obj docutils literal"><span class="pre">carrier.LowPass</span></code></a>([fs])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum" title="pactools.utils.spectrum.Spectrum"><code class="xref py py-obj docutils literal"><span class="pre">spectrum.Spectrum</span></code></a>([block_length,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence" title="pactools.utils.spectrum.Coherence"><code class="xref py py-obj docutils literal"><span class="pre">spectrum.Coherence</span></code></a>([block_length,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence" title="pactools.utils.spectrum.Bicoherence"><code class="xref py py-obj docutils literal"><span class="pre">spectrum.Bicoherence</span></code></a>([block_length,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pactools.utils.peak_finder.peak_finder.html#pactools.utils.peak_finder.peak_finder" title="pactools.utils.peak_finder.peak_finder"><code class="xref py py-obj docutils literal"><span class="pre">peak_finder.peak_finder</span></code></a>(x0[,&nbsp;thresh,&nbsp;extrema])</td>
 <td>Noise tolerant fast peak finding algorithm</td>
 </tr>
 </tbody>

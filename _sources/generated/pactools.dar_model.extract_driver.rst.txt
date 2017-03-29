@@ -1,0 +1,6 @@
+pactools.dar_model.extract_driver
+=================================
+
+.. currentmodule:: pactools.dar_model
+
+.. autofunction:: extract_driver
