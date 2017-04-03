@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Example of fitting a DAR model &#8212; pactools 0.1 documentation</title>
+    <title>Fitting a DAR model &#8212; pactools 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -87,7 +87,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Example of fitting a DAR model</a></li>
+<li><a class="reference internal" href="#">Fitting a DAR model</a></li>
 </ul>
 </ul>
 </li>
@@ -121,18 +121,17 @@
 
 <div class="container content-container">
   
-  <div class="section" id="example-of-fitting-a-dar-model">
-<span id="sphx-glr-auto-examples-plot-dar-model-py"></span><h1>Example of fitting a DAR model<a class="headerlink" href="#example-of-fitting-a-dar-model" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="fitting-a-dar-model">
+<span id="sphx-glr-auto-examples-plot-dar-model-py"></span><h1>Fitting a DAR model<a class="headerlink" href="#fitting-a-dar-model" title="Permalink to this headline">¶</a></h1>
 <p>This example creates an artificial signal with phase-amplitude coupling (PAC),
 fits a DAR model and show the modulation extracted in the DAR model.</p>
 <p>It also shows the comodulogram computed with a DAR model.</p>
-<img alt="../_images/sphx_glr_plot_dar_model_001.png" class="align-center" src="../_images/sphx_glr_plot_dar_model_001.png" />
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 <span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a>
-<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <span class="n">create_signal</span>
-<span class="kn">from</span> <span class="nn">pactools.dar_model</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="View documentation for pactools.dar_model.DAR"><span class="n">DAR</span></a><span class="p">,</span> <span class="n">extract_driver</span>
+<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <span class="n">simulate_pac</span>
+<span class="kn">from</span> <span class="nn">pactools.dar_model</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="View documentation for pactools.dar_model.DAR"><span class="n">DAR</span></a><span class="p">,</span> <a href="http://pactools.github.io/generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="View documentation for pactools.dar_model.extract_driver"><span class="n">extract_driver</span></a>
 
 <span class="n">fs</span> <span class="o">=</span> <span class="mf">200.</span>  <span class="c1"># Hz</span>
 <span class="n">high_fq</span> <span class="o">=</span> <span class="mf">50.0</span>  <span class="c1"># Hz</span>
@@ -144,22 +143,27 @@ fits a DAR model and show the modulation extracted in the DAR model.</p>
 <span class="n">t_plot</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># sec</span>
 
 <span class="c1"># Create the artificial signal with PAC</span>
-<span class="n">signal</span> <span class="o">=</span> <span class="n">create_signal</span><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span>
-                       <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
-                       <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="c1"># Prepare the plot for the two figures</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">signal</span> <span class="o">=</span> <span class="n">simulate_pac</span><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
+                      <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span>
+                      <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Prepare the plot for the three figures</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
-<span class="c1"># Extract a low frequency band and fit a DAR model</span>
-<span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">extract_driver</span><span class="p">(</span>
+<span class="c1"># Extract a low frequency band</span>
+<span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="View documentation for pactools.dar_model.extract_driver"><span class="n">extract_driver</span></a><span class="p">(</span>
     <span class="n">sigs</span><span class="o">=</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
     <span class="n">extract_complex</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
+<span class="c1"># Create a DAR model</span>
 <span class="c1"># Here we use BIC selection to get optimal hyperparameters (ordar, ordriv)</span>
 <span class="n">dar</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="View documentation for pactools.dar_model.DAR"><span class="n">DAR</span></a><span class="p">(</span><span class="n">ordar</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">)</span>
+<span class="c1"># Fit the DAR model</span>
 <span class="n">dar</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sigin</span><span class="o">=</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
+
+<span class="c1"># Plot the BIC selection</span>
 <span class="n">bic_array</span> <span class="o">=</span> <span class="n">dar</span><span class="o">.</span><span class="n">model_selection_criterions_</span><span class="p">[</span><span class="s1">&#39;bic&#39;</span><span class="p">]</span>
 <span class="n">lines</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bic_array</span><span class="p">)</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ordriv=</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
@@ -168,12 +172,22 @@ fits a DAR model and show the modulation extracted in the DAR model.</p>
 <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;BIC order selection&#39;</span><span class="p">)</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dar</span><span class="o">.</span><span class="n">ordar_</span><span class="p">,</span> <span class="n">bic_array</span><span class="p">[</span><span class="n">dar</span><span class="o">.</span><span class="n">ordar_</span><span class="p">,</span> <span class="n">dar</span><span class="o">.</span><span class="n">ordriv_</span><span class="p">],</span> <span class="s1">&#39;ro&#39;</span><span class="p">)</span>
 
-<span class="c1"># Plot the modulation extracted by the optimal model</span>
+<span class="c1"># Plot the modulation extracted by the optimal model</span>
 <span class="n">dar</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">dar</span><span class="o">.</span><span class="n">get_title</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
-
-<span class="c1"># Compute the comodulogram: It handles the driver extraction for a range</span>
-<span class="c1"># of low frequency, fit a model, and quantify PAC accross the spectrum.</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_plot_dar_model_001.png" class="align-center" src="../_images/sphx_glr_plot_dar_model_001.png" />
+<p>To compute a comodulogram, we need to perform the same steps for each
+low frequency: extract the low frequency, fit a DAR model, potentially with
+a model selection with the BIC, and quantify the PAC accross the spectrum.</p>
+<p>Everything is handled by the function <code class="docutils literal"><span class="pre">Comodulogram</span></code>, by giving a
+(non-fitted) DAR model in the parameter <code class="docutils literal"><span class="pre">method</span></code>.
+Giving <code class="docutils literal"><span class="pre">method='duprelatour'</span></code> will default to
+<code class="docutils literal"><span class="pre">DAR(ordar=10,</span> <span class="pre">ordriv=1,</span> <span class="pre">criterion=None)</span></code>, without BIC selection.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Here we give a different set of parameter, and the BIC selection will be</span>
+<span class="c1"># performed independantly for each model (i.e. at each low frequency).</span>
+<span class="n">dar</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="View documentation for pactools.dar_model.DAR"><span class="n">DAR</span></a><span class="p">(</span><span class="n">ordar</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">)</span>
 <span class="n">low_fq_range</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.linspace.html#numpy.linspace" title="View documentation for numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
 <span class="n">estimator</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="o">=</span><span class="n">low_fq_range</span><span class="p">,</span>
                          <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">dar</span><span class="p">,</span>
@@ -185,7 +199,7 @@ fits a DAR model and show the modulation extracted in the DAR model.</p>
 <a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.show" title="View documentation for matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  30.494 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  26.137 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_dar_model.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dar_model.py</span></code></a></div>

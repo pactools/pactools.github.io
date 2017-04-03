@@ -1,14 +1,11 @@
-.. pactools documentation master file, created by
-   sphinx-quickstart on Thu Mar 23 10:56:51 2017.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to pactools's documentation!
 ====================================
 
 This package provides tools to estimate **phase-amplitude coupling (PAC)** in neural time series.
 
 In particular, it implements the **driven auto-regressive (DAR)** models presented in the reference below.
+
+WARNING: The API of this package is not fixed yet; function names and parameters may change without notice. Estimated date of reliable API: May 2017
 
 Installation
 ------------
@@ -31,11 +28,9 @@ To check if everything worked fine, you can do::
 and it should not give any error messages.
 
 
-Content
--------
-
 .. toctree::
    :maxdepth: 2
+   :hidden:
 
    api.rst
 
@@ -56,7 +51,10 @@ If you use this code in your project, please cite:
      organization={IEEE}
      }
 
+Acknowledgment
+--------------
 
+The project was supported by the ERC Starting Grant SLAB ERC-YStG-676943 to Alexandre Gramfort and IDEX Grant NoTime to Virginie van Wassenhove.
 
 Indices and tables
 ==================

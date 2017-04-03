@@ -121,7 +121,6 @@
 
 
 <div class="viewcode-block" id="DAR"><a class="viewcode-back" href="../../../generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR">[docs]</a><span class="k">class</span> <span class="nc">DAR</span><span class="p">(</span><span class="n">BaseDAR</span><span class="p">):</span>
-
     <span class="k">def</span> <span class="nf">last_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_model</span><span class="p">(</span><span class="n">only_last</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -144,7 +143,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;basis does not yet exist&#39;</span><span class="p">)</span>
 
         <span class="c1"># -------- get the training data</span>
-        <span class="n">sigin</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_train_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sigin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span><span class="p">])</span>
+        <span class="n">sigin</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_train_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sigin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span><span class="p">])</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="o">~</span><span class="n">mask</span> <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
 
         <span class="c1"># mask the signal</span>
@@ -174,8 +173,8 @@
 
             <span class="c1"># -------- prepare auto/inter correlations</span>
             <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n_points</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">sigreg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
-                               <span class="n">sigreg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                <span class="n">sigreg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">sigreg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
             <span class="n">r</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">masked_sigin</span><span class="p">[:,</span> <span class="n">K</span><span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
                                <span class="n">sigreg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
@@ -237,8 +236,7 @@
 
 <span class="k">class</span> <span class="nc">AR</span><span class="p">(</span><span class="n">DAR</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">AR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
-            <span class="n">ordar</span><span class="o">=</span><span class="n">ordar</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">AR</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">ordar</span><span class="o">=</span><span class="n">ordar</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </pre></div>
 
 </div>

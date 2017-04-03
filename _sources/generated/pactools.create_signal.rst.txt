@@ -1,6 +1,0 @@
-pactools.create_signal
-======================
-
-.. currentmodule:: pactools
-
-.. autofunction:: create_signal

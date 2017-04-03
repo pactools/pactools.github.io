@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Example of comodulogram &#8212; pactools 0.1 documentation</title>
+    <title>Comodulogram &#8212; pactools 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -87,7 +87,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Example of comodulogram</a></li>
+<li><a class="reference internal" href="#">Comodulogram</a></li>
 </ul>
 </ul>
 </li>
@@ -121,8 +121,8 @@
 
 <div class="container content-container">
   
-  <div class="section" id="example-of-comodulogram">
-<span id="sphx-glr-auto-examples-plot-comodulogram-py"></span><h1>Example of comodulogram<a class="headerlink" href="#example-of-comodulogram" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="comodulogram">
+<span id="sphx-glr-auto-examples-plot-comodulogram-py"></span><h1>Comodulogram<a class="headerlink" href="#comodulogram" title="Permalink to this headline">¶</a></h1>
 <p>This example creates an artificial signal with phase-amplitude coupling (PAC)
 and computes comodulograms with several methods.</p>
 <p>A comodulogram shows the estimated PAC metric on a grid of frequency bands.</p>
@@ -146,7 +146,7 @@ and computes comodulograms with several methods.</p>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 <span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a><span class="p">,</span> <span class="n">REFERENCES</span>
-<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <span class="n">create_signal</span>
+<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <span class="n">simulate_pac</span>
 
 <span class="n">fs</span> <span class="o">=</span> <span class="mf">200.</span>  <span class="c1"># Hz</span>
 <span class="n">high_fq</span> <span class="o">=</span> <span class="mf">50.0</span>  <span class="c1"># Hz</span>
@@ -157,13 +157,15 @@ and computes comodulograms with several methods.</p>
 <span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.4</span>
 <span class="n">t_plot</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># sec</span>
 
-<span class="n">signal</span> <span class="o">=</span> <span class="n">create_signal</span><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span>
-                       <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
-                       <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">signal</span> <span class="o">=</span> <span class="n">simulate_pac</span><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
+                      <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span>
+                      <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="n">low_fq_range</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.linspace.html#numpy.linspace" title="View documentation for numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-<span class="n">methods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ozkurt&#39;</span><span class="p">,</span> <span class="s1">&#39;canolty&#39;</span><span class="p">,</span> <span class="s1">&#39;tort&#39;</span><span class="p">,</span> <span class="s1">&#39;penny&#39;</span><span class="p">,</span> <span class="s1">&#39;vanwijk&#39;</span><span class="p">,</span> <span class="s1">&#39;duprelatour&#39;</span><span class="p">,</span>
-           <span class="s1">&#39;colgin&#39;</span><span class="p">,</span> <span class="s1">&#39;sigl&#39;</span><span class="p">,</span> <span class="s1">&#39;bispectrum&#39;</span><span class="p">]</span>
+<span class="n">methods</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;ozkurt&#39;</span><span class="p">,</span> <span class="s1">&#39;canolty&#39;</span><span class="p">,</span> <span class="s1">&#39;tort&#39;</span><span class="p">,</span> <span class="s1">&#39;penny&#39;</span><span class="p">,</span> <span class="s1">&#39;vanwijk&#39;</span><span class="p">,</span> <span class="s1">&#39;duprelatour&#39;</span><span class="p">,</span> <span class="s1">&#39;colgin&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sigl&#39;</span><span class="p">,</span> <span class="s1">&#39;bispectrum&#39;</span>
+<span class="p">]</span>
 
 <span class="n">n_lines</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">n_columns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.ceil.html#numpy.ceil" title="View documentation for numpy.ceil"><span class="n">np</span><span class="o">.</span><span class="n">ceil</span></a><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">methods</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n_lines</span><span class="p">)))</span>
@@ -182,7 +184,7 @@ and computes comodulograms with several methods.</p>
 <a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.show" title="View documentation for matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  9.435 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  9.560 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_comodulogram.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_comodulogram.py</span></code></a></div>

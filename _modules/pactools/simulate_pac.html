@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pactools.create_signal &#8212; pactools 0.1 documentation</title>
+    <title>pactools.simulate_pac &#8212; pactools 0.1 documentation</title>
     
     <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -114,7 +114,7 @@
 
 <div class="container content-container">
   
-  <h1>Source code for pactools.create_signal</h1><div class="highlight"><pre>
+  <h1>Source code for pactools.simulate_pac</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">.utils.carrier</span> <span class="k">import</span> <span class="n">Carrier</span>
@@ -125,10 +125,9 @@
     <span class="k">return</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">sharpness</span> <span class="o">*</span> <span class="n">array</span><span class="p">))</span>
 
 
-<div class="viewcode-block" id="create_signal"><a class="viewcode-back" href="../../generated/pactools.create_signal.html#pactools.create_signal">[docs]</a><span class="k">def</span> <span class="nf">create_signal</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">,</span>
-                  <span class="n">high_fq_amp</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">low_fq_amp</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">sigmoid_sharpness</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">phi_0</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                  <span class="n">return_driver</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="simulate_pac"><a class="viewcode-back" href="../../generated/pactools.simulate_pac.html#pactools.simulate_pac">[docs]</a><span class="k">def</span> <span class="nf">simulate_pac</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">,</span>
+                 <span class="n">high_fq_amp</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">low_fq_amp</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">sigmoid_sharpness</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">phi_0</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">return_driver</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate a 1D signal with artificial phase amplitude coupling (PAC).</span>
 
 <span class="sd">    Parameters</span>

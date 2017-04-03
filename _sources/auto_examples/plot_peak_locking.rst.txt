@@ -3,8 +3,8 @@
 .. _sphx_glr_auto_examples_plot_peak_locking.py:
 
 
-Example of peak-locking
------------------------
+Peak-locking
+------------
 The peaks are extracted from the low frequency band, then both the raw-signal
 and a time-frequency representation are peak-locked and averaged.
 
@@ -36,7 +36,7 @@ oscillations in the results.
     import matplotlib.pyplot as plt
 
     from pactools import PeakLocking
-    from pactools import create_signal
+    from pactools import simulate_pac
 
     fs = 200.  # Hz
     high_fq = 50.0  # Hz
@@ -47,9 +47,9 @@ oscillations in the results.
     noise_level = 0.4
     t_plot = 2.0  # sec
 
-    signal = create_signal(n_points=n_points, fs=fs, high_fq=high_fq,
-                           low_fq=low_fq, low_fq_width=low_fq_width,
-                           noise_level=noise_level, random_state=0)
+    signal = simulate_pac(n_points=n_points, fs=fs, high_fq=high_fq, low_fq=low_fq,
+                          low_fq_width=low_fq_width, noise_level=noise_level,
+                          random_state=0)
 
     estimator = PeakLocking(fs=fs, low_fq=low_fq, low_fq_width=2.0, t_plot=t_plot)
     estimator.fit(signal)
@@ -61,7 +61,7 @@ oscillations in the results.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.884 seconds)
+**Total running time of the script:** ( 0 minutes  0.800 seconds)
 
 
 

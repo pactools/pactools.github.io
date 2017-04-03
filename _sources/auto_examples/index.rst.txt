@@ -25,6 +25,26 @@
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="It relies on the function ``raw_to_mask``, which takes as input a MNE.Raw instance and an event...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_mne_epoch_masking_thumb.png
+
+        :ref:`sphx_glr_auto_examples_plot_mne_epoch_masking.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_mne_epoch_masking
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="A comodulogram shows the estimated PAC metric on a grid of frequency bands. ">
 
 .. only:: html

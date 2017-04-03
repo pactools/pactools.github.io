@@ -1,0 +1,6 @@
+pactools.simulate_pac
+=====================
+
+.. currentmodule:: pactools
+
+.. autofunction:: simulate_pac

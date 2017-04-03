@@ -14,9 +14,6 @@ pactools.dar_model.DAR
    .. autosummary::
    
       ~DAR.__init__
-      ~DAR.amplitude_frequency
-      ~DAR.check_all_arrays
-      ~DAR.compute_cross_orders
       ~DAR.copy
       ~DAR.degrees_of_freedom
       ~DAR.develop
@@ -29,15 +26,12 @@ pactools.dar_model.DAR
       ~DAR.fit
       ~DAR.fit_transform
       ~DAR.get_criterion
-      ~DAR.get_test_data
       ~DAR.get_title
-      ~DAR.get_train_data
       ~DAR.last_model
       ~DAR.likelihood_ratio
       ~DAR.log_likelihood
       ~DAR.make_basis
       ~DAR.next_model
-      ~DAR.order_selection
       ~DAR.plot
       ~DAR.plot_lines
       ~DAR.reset_criterions
