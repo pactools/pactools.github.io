@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pactools.mne_api &#8212; pactools 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html">
+          pactools</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../auto_examples/index.html">Examples</a></li>
+                <li><a href="../../api.html">API</a></li>
+                <li><a href="https://github.com/pactools/pactools">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container content-container">
+  
+  <h1>Source code for pactools.mne_api</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">mne.io</span> <span class="k">import</span> <span class="n">BaseRaw</span>
+
+
+<div class="viewcode-block" id="raw_to_mask"><a class="viewcode-back" href="../../generated/pactools.raw_to_mask.html#pactools.raw_to_mask">[docs]</a><span class="k">def</span> <span class="nf">raw_to_mask</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">ixs</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Warning: events is stored in indices, tmin and tmax are stored in seconds.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    raw : an instance of Raw, containing data of shape (n_channels, n_times)</span>
+<span class="sd">        The data used to calculate PAC</span>
+
+<span class="sd">    ixs : int or couple of int</span>
+<span class="sd">        The indices for the low/high frequency channels. If only one is given,</span>
+<span class="sd">        the same channel is used for both low_sig and high_sig.</span>
+
+<span class="sd">    events : array, shape (n_events, 3) | array, shape (n_events,) | None</span>
+<span class="sd">        MNE events array. To be supplied if data is 2D and output should be</span>
+<span class="sd">        split by events. In this case, `tmin` and `tmax` must be provided. If</span>
+<span class="sd">        `ndim == 1`, it is assumed to be event indices, and all events will be</span>
+<span class="sd">        grouped together. Otherwise, events will be grouped along the third</span>
+<span class="sd">        dimension.</span>
+
+<span class="sd">    tmin : float | list of floats, shape (n_windows, ) | None</span>
+<span class="sd">        If `events` is not provided, it is the start time to use in `raw`.</span>
+<span class="sd">        If `events` is provided, it is the time (in seconds) to include before</span>
+<span class="sd">        each event index. If a list of floats is given, then PAC is calculated</span>
+<span class="sd">        for each pair of `tmin` and `tmax`. Defaults to `min(raw.times)`.</span>
+
+<span class="sd">    tmax : float | list of floats, shape (n_windows, ) | None</span>
+<span class="sd">        If `events` is not provided, it is the stop time to use in `raw`.</span>
+<span class="sd">        If `events` is provided, it is the time (in seconds) to include after</span>
+<span class="sd">        each event index. If a list of floats is given, then PAC is calculated</span>
+<span class="sd">        for each pair of `tmin` and `tmax`. Defaults to `max(raw.times)`.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    low_sig : array, shape (1, n_points)</span>
+<span class="sd">        Input data for the phase signal</span>
+
+<span class="sd">    high_sig : array or None, shape (1, n_points)</span>
+<span class="sd">        Input data for the amplitude signal.</span>
+<span class="sd">        If None, we use low_sig for both signals.</span>
+
+<span class="sd">    mask : MaskIterator instance</span>
+<span class="sd">        Object that behaves like a list of mask, without storing them all.</span>
+<span class="sd">        The PAC will only be evaluated where the mask is False.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; low_sig, high_sig, mask = raw_to_mask(raw, ixs, events, tmin, tmax)</span>
+<span class="sd">    &gt;&gt;&gt; n_masks = len(mask)</span>
+<span class="sd">    &gt;&gt;&gt; for one_mask in mask:</span>
+<span class="sd">    &gt;&gt;&gt;     pass</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Must supply Raw as input&#39;</span><span class="p">)</span>
+
+    <span class="n">ixs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ixs</span><span class="p">)</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">raw</span><span class="p">[:][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">n_channels</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">low_sig</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">ixs</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">if</span> <span class="n">ixs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">high_sig</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">ixs</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">high_sig</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">MaskIterator</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span></div>
+
+
+<span class="k">class</span> <span class="nc">MaskIterator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Iterator that creates the masks one at a time.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; all_masks = MaskIterator(events, tmin, tmax, n_points, fs)</span>
+<span class="sd">    &gt;&gt;&gt; n_masks = len(all_masks)</span>
+<span class="sd">    &gt;&gt;&gt; for one_mask in all_masks:</span>
+<span class="sd">    &gt;&gt;&gt;     pass</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span> <span class="o">=</span> <span class="n">tmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span> <span class="o">=</span> <span class="n">tmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span> <span class="o">=</span> <span class="n">n_points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;tmin and tmax have differing lengths&#39;</span><span class="p">)</span>
+        <span class="n">n_windows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span>
+            <span class="n">n_events</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">n_events</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># number of different event kinds</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">n_events</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n_iter</span> <span class="o">=</span> <span class="n">n_windows</span> <span class="o">*</span> <span class="n">n_events</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_iter</span>
+
+    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">event_names</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">event_names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">event_name</span> <span class="ow">in</span> <span class="n">event_names</span><span class="p">:</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># select all the events since their kind is not specified</span>
+                <span class="n">these_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># select the event indices of one kind of event</span>
+                <span class="n">these_events</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">event_name</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span><span class="p">):</span>
+                <span class="n">mask</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># it masks everything</span>
+                <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">these_events</span><span class="p">:</span>
+                    <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">tmin</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span> <span class="o">+</span> <span class="n">tmin</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">tmax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">stop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span> <span class="o">+</span> <span class="n">tmax</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
+                    <span class="n">mask</span><span class="p">[:,</span> <span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+                <span class="k">yield</span> <span class="n">mask</span>
+</pre></div>
+
+</div>
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/pactools/pactools"><img style="position: absolute; top: 50px; right: 0; border: 0;"
+src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Tom Dupre la Tour.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

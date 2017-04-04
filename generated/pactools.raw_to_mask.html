@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pactools.simulate_pac &#8212; pactools 0.1 documentation</title>
+    <title>pactools.raw_to_mask &#8212; pactools 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -34,8 +34,8 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pactools.raw_to_mask" href="pactools.raw_to_mask.html" />
-    <link rel="prev" title="pactools.PeakLocking" href="pactools.PeakLocking.html" />
+    <link rel="next" title="pactools.dar_model.DAR" href="pactools.dar_model.DAR.html" />
+    <link rel="prev" title="pactools.simulate_pac" href="pactools.simulate_pac.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -89,7 +89,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">pactools.simulate_pac</a></li>
+<li><a class="reference internal" href="#">pactools.raw_to_mask</a></li>
 </ul>
 </ul>
 </li>
@@ -101,7 +101,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="../_sources/generated/pactools.simulate_pac.rst.txt"
+  <a href="../_sources/generated/pactools.raw_to_mask.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -123,76 +123,73 @@
 
 <div class="container content-container">
   
-  <div class="section" id="pactools-simulate-pac">
-<h1>pactools.simulate_pac<a class="headerlink" href="#pactools-simulate-pac" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pactools-raw-to-mask">
+<h1>pactools.raw_to_mask<a class="headerlink" href="#pactools-raw-to-mask" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="pactools.simulate_pac">
-<code class="descclassname">pactools.</code><code class="descname">simulate_pac</code><span class="sig-paren">(</span><em>n_points</em>, <em>fs</em>, <em>high_fq</em>, <em>low_fq</em>, <em>low_fq_width</em>, <em>noise_level</em>, <em>high_fq_amp=0.5</em>, <em>low_fq_amp=0.5</em>, <em>random_state=None</em>, <em>sigmoid_sharpness=6</em>, <em>phi_0=0.0</em>, <em>delay=0.0</em>, <em>return_driver=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/simulate_pac.html#simulate_pac"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.simulate_pac" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simulate a 1D signal with artificial phase amplitude coupling (PAC).</p>
+<dt id="pactools.raw_to_mask">
+<code class="descclassname">pactools.</code><code class="descname">raw_to_mask</code><span class="sig-paren">(</span><em>raw</em>, <em>ixs</em>, <em>events=None</em>, <em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/mne_api.html#raw_to_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.raw_to_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Warning: events is stored in indices, tmin and tmax are stored in seconds.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n_points</strong> : int</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>raw</strong> : an instance of Raw, containing data of shape (n_channels, n_times)</p>
 <blockquote>
-<div><p>Number of points in the signal</p>
+<div><p>The data used to calculate PAC</p>
 </div></blockquote>
-<p><strong>fs</strong> : float</p>
+<p><strong>ixs</strong> : int or couple of int</p>
 <blockquote>
-<div><p>Sampling frequency of the signal</p>
+<div><p>The indices for the low/high frequency channels. If only one is given,
+the same channel is used for both low_sig and high_sig.</p>
 </div></blockquote>
-<p><strong>high_fq</strong> : float</p>
+<p><strong>events</strong> : array, shape (n_events, 3) | array, shape (n_events,) | None</p>
 <blockquote>
-<div><p>Frequency of the fast oscillation which is modulated in amplitude</p>
+<div><p>MNE events array. To be supplied if data is 2D and output should be
+split by events. In this case, <cite>tmin</cite> and <cite>tmax</cite> must be provided. If
+<cite>ndim == 1</cite>, it is assumed to be event indices, and all events will be
+grouped together. Otherwise, events will be grouped along the third
+dimension.</p>
 </div></blockquote>
-<p><strong>low_fq</strong> : float</p>
+<p><strong>tmin</strong> : float | list of floats, shape (n_windows, ) | None</p>
 <blockquote>
-<div><p>Center frequency of the slow oscillation which controls the modulation</p>
+<div><p>If <cite>events</cite> is not provided, it is the start time to use in <cite>raw</cite>.
+If <cite>events</cite> is provided, it is the time (in seconds) to include before
+each event index. If a list of floats is given, then PAC is calculated
+for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>min(raw.times)</cite>.</p>
 </div></blockquote>
-<p><strong>low_fq_width</strong> : float</p>
-<blockquote>
-<div><p>Bandwidth of the slow oscillation which controls the modulation</p>
-</div></blockquote>
-<p><strong>noise_level</strong> : float</p>
-<blockquote>
-<div><p>Level of the Gaussian additive white noise</p>
-</div></blockquote>
-<p><strong>high_fq_amp</strong> : float</p>
-<blockquote>
-<div><p>Amplitude of the fast oscillation</p>
-</div></blockquote>
-<p><strong>low_fq_amp</strong> : float</p>
-<blockquote>
-<div><p>Amplitude of the slow oscillation</p>
-</div></blockquote>
-<p><strong>random_state</strong> : int seed, RandomState instance, or None (default)</p>
-<blockquote>
-<div><p>The seed of the pseudo random number generator.</p>
-</div></blockquote>
-<p><strong>sigmoid_sharpness</strong> : float</p>
-<blockquote>
-<div><p>Sharpness of the sigmoid used to define the modulation</p>
-</div></blockquote>
-<p><strong>phi_0</strong> : float</p>
-<blockquote>
-<div><p>Preferred phase of the coupling: phase of the slow oscillation which
-corresponds to the maximum amplitude of the fast oscillations</p>
-</div></blockquote>
-<p><strong>delay</strong> : float</p>
-<blockquote>
-<div><p>Delay between the slow oscillation and the modulation</p>
-</div></blockquote>
-<p><strong>return_driver</strong> : boolean</p>
-<blockquote>
-<div><p>If True, return the complex driver instead of the full signal</p>
+<p><strong>tmax</strong> : float | list of floats, shape (n_windows, ) | None</p>
+<blockquote class="last">
+<div><p>If <cite>events</cite> is not provided, it is the stop time to use in <cite>raw</cite>.
+If <cite>events</cite> is provided, it is the time (in seconds) to include after
+each event index. If a list of floats is given, then PAC is calculated
+for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>max(raw.times)</cite>.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>signal</strong> : array, shape (n_points, )</p>
-<blockquote class="last">
-<div><p>Signal with artifical PAC</p>
-</div></blockquote>
-</td>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">raw_to_mask</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">ixs</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_masks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">one_mask</span> <span class="ow">in</span> <span class="n">mask</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="k">pass</span>
+</pre></div>
+</div>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="5%" />
+<col width="95%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>low_sig</td>
+<td>(array, shape (1, n_points)) Input data for the phase signal</td>
+</tr>
+<tr class="row-even"><td>high_sig</td>
+<td>(array or None, shape (1, n_points)) Input data for the amplitude signal. If None, we use low_sig for both signals.</td>
+</tr>
+<tr class="row-odd"><td>mask</td>
+<td>(MaskIterator instance) Object that behaves like a list of mask, without storing them all. The PAC will only be evaluated where the mask is False.</td>
 </tr>
 </tbody>
 </table>

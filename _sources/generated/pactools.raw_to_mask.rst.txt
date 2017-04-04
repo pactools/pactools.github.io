@@ -1,0 +1,6 @@
+pactools.raw_to_mask
+====================
+
+.. currentmodule:: pactools
+
+.. autofunction:: raw_to_mask
