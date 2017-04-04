@@ -30,7 +30,7 @@ signal = simulate_pac(n_points=n_points, fs=fs, high_fq=high_fq, low_fq=low_fq,
                       random_state=0)
 
 ###############################################################################
-# Extract a low-frequency band, and fit a DAR model, using BIC order selection.
+# Extract a low-frequency band, and fit a DAR model, using BIC order selection.
 
 # Prepare the plot for the two figures
 fig, axs = plt.subplots(1, 2, figsize=(10, 4))
@@ -62,8 +62,10 @@ axs[1].set_title(dar.get_title(name=True))
 
 ###############################################################################
 # To compute a comodulogram, we perform the same steps for each low frequency:
-# Extract the low frequency, fit a DAR model, potentially with a model
-# selection using the BIC, and quantify the PAC accross the spectrum.
+# - Extract the low frequency
+# - Fit a DAR model
+# - Potentially with a model selection using the BIC
+# - And quantify the PAC accross the spectrum.
 #
 # Everything is handled by the class :class:`~pactools.Comodulogram`, by giving
 # a (non-fitted) DAR model in the parameter ``method``.

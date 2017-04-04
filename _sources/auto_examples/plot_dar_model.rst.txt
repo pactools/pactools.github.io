@@ -98,13 +98,15 @@ Extract a low-frequency band, and fit a DAR model, using BIC order selection.
 
 
 To compute a comodulogram, we perform the same steps for each low frequency:
- Extract the low frequency, fit a DAR model, potentially with a model
- selection using the BIC, and quantify the PAC accross the spectrum.
+- Extract the low frequency
+- Fit a DAR model
+- Potentially with a model selection using the BIC
+- And quantify the PAC accross the spectrum.
 
- Everything is handled by the class :class:`~pactools.Comodulogram`, by giving
- a (non-fitted) DAR model in the parameter ``method``.
- Giving ``method='duprelatour'`` will default to
- ``DAR(ordar=10, ordriv=1, criterion=None)``, without BIC selection.
+Everything is handled by the class :class:`~pactools.Comodulogram`, by giving
+a (non-fitted) DAR model in the parameter ``method``.
+Giving ``method='duprelatour'`` will default to
+``DAR(ordar=10, ordriv=1, criterion=None)``, without BIC selection.
 
 
 
@@ -133,7 +135,7 @@ To compute a comodulogram, we perform the same steps for each low frequency:
 
 
 
-**Total running time of the script:** ( 0 minutes  24.857 seconds)
+**Total running time of the script:** ( 0 minutes  26.206 seconds)
 
 
 
