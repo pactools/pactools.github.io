@@ -957,7 +957,7 @@
     <span class="c1"># ------------------------------------------------ #</span>
     <span class="c1"># Functions to plot the models                     #</span>
     <span class="c1"># ------------------------------------------------ #</span>
-    <span class="k">def</span> <span class="nf">_basis2spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_basis2spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_fft</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the power spectral density for a given basis</span>
 <span class="sd">        frange  : frequency range</span>
 
@@ -973,30 +973,29 @@
         <span class="n">G_cols</span> <span class="o">=</span> <span class="n">G_cols</span><span class="p">[:</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
 
         <span class="c1"># -------- estimate AR spectrum</span>
-        <span class="n">nfft</span> <span class="o">=</span> <span class="mi">256</span>
-        <span class="k">while</span> <span class="n">nfft</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">ordar_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="n">nfft</span> <span class="o">*=</span> <span class="mi">2</span>
+        <span class="k">while</span> <span class="n">n_fft</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">ordar_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">n_fft</span> <span class="o">*=</span> <span class="mi">2</span>
 
         <span class="k">if</span> <span class="n">ordar_</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">AR_cols</span> <span class="o">=</span> <span class="n">AR_cols</span> <span class="o">/</span> <span class="p">(</span><span class="n">G_cols</span> <span class="o">+</span> <span class="n">EPSILON</span><span class="p">)</span>
-            <span class="n">AR_spec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">AR_cols</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">nfft</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">AR_spec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">AR_cols</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_fft</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">Ginv_cols</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">G_cols</span> <span class="o">+</span> <span class="n">EPSILON</span><span class="p">)</span>
-            <span class="n">AR_spec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">Ginv_cols</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">nfft</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">AR_spec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">Ginv_cols</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n_fft</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># -------- estimate AR spectrum</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="o">-</span><span class="mf">20.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">AR_spec</span><span class="p">))</span>
 
         <span class="c1"># -------- truncate to frange</span>
         <span class="k">if</span> <span class="n">frange</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">nfft</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">frequencies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">n_fft</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">frequencies</span> <span class="o">&lt;=</span> <span class="n">frange</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
                                   <span class="n">frequencies</span> <span class="o">&gt;=</span> <span class="n">frange</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
             <span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">:]</span>
         <span class="k">return</span> <span class="n">spec</span>
 
     <span class="k">def</span> <span class="nf">_amplitude_frequency</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbcols</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-                             <span class="n">xlim</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+                             <span class="n">xlim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_fft</span><span class="o">=</span><span class="mi">256</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computes an amplitude-frequency power spectral density</span>
 
 <span class="sd">        nbcols : number of expected columns (amplitude)</span>
@@ -1015,7 +1014,7 @@
 
         <span class="c1"># -------- compute spectra</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis2spec</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">,</span>
-                                <span class="n">frange</span><span class="o">=</span><span class="n">frange</span><span class="p">)</span>
+                                <span class="n">frange</span><span class="o">=</span><span class="n">frange</span><span class="p">,</span> <span class="n">n_fft</span><span class="o">=</span><span class="n">n_fft</span><span class="p">)</span>
 
         <span class="c1"># -------- normalize</span>
         <span class="k">if</span> <span class="s1">&#39;c&#39;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>

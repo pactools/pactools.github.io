@@ -212,15 +212,18 @@
         <span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_params</span><span class="p">()</span>
 
         <span class="n">signals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+        <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">shape</span>
 
-        <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+        <span class="n">block_length</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
+
+        <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span><span class="p">(</span><span class="n">block_length</span><span class="p">)</span>
         <span class="n">n_epochs</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">shape</span>
         <span class="n">n_freq</span> <span class="o">=</span> <span class="n">fft_length</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
 
         <span class="n">psd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">))</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">signals</span><span class="p">):</span>
-            <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">block_length</span><span class="p">)</span>
 
             <span class="c1"># iterate on blocks</span>
             <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -377,7 +380,9 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Incompatible shapes: </span><span class="si">%s</span><span class="s1"> and </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
                              <span class="p">(</span><span class="n">sigs_a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">sigs_b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
 
-        <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+        <span class="n">block_length</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
+
+        <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span><span class="p">(</span><span class="n">block_length</span><span class="p">)</span>
         <span class="n">n_freq</span> <span class="o">=</span> <span class="n">fft_length</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">coherence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_signals_a</span><span class="p">,</span> <span class="n">n_signals_b</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">),</span>
                              <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
@@ -387,7 +392,7 @@
         <span class="c1"># iterate on blocks</span>
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i_epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
-            <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">block_length</span><span class="p">)</span>
             <span class="k">while</span> <span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n_points</span><span class="p">:</span>
 
                 <span class="k">for</span> <span class="n">i_a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_signals_a</span><span class="p">):</span>
@@ -413,7 +418,7 @@
         <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
                 <span class="s1">&#39;bicoherence: first block needs </span><span class="si">%d</span><span class="s1"> samples but sigs has shape &#39;</span>
-                <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">,</span> <span class="n">sigs_a</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+                <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">block_length</span><span class="p">,</span> <span class="n">sigs_a</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">coherence</span> <span class="o">=</span> <span class="n">coherence</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coherence</span>
@@ -483,7 +488,9 @@
         <span class="n">sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigs</span><span class="p">)</span>
         <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sigs</span><span class="o">.</span><span class="n">shape</span>
 
-        <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+        <span class="n">block_length</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
+
+        <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfunc</span><span class="p">(</span><span class="n">block_length</span><span class="p">)</span>
         <span class="n">n_freq</span> <span class="o">=</span> <span class="n">fft_length</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">bicoherence</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_freq</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complex128</span><span class="p">)</span>
         <span class="n">normalization</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n_freq</span><span class="p">,</span> <span class="n">n_freq</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
@@ -491,7 +498,7 @@
         <span class="c1"># iterate on blocks</span>
         <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i_epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
-            <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
+            <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">block_length</span><span class="p">)</span>
             <span class="k">while</span> <span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n_points</span><span class="p">:</span>
                 <span class="n">F</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs</span><span class="p">[</span><span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span> <span class="n">fft_length</span><span class="p">,</span>
                            <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
