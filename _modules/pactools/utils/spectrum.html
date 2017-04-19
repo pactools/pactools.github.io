@@ -121,7 +121,7 @@
 <span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="k">import</span> <span class="n">hilbert</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">.maths</span> <span class="k">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">is_power2</span><span class="p">,</span> <span class="n">prime_factors</span><span class="p">,</span> <span class="n">compute_n_fft</span>
+<span class="kn">from</span> <span class="nn">.maths</span> <span class="k">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">is_power2</span><span class="p">,</span> <span class="n">prime_factors</span><span class="p">,</span> <span class="n">compute_n_fft</span><span class="p">,</span> <span class="n">next_power2</span>
 <span class="kn">from</span> <span class="nn">.viz</span> <span class="k">import</span> <span class="n">compute_vmin_vmax</span>
 
 
@@ -171,7 +171,7 @@
 
         <span class="c1"># fft_length</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">fft_length</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">fft_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)))</span>
+            <span class="n">fft_length</span> <span class="o">=</span> <span class="n">next_power2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">block_length</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fft_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fft_length</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_power2</span><span class="p">(</span><span class="n">fft_length</span><span class="p">):</span>

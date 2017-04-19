@@ -143,16 +143,16 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;basis does not yet exist&#39;</span><span class="p">)</span>
 
         <span class="c1"># -------- get the training data</span>
-        <span class="n">sigin</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_train_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sigin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span><span class="p">])</span>
-        <span class="n">selection</span> <span class="o">=</span> <span class="o">~</span><span class="n">mask</span> <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">sigin</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_train_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sigin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span><span class="p">])</span>
 
         <span class="c1"># mask the signal</span>
-        <span class="k">if</span> <span class="n">selection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">masked_basis</span> <span class="o">=</span> <span class="n">selection</span> <span class="o">*</span> <span class="n">basis</span>
-            <span class="n">masked_sigin</span> <span class="o">=</span> <span class="n">selection</span> <span class="o">*</span> <span class="n">sigin</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+            <span class="n">w_basis</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">*</span> <span class="n">basis</span>
+            <span class="n">w_sigin</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">*</span> <span class="n">sigin</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">masked_basis</span> <span class="o">=</span> <span class="n">basis</span>
-            <span class="n">masked_sigin</span> <span class="o">=</span> <span class="n">sigin</span>
+            <span class="n">w_basis</span> <span class="o">=</span> <span class="n">basis</span>
+            <span class="n">w_sigin</span> <span class="o">=</span> <span class="n">sigin</span>
 
         <span class="c1"># -------- select signal, basis and regression signals</span>
         <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sigin</span><span class="o">.</span><span class="n">shape</span>
@@ -168,14 +168,14 @@
             <span class="n">sigreg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">K</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">-</span> <span class="n">K</span><span class="p">))</span>
             <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">K</span><span class="p">):</span>
                 <span class="n">sigreg</span><span class="p">[</span><span class="n">k</span> <span class="o">*</span> <span class="n">m</span><span class="p">:(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">masked_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">K</span><span class="p">:]</span> <span class="o">*</span>
+                    <span class="n">w_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">K</span><span class="p">:]</span> <span class="o">*</span>
                     <span class="n">sigin</span><span class="p">[:,</span> <span class="n">K</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span><span class="p">:</span><span class="n">n_points</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">k</span><span class="p">])</span>
 
             <span class="c1"># -------- prepare auto/inter correlations</span>
             <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n_points</span>
             <span class="n">R</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
                 <span class="n">sigreg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">sigreg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
-            <span class="n">r</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">masked_sigin</span><span class="p">[:,</span> <span class="n">K</span><span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_sigin</span><span class="p">[:,</span> <span class="n">K</span><span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
                                <span class="n">sigreg</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">K</span> <span class="o">*</span> <span class="n">m</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
 
             <span class="c1"># -------- loop on successive orders</span>

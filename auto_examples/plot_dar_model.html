@@ -180,24 +180,15 @@ fits a DAR model and show the modulation extracted in the DAR model.</p>
 </pre></div>
 </div>
 <img alt="../_images/sphx_glr_plot_dar_model_001.png" class="align-center" src="../_images/sphx_glr_plot_dar_model_001.png" />
-<dl class="docutils">
-<dt>To compute a comodulogram, we perform the same steps for each low frequency:</dt>
-<dd><ul class="first last simple">
-<li>Extract the low frequency</li>
-</ul>
-</dd>
-</dl>
-<p>&nbsp;* Fit a DAR model
-&nbsp;* Potentially with a model selection using the BIC</p>
-<blockquote>
-<div><ul class="simple">
-<li>And quantify the PAC accross the spectrum.</li>
-</ul>
+<p>To compute a comodulogram, we perform the same steps for each low frequency:
+* Extract the low frequency
+* Fit a DAR model
+* Potentially with a model selection using the BIC
+* And quantify the PAC accross the spectrum.</p>
 <p>Everything is handled by the class <a class="reference internal" href="../generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram"><code class="xref py py-class docutils literal"><span class="pre">Comodulogram</span></code></a>, by giving
 a (non-fitted) DAR model in the parameter <code class="docutils literal"><span class="pre">method</span></code>.
 Giving <code class="docutils literal"><span class="pre">method='duprelatour'</span></code> will default to
 <code class="docutils literal"><span class="pre">DAR(ordar=10,</span> <span class="pre">ordriv=1,</span> <span class="pre">criterion=None)</span></code>, without BIC selection.</p>
-</div></blockquote>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Here we do not give the default set of parameter. Note that the BIC selection</span>
 <span class="c1"># will be performed independantly for each model (i.e. at each low frequency).</span>
 <span class="n">dar</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="View documentation for pactools.dar_model.DAR"><span class="n">DAR</span></a><span class="p">(</span><span class="n">ordar</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">)</span>
@@ -214,7 +205,7 @@ Giving <code class="docutils literal"><span class="pre">method='duprelatour'</sp
 </pre></div>
 </div>
 <img alt="../_images/sphx_glr_plot_dar_model_002.png" class="align-center" src="../_images/sphx_glr_plot_dar_model_002.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  24.484 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 1 minutes  9.817 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_dar_model.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dar_model.py</span></code></a></div>
