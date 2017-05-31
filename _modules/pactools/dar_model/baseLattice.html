@@ -1,0 +1,574 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pactools.dar_model.baseLattice &#8212; pactools 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          pactools</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="../../../auto_examples/index.html">Examples</a></li>
+                <li><a href="../../../api.html">API</a></li>
+                <li><a href="https://github.com/pactools/pactools">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api.html">API Documentation</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container content-container">
+  
+  <h1>Source code for pactools.dar_model.baseLattice</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">linalg</span>
+
+<span class="kn">from</span> <span class="nn">.base_dar</span> <span class="k">import</span> <span class="n">BaseDAR</span>
+<span class="kn">from</span> <span class="nn">..utils.arma</span> <span class="k">import</span> <span class="n">ki2ai</span>
+
+
+<span class="k">class</span> <span class="nc">BaseLattice</span><span class="p">(</span><span class="n">BaseDAR</span><span class="p">):</span>
+    <span class="n">__metaclass__</span> <span class="o">=</span> <span class="n">ABCMeta</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_newton</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">eps_newton</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a base Lattice model with Taylor expansion</span>
+
+<span class="sd">        iter_newton : maximum number of Newton-Raphson iterations</span>
+<span class="sd">        eps_newton  : threshold to stop Newton-Raphson iterations</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">BaseLattice</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">iter_newton</span> <span class="o">=</span> <span class="n">iter_newton</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eps_newton</span> <span class="o">=</span> <span class="n">eps_newton</span>
+
+    <span class="k">def</span> <span class="nf">synthesis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigin_init</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a signal from fitted model</span>
+
+<span class="sd">        sigdriv      : driving signal</span>
+<span class="sd">        sigdriv_init : shape (1, self.ordar_) previous point of the past</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ordar_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span>
+        <span class="k">if</span> <span class="n">sigdriv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigdriv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigdriv</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">)</span>
+
+        <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sigdriv</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="k">if</span> <span class="n">sigin_init</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigin_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ordar_</span><span class="p">)</span>
+        <span class="n">sigin_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigin_init</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sigin_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ordar_</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="s2">&quot;initialization of incorrect length: </span><span class="si">%d</span><span class="s2"> instead&quot;</span>
+                   <span class="s2">&quot;of </span><span class="si">%d</span><span class="s2"> (self.ordar_)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">sigin_init</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ordar_</span><span class="p">))</span>
+
+        <span class="c1"># initialization</span>
+        <span class="n">signal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_points</span><span class="p">)</span>
+        <span class="n">signal</span><span class="p">[:</span><span class="n">ordar_</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigin_init</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">ordar_</span><span class="p">:]</span>
+
+        <span class="c1"># compute basis corresponding to sigdriv</span>
+        <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">)</span>
+
+        <span class="c1"># synthesis of the signal</span>
+        <span class="n">random_sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">-</span> <span class="n">ordar_</span><span class="p">)</span>
+        <span class="n">burn_in</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">ordar_</span><span class="p">)</span>
+        <span class="n">sigout</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">synthesize</span><span class="p">(</span><span class="n">random_sig</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="n">burn_in</span><span class="p">,</span>
+                                 <span class="n">newbasis</span><span class="o">=</span><span class="n">newbasis</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">sigout</span>
+
+    <span class="c1"># ------------------------------------------------ #</span>
+    <span class="c1"># Functions that are added to the derived class    #</span>
+    <span class="c1"># ------------------------------------------------ #</span>
+    <span class="k">def</span> <span class="nf">synthesize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">random_sig</span><span class="p">,</span> <span class="n">burn_in</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">newbasis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply the inverse lattice filter to synthesize</span>
+<span class="sd">        an AR signal</span>
+
+<span class="sd">        random_sig : array containing the excitation starting at t=0</span>
+<span class="sd">        burn_in    : auxiliary excitations before t=0</span>
+<span class="sd">        newbasis   : if None, we use the basis used for fitting (self.basis_)</span>
+<span class="sd">                    else, we use the given basis.</span>
+
+<span class="sd">        returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sigout : array containing the synthesized signal</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">newbasis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">basis</span> <span class="o">=</span> <span class="n">newbasis</span>
+        <span class="c1"># -------- select ordar (prefered: ordar_)</span>
+        <span class="n">ordar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span>
+
+        <span class="c1"># -------- prepare excitation signal and burn in phase</span>
+        <span class="k">if</span> <span class="n">burn_in</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tburn</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">excitation</span> <span class="o">=</span> <span class="n">random_sig</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tburn</span> <span class="o">=</span> <span class="n">burn_in</span><span class="o">.</span><span class="n">size</span>
+            <span class="n">excitation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">burn_in</span><span class="p">,</span> <span class="n">random_sig</span><span class="p">))</span>
+
+        <span class="n">n_basis</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">basis</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points_minus_ordar_</span> <span class="o">=</span> <span class="n">random_sig</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># -------- allocate arrays for forward and backward residuals</span>
+        <span class="n">e_forward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">ordar</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">e_backward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">ordar</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># -------- prepare parcor coefficients</span>
+        <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
+        <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">)</span>
+
+        <span class="n">gain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_gain</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># -------- create the output signal</span>
+        <span class="n">sigout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points_minus_ordar_</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">tburn</span><span class="p">,</span> <span class="n">n_points_minus_ordar_</span><span class="p">):</span>
+            <span class="n">e_forward</span><span class="p">[:,</span> <span class="n">ordar</span><span class="p">]</span> <span class="o">=</span> <span class="n">excitation</span><span class="p">[:,</span> <span class="n">t</span> <span class="o">+</span> <span class="n">tburn</span><span class="p">]</span> <span class="o">*</span> <span class="n">gain</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ordar</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">e_forward</span><span class="p">[:,</span> <span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">e_forward</span><span class="p">[:,</span> <span class="n">p</span><span class="p">]</span> <span class="o">-</span> <span class="n">parcor_list</span><span class="p">[</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">*</span>
+                    <span class="n">e_backward</span><span class="p">[:,</span> <span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ordar</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">e_backward</span><span class="p">[:,</span> <span class="n">p</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">e_backward</span><span class="p">[:,</span> <span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">parcor_list</span><span class="p">[</span><span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">*</span>
+                    <span class="n">e_forward</span><span class="p">[:,</span> <span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">e_backward</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">e_forward</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="n">sigout</span><span class="p">[:,</span> <span class="nb">max</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span> <span class="o">=</span> <span class="n">e_forward</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">sigout</span>
+
+    <span class="k">def</span> <span class="nf">cell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parcor_list</span><span class="p">,</span> <span class="n">forward_residual</span><span class="p">,</span> <span class="n">backward_residual</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply a single cell of the direct lattice filter</span>
+<span class="sd">        to whiten the original signal</span>
+
+<span class="sd">        parcor_list       : array, lattice coefficients</span>
+<span class="sd">        forward_residual  : array, forward residual from previous cell</span>
+<span class="sd">        backward_residual : array, backward residual from previous cell</span>
+
+<span class="sd">        the input arrays should have same shape as self.sigin</span>
+
+<span class="sd">        returns:</span>
+<span class="sd">        forward_residual  : forward residual after this cell</span>
+<span class="sd">        backward_residual : backward residual after this cell</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">f_residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">forward_residual</span><span class="p">)</span>
+        <span class="n">b_residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">backward_residual</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">delayed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">backward_residual</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># -------- apply the cell</span>
+        <span class="n">b_residual</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">delayed</span> <span class="o">+</span> <span class="p">(</span><span class="n">parcor_list</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">*</span> <span class="n">f_residual</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:])</span>
+        <span class="n">b_residual</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">parcor_list</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">f_residual</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">f_residual</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">+=</span> <span class="n">parcor_list</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">*</span> <span class="n">delayed</span>
+        <span class="k">return</span> <span class="n">f_residual</span><span class="p">,</span> <span class="n">b_residual</span>
+
+    <span class="k">def</span> <span class="nf">whiten</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply the direct lattice filter to whiten the original signal</span>
+
+<span class="sd">        returns:</span>
+<span class="sd">        residual : array containing the residual (whitened) signal</span>
+<span class="sd">        backward : array containing the backward residual (whitened) signal</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># compute the error on both the train and test part</span>
+        <span class="n">sigin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigin</span>
+        <span class="n">basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span>
+
+        <span class="c1"># -------- select ordar (prefered: ordar_)</span>
+        <span class="n">ordar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span>
+        <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sigin</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
+        <span class="n">backward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ordar</span><span class="p">):</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">basis</span><span class="p">)</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">)</span>
+            <span class="n">residual</span><span class="p">,</span> <span class="n">backward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">,</span> <span class="n">residual</span><span class="p">,</span> <span class="n">backward</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">residual</span><span class="p">,</span> <span class="n">backward</span>
+
+    <span class="k">def</span> <span class="nf">develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">LAR</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
+        <span class="n">single_dim</span> <span class="o">=</span> <span class="n">LAR</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">LAR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">LAR</span><span class="p">)</span>
+        <span class="c1"># n_basis, n_epochs, n_points = basis.shape</span>
+        <span class="c1"># ordar, n_basis = LAR.shape</span>
+        <span class="c1"># ordar, n_epochs, n_points = lar_list.shape</span>
+        <span class="n">lar_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tensordot</span><span class="p">(</span><span class="n">LAR</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">single_dim</span><span class="p">:</span>
+            <span class="c1"># n_epochs, n_points = lar_list.shape</span>
+            <span class="n">lar_list</span> <span class="o">=</span> <span class="n">lar_list</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="k">return</span> <span class="n">lar_list</span>
+
+    <span class="c1"># ------------------------------------------------ #</span>
+    <span class="c1"># Functions that should be overloaded              #</span>
+    <span class="c1"># ------------------------------------------------ #</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lar</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Extracts parcor coefficients from encoded version (e.g. LAR)</span>
+
+<span class="sd">        lar : array containing the encoded coefficients</span>
+
+<span class="sd">        returns:</span>
+<span class="sd">        ki : array containing the decoded coefficients (same size as lar)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Encodes parcor coefficients to parameterized coefficients</span>
+<span class="sd">        (for instance LAR)</span>
+
+<span class="sd">        ki : array containing the original parcor coefficients</span>
+
+<span class="sd">        returns:</span>
+<span class="sd">        lar : array containing the encoded coefficients (same size as ki)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">common_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute common factor in gradient. The gradient is computed as</span>
+<span class="sd">        G[p] = sum from t=1 to T {g[p,t] * F(t)}</span>
+<span class="sd">        where F(t) is the vector of driving signal and its powers</span>
+<span class="sd">        g[p,t] = (e_forward[p, t] * e_backward[p-1, t-1]</span>
+<span class="sd">                  + e_backward[p, t] * e_forward[p-1, t]) * phi&#39;[k[p,t]]</span>
+<span class="sd">        phi is the encoding function, and phi&#39; is its derivative.</span>
+
+<span class="sd">        p  : order corresponding to the current lattice cell</span>
+<span class="sd">        ki : array containing the original parcor coefficients</span>
+
+<span class="sd">        returns:</span>
+<span class="sd">        g : array containing the factors (size (n_epochs, n_points - 1))</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">common_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute common factor in Hessian. The Hessian is computed as</span>
+<span class="sd">        H[p] = sum from t=1 to T {F(t) * h[p,t] * F(t).T}</span>
+<span class="sd">        where F(t) is the vector of driving signal and its powers</span>
+<span class="sd">        h[p,t] = (e_forward[p, t-1]**2 + e_backward[p-1, t-1]**2)</span>
+<span class="sd">                    * phi&#39;[k[p,t]]**2</span>
+<span class="sd">                 + (e_forward[p, t] * e_backward[p-1, t-1]</span>
+<span class="sd">                    e_backward[p, t] * e_forward[p-1, t]) * phi&#39;&#39;[k[p,t]]</span>
+<span class="sd">        phi is the encoding function, phi&#39; is its first derivative,</span>
+<span class="sd">        and phi&#39;&#39; is its second derivative.</span>
+
+<span class="sd">        p  : order corresponding to the current lattice cell</span>
+<span class="sd">        ki : array containing the original parcor coefficients</span>
+
+<span class="sd">        returns:</span>
+<span class="sd">        h : array containing the factors (size (n_epochs, n_points - 1))</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+    <span class="c1"># ------------------------------------------------ #</span>
+    <span class="c1"># Functions that overload abstract methods         #</span>
+    <span class="c1"># ------------------------------------------------ #</span>
+    <span class="k">def</span> <span class="nf">next_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the AR model at successive orders</span>
+
+<span class="sd">        Acts as a generator that stores the result in self.AR_</span>
+<span class="sd">        Creates the models with orders from 0 to self.ordar</span>
+
+<span class="sd">        Typical usage:</span>
+<span class="sd">        for AR_ in A.next_model():</span>
+<span class="sd">            A.AR_ = AR_</span>
+<span class="sd">            A.ordar_ = AR_.shape[0]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">: basis_ does not yet exist&#39;</span> <span class="o">%</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+
+        <span class="c1"># --------  get the training data</span>
+        <span class="n">sigin</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_train_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sigin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+            <span class="n">w_basis</span> <span class="o">=</span> <span class="n">basis</span> <span class="o">*</span> <span class="n">weights</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">w_basis</span> <span class="o">=</span> <span class="n">basis</span>
+
+        <span class="c1"># -------- select signal, basis and regression signals</span>
+        <span class="n">n_basis</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">basis</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">ordar_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n_points</span>
+
+        <span class="c1"># -------- prepare residual signals</span>
+        <span class="n">forward_res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
+        <span class="n">backward_res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">forward_residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">ordar_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backward_residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">ordar_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forward_residual</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">forward_res</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backward_residual</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">backward_res</span>
+
+        <span class="c1"># -------- model at order 0</span>
+        <span class="n">AR_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_basis</span><span class="p">))</span>
+        <span class="k">yield</span> <span class="n">AR_</span>
+
+        <span class="c1"># -------- loop on successive orders</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ordar_</span><span class="p">):</span>
+            <span class="c1"># -------- prepare initial estimation (driven parcor)</span>
+            <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># the weights and basis are not delay as backward_res /!\</span>
+                <span class="n">forward_res</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">*</span> <span class="n">forward_res</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+                <span class="n">backward_res</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">*</span> <span class="n">backward_res</span><span class="p">[:,</span> <span class="n">k</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">forward_res</span> <span class="o">=</span> <span class="n">forward_res</span><span class="p">[:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+                <span class="n">backward_res</span> <span class="o">=</span> <span class="n">backward_res</span><span class="p">[:,</span> <span class="n">k</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">forward_regressor</span> <span class="o">=</span> <span class="n">basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">*</span> <span class="n">forward_res</span>
+            <span class="n">backward_regressor</span> <span class="o">=</span> <span class="n">basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">*</span> <span class="n">backward_res</span>
+
+            <span class="c1"># this reshape method will throw an error if a copy is needed</span>
+            <span class="n">forward_regressor</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">backward_regressor</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">backward_res</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">R</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">forward_regressor</span><span class="p">,</span> <span class="n">forward_regressor</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                <span class="n">backward_regressor</span><span class="p">,</span> <span class="n">backward_regressor</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">forward_regressor</span><span class="p">,</span> <span class="n">backward_res</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">backward_res</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">R</span> <span class="o">*=</span> <span class="n">scale</span>
+            <span class="n">r</span> <span class="o">*=</span> <span class="n">scale</span> <span class="o">*</span> <span class="mf">2.0</span>
+            <span class="n">parcor</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+            <span class="c1"># n_basis, n_epochs, n_points = basis.shape</span>
+            <span class="c1"># n_epochs, n_points = parcor_list.shape</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="n">parcor</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">basis</span><span class="p">)</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.999999</span><span class="p">)</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">,</span> <span class="mf">0.999999</span><span class="p">)</span>
+
+            <span class="n">lar_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">[:,</span> <span class="n">k</span><span class="p">:])</span>
+            <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">lar_list</span> <span class="o">*=</span> <span class="n">weights</span><span class="p">[:,</span> <span class="n">k</span><span class="p">:]</span>
+
+            <span class="n">R2</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                                <span class="n">w_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+            <span class="n">r2</span> <span class="o">=</span> <span class="n">scale</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">k</span><span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                                <span class="n">lar_list</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">LAR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">R2</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span><span class="o">.</span><span class="n">T</span>
+
+            <span class="c1"># -------- Newton-Raphson refinement</span>
+            <span class="n">dLAR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span>
+            <span class="n">itnum</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="p">(</span><span class="n">itnum</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_newton</span> <span class="ow">and</span>
+                   <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dLAR</span><span class="p">))</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">eps_newton</span><span class="p">):</span>
+                <span class="n">itnum</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="c1"># -------- compute next residual</span>
+                <span class="n">lar_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="n">LAR</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">basis</span><span class="p">)</span>
+                <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">lar_list</span><span class="p">)</span>
+                <span class="n">forward_res_next</span><span class="p">,</span> <span class="n">backward_res_next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span>
+                    <span class="n">parcor_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_residual</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">backward_residual</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">forward_residual</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">forward_res_next</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">backward_residual</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">backward_res_next</span>
+
+                <span class="c1"># -------- correct the current vector</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">common_gradient</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">parcor_list</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">g</span> <span class="o">*=</span> <span class="n">weights</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">n_points</span><span class="p">]</span>
+                <span class="c1"># n_epochs, n_points - 1 = g.shape = h.shape</span>
+                <span class="c1"># n_basis, n_epochs, n_points = basis.shape</span>
+                <span class="n">gradient</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                    <span class="n">w_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">n_points</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="n">g</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">gradient</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+                <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">common_hessian</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">parcor_list</span><span class="p">)</span>
+                <span class="n">hessian</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">w_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">n_points</span><span class="p">]</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
+                    <span class="n">w_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">n_points</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+                <span class="n">dLAR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
+                    <span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">hessian</span><span class="p">,</span> <span class="n">gradient</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_basis</span><span class="p">))</span>
+                <span class="n">LAR</span> <span class="o">-=</span> <span class="n">dLAR</span>
+
+            <span class="c1"># -------- save current cell and residuals</span>
+            <span class="n">lar_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="n">LAR</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">basis</span><span class="p">)</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">lar_list</span><span class="p">)</span>
+
+            <span class="n">forward_res</span><span class="p">,</span> <span class="n">backward_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">,</span>
+                                                  <span class="bp">self</span><span class="o">.</span><span class="n">forward_residual</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
+                                                  <span class="bp">self</span><span class="o">.</span><span class="n">backward_residual</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">forward_residual</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">forward_res</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">backward_residual</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">backward_res</span>
+
+            <span class="n">AR_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">AR_</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">LAR</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_basis</span><span class="p">))))</span>
+            <span class="k">yield</span> <span class="n">AR_</span>
+
+    <span class="k">def</span> <span class="nf">estimate_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recompute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Estimates the prediction error</span>
+
+<span class="sd">        uses self.sigin, self.basis_ and AR_</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">recompute</span><span class="p">:</span>
+            <span class="c1"># if residual are stored, simply return the right one</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">residual_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_residual</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span><span class="p">]</span>
+            <span class="c1"># otherwise, compute the prediction error</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="n">recompute</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">recompute</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">residual_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">whiten</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">develop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Compute the AR models and gains at instants fixed by newcols</span>
+
+<span class="sd">        returns:</span>
+<span class="sd">        ARcols : array containing the AR parts</span>
+<span class="sd">        Gcols  : array containing the gains</span>
+
+<span class="sd">        The size of ARcols is (1 + ordar, n_epochs, n_columns)</span>
+<span class="sd">        The size of Gcols is (1, n_epochs, n_columns)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n_basis</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">basis</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">ordar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span>
+
+        <span class="c1"># -------- expand on the basis</span>
+        <span class="n">AR_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">ordar</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">)</span>
+            <span class="n">AR_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">AR_cols</span><span class="p">,</span> <span class="n">ki2ai</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">)))</span>
+        <span class="n">G_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_gain</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">AR_cols</span><span class="p">,</span> <span class="n">G_cols</span>
+</pre></div>
+
+</div>
+
+<!-- Github "fork me" ribbon -->
+<a href="https://github.com/pactools/pactools"><img style="position: absolute; top: 50px; right: 0; border: 0;"
+src="https://camo.githubusercontent.com/652c5b9acfaddf3a9c326fa6bde407b87f7be0f4/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6f72616e67655f6666373630302e706e67"
+alt="Fork me on GitHub"
+data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_ff7600.png"></a>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2017, Tom Dupre la Tour.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

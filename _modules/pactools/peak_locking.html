@@ -122,6 +122,7 @@
 <span class="kn">from</span> <span class="nn">.comodulogram</span> <span class="k">import</span> <span class="n">multiple_band_pass</span>
 <span class="kn">from</span> <span class="nn">.utils.peak_finder</span> <span class="k">import</span> <span class="n">peak_finder</span>
 <span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_consistent_shape</span><span class="p">,</span> <span class="n">check_array</span>
+<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">.utils.viz</span> <span class="k">import</span> <span class="n">add_colorbar</span><span class="p">,</span> <span class="n">mpl_palette</span>
 
 
@@ -275,6 +276,7 @@
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="k">def</span> <span class="nf">plot_peaks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;filtered_low_&#39;</span><span class="p">)</span>
         <span class="c1"># plot the filtered_low_real peaks</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
@@ -300,6 +302,7 @@
 <span class="sd">        fig : matplotlib.figure.Figure</span>
 <span class="sd">            Figure instance containing the plot.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;time_average_&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">axs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
             <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>

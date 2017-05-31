@@ -128,7 +128,13 @@
 <dl class="function">
 <dt id="pactools.raw_to_mask">
 <code class="descclassname">pactools.</code><code class="descname">raw_to_mask</code><span class="sig-paren">(</span><em>raw</em>, <em>ixs</em>, <em>events=None</em>, <em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/mne_api.html#raw_to_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.raw_to_mask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Warning: events is stored in indices, tmin and tmax are stored in seconds.</p>
+<dd><p>A function to transform MNE data into pactools input signals.
+It select the one channel on which you to estimate PAC, or two channels
+for cross-channel PAC. It also returns a mask generator, that mask the
+data outside a given window around an event. The mask generator returns
+a number of masks equal to the number of events times the number of
+windows (i.e. the number of pairs (tmin, tmax)).</p>
+<p>Warning: events is stored in indices, tmin and tmax are stored in seconds.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

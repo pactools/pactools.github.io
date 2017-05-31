@@ -127,6 +127,7 @@
 <span class="kn">from</span> <span class="nn">..utils.progress_bar</span> <span class="k">import</span> <span class="n">ProgressBar</span>
 <span class="kn">from</span> <span class="nn">..utils.maths</span> <span class="k">import</span> <span class="n">squared_norm</span>
 <span class="kn">from</span> <span class="nn">..utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_consistent_shape</span>
+<span class="kn">from</span> <span class="nn">..utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">..utils.spectrum</span> <span class="k">import</span> <span class="n">Spectrum</span>
 <span class="kn">from</span> <span class="nn">..utils.viz</span> <span class="k">import</span> <span class="n">add_colorbar</span><span class="p">,</span> <span class="n">compute_vmin_vmax</span><span class="p">,</span> <span class="n">phase_string</span>
 
@@ -143,10 +144,10 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        ordar : int &gt; 0</span>
-<span class="sd">            Order of the autoregressive model</span>
+<span class="sd">            Order of the autoregressive model (p)</span>
 
 <span class="sd">        ordriv : int &gt;= 0</span>
-<span class="sd">            Order of the taylor expansion for sigdriv</span>
+<span class="sd">            Order of the taylor expansion for sigdriv (m)</span>
 
 <span class="sd">        criterion : None or string in (&#39;bic&#39;, &#39;aic&#39;, &#39;logl&#39;)</span>
 <span class="sd">            If not None, select the criterion used for model selection.</span>
@@ -531,6 +532,7 @@
         <span class="k">return</span> <span class="n">value</span>
 
     <span class="k">def</span> <span class="nf">_compute_criterion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="n">criterions</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;criterions_&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">criterions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">criterions</span>
@@ -656,11 +658,8 @@
         <span class="sd">&quot;&quot;&quot;AR order of the model, different from self.ordar if a model</span>
 <span class="sd">        selection has been performed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">AR_</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">AR_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">NotFittedError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> is not fitted.&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">estimate_fixed_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Estimates a fixed gain from the predicton error self.residual_.</span>
@@ -835,9 +834,8 @@
                   <span class="n">test_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Whiten a signal with the already fitted model</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
-        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;G_&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reset_criterions</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_all_arrays</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                                <span class="n">test_weights</span><span class="p">)</span>
@@ -864,6 +862,7 @@
 
 <span class="sd">        skip : how many initial samples to skip</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;residual_&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">train</span><span class="p">:</span>
             <span class="n">basis</span><span class="p">,</span> <span class="n">residual</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_train_data</span><span class="p">(</span>
                 <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">basis_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">residual_</span><span class="p">])</span>
@@ -990,6 +989,7 @@
 <span class="sd">        factorisation of the code of methods plot_time_freq and</span>
 <span class="sd">        plot_drive_freq</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="n">ordar_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span>
 
         <span class="n">AR_cols</span><span class="p">,</span> <span class="n">G_cols</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sigdriv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_all</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">)</span>
@@ -1033,6 +1033,7 @@
 <span class="sd">        xlim : minimum and maximum amplitude</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="n">xlim</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver_range</span><span class="p">(</span><span class="n">nbcols</span><span class="p">,</span> <span class="n">xlim</span><span class="p">)</span>
         <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">)</span>
         <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigdriv_imag</span><span class="p">)</span>
@@ -1101,6 +1102,7 @@
 <span class="sd">        ax    : matplotlib.axes.Axes</span>
 <span class="sd">        xlim  : force xlim to these values if defined</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="n">spec</span><span class="p">,</span> <span class="n">xlim</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_amplitude_frequency</span><span class="p">(</span>
             <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="n">frange</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spec_</span> <span class="o">=</span> <span class="n">spec</span>
@@ -1167,6 +1169,7 @@
 <span class="sd">        vmin    : minimum power to plot (dB)</span>
 <span class="sd">        vmax    : maximum power to plot (dB)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="n">spec</span><span class="p">,</span> <span class="n">xlim</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_amplitude_frequency</span><span class="p">(</span>
             <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="n">xlim</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="n">frange</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spec_</span> <span class="o">=</span> <span class="n">spec</span>
@@ -1292,10 +1295,6 @@
     <span class="n">logL</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">0.5</span>
 
     <span class="k">return</span> <span class="n">logL</span>
-
-
-<span class="k">class</span> <span class="nc">NotFittedError</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Exception class to raise if estimator is used before fitting.&quot;&quot;&quot;</span>
 </pre></div>
 
 </div>

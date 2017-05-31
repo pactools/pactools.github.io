@@ -129,7 +129,7 @@
 <span class="kn">from</span> <span class="nn">.utils.spectrum</span> <span class="k">import</span> <span class="n">Bicoherence</span><span class="p">,</span> <span class="n">Coherence</span>
 <span class="kn">from</span> <span class="nn">.utils.maths</span> <span class="k">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">argmax_2d</span><span class="p">,</span> <span class="n">next_power2</span>
 <span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_random_state</span>
-<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_consistent_shape</span>
+<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_consistent_shape</span><span class="p">,</span> <span class="n">check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">.utils.viz</span> <span class="k">import</span> <span class="n">add_colorbar</span>
 <span class="kn">from</span> <span class="nn">.bandpass_filter</span> <span class="k">import</span> <span class="n">multiple_band_pass</span>
 <span class="kn">from</span> <span class="nn">.mne_api</span> <span class="k">import</span> <span class="n">MaskIterator</span>
@@ -439,6 +439,7 @@
 <span class="sd">        tight_layout : boolean</span>
 <span class="sd">            Use tight_layout or not</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;comod_&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comod_</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">comod_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">comod_</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
@@ -517,6 +518,7 @@
 <span class="sd">        pac_value : float or array, shape (n_comod, )</span>
 <span class="sd">            Maximum PAC value</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;comod_&#39;</span><span class="p">)</span>
         <span class="c1"># only one comodulogram</span>
         <span class="n">return_array</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">comod_</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>

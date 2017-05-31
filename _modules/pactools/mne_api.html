@@ -121,6 +121,13 @@
 
 <div class="viewcode-block" id="raw_to_mask"><a class="viewcode-back" href="../../generated/pactools.raw_to_mask.html#pactools.raw_to_mask">[docs]</a><span class="k">def</span> <span class="nf">raw_to_mask</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">ixs</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A function to transform MNE data into pactools input signals.</span>
+<span class="sd">    It select the one channel on which you to estimate PAC, or two channels</span>
+<span class="sd">    for cross-channel PAC. It also returns a mask generator, that mask the</span>
+<span class="sd">    data outside a given window around an event. The mask generator returns</span>
+<span class="sd">    a number of masks equal to the number of events times the number of</span>
+<span class="sd">    windows (i.e. the number of pairs (tmin, tmax)).</span>
+
 <span class="sd">    Warning: events is stored in indices, tmin and tmax are stored in seconds.</span>
 
 <span class="sd">    Parameters</span>

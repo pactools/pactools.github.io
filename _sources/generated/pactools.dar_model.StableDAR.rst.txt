@@ -1,0 +1,63 @@
+pactools.dar_model.StableDAR
+============================
+
+.. currentmodule:: pactools.dar_model
+
+.. autoclass:: StableDAR
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~StableDAR.__init__
+      ~StableDAR.cell
+      ~StableDAR.common_gradient
+      ~StableDAR.common_hessian
+      ~StableDAR.copy
+      ~StableDAR.decode
+      ~StableDAR.degrees_of_freedom
+      ~StableDAR.develop
+      ~StableDAR.develop_all
+      ~StableDAR.develop_gain
+      ~StableDAR.develop_parcor
+      ~StableDAR.encode
+      ~StableDAR.estimate_ar
+      ~StableDAR.estimate_error
+      ~StableDAR.estimate_fixed_gain
+      ~StableDAR.estimate_gain
+      ~StableDAR.fit
+      ~StableDAR.fit_transform
+      ~StableDAR.get_criterion
+      ~StableDAR.get_title
+      ~StableDAR.last_model
+      ~StableDAR.likelihood_ratio
+      ~StableDAR.log_likelihood
+      ~StableDAR.make_basis
+      ~StableDAR.next_model
+      ~StableDAR.plot
+      ~StableDAR.plot_lines
+      ~StableDAR.reset_criterions
+      ~StableDAR.synthesis
+      ~StableDAR.synthesize
+      ~StableDAR.to_dict
+      ~StableDAR.transform
+      ~StableDAR.whiten
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StableDAR.aic
+      ~StableDAR.bic
+      ~StableDAR.logl
+      ~StableDAR.ordar_
+   
+   

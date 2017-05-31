@@ -148,7 +148,7 @@
 <td>Simulate a 1D signal with artificial phase amplitude coupling (PAC).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pactools.raw_to_mask.html#pactools.raw_to_mask" title="pactools.raw_to_mask"><code class="xref py py-obj docutils literal"><span class="pre">raw_to_mask</span></code></a>(raw,&nbsp;ixs[,&nbsp;events,&nbsp;tmin,&nbsp;tmax])</td>
-<td>Warning: events is stored in indices, tmin and tmax are stored in seconds.</td>
+<td>A function to transform MNE data into pactools input signals.</td>
 </tr>
 </tbody>
 </table>
@@ -162,9 +162,12 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR"><code class="xref py py-obj docutils literal"><span class="pre">DAR</span></code></a>([ordar,&nbsp;ordriv,&nbsp;criterion,&nbsp;normalize,&nbsp;...])</td>
-<td></td>
+<td>A driven auto-regressive (DAR) model, as described in [1].</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="pactools.dar_model.extract_driver"><code class="xref py py-obj docutils literal"><span class="pre">extract_driver</span></code></a>(sigs,&nbsp;fs,&nbsp;low_fq[,&nbsp;n_cycles,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pactools.dar_model.StableDAR.html#pactools.dar_model.StableDAR" title="pactools.dar_model.StableDAR"><code class="xref py py-obj docutils literal"><span class="pre">StableDAR</span></code></a>([iter_newton,&nbsp;eps_newton])</td>
+<td>A stable driven auto-regressive (DAR) model, as described in [1].</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="pactools.dar_model.extract_driver"><code class="xref py py-obj docutils literal"><span class="pre">extract_driver</span></code></a>(sigs,&nbsp;fs,&nbsp;low_fq[,&nbsp;n_cycles,&nbsp;...])</td>
 <td>Extract the driver with filtering and fill the rest of the signal.</td>
 </tr>
 </tbody>

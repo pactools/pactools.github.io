@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pactools.dar_model.DAR &#8212; pactools 0.1 documentation</title>
+    <title>pactools.dar_model.StableDAR &#8212; pactools 0.1 documentation</title>
     
     <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -34,8 +34,8 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pactools.dar_model.StableDAR" href="pactools.dar_model.StableDAR.html" />
-    <link rel="prev" title="pactools.raw_to_mask" href="pactools.raw_to_mask.html" />
+    <link rel="next" title="pactools.dar_model.extract_driver" href="pactools.dar_model.extract_driver.html" />
+    <link rel="prev" title="pactools.dar_model.DAR" href="pactools.dar_model.DAR.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -89,7 +89,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">pactools.dar_model.DAR</a></li>
+<li><a class="reference internal" href="#">pactools.dar_model.StableDAR</a></li>
 </ul>
 </ul>
 </li>
@@ -101,7 +101,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="../_sources/generated/pactools.dar_model.DAR.rst.txt"
+  <a href="../_sources/generated/pactools.dar_model.StableDAR.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -123,70 +123,35 @@
 
 <div class="container content-container">
   
-  <div class="section" id="pactools-dar-model-dar">
-<h1>pactools.dar_model.DAR<a class="headerlink" href="#pactools-dar-model-dar" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pactools-dar-model-stabledar">
+<h1>pactools.dar_model.StableDAR<a class="headerlink" href="#pactools-dar-model-stabledar" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="pactools.dar_model.DAR">
-<em class="property">class </em><code class="descclassname">pactools.dar_model.</code><code class="descname">DAR</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/dar.html#DAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.DAR" title="Permalink to this definition">¶</a></dt>
-<dd><p>A driven auto-regressive (DAR) model, as described in [1].</p>
-<p>This model uses the simple parametrization:</p>
+<dt id="pactools.dar_model.StableDAR">
+<em class="property">class </em><code class="descclassname">pactools.dar_model.</code><code class="descname">StableDAR</code><span class="sig-paren">(</span><em>iter_newton=0</em>, <em>eps_newton=0.001</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/stable_dar.html#StableDAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.StableDAR" title="Permalink to this definition">¶</a></dt>
+<dd><p>A stable driven auto-regressive (DAR) model, as described in [1].
+This model is designed to have an stable instantaneous AR model at each
+time.</p>
+<p>This model uses the parametrization:</p>
 <div class="math">
 \[y(t) + \sum_{i=1}^p a_i(t) y(t-i)= \varepsilon(t)\]</div>
 <p>with:</p>
 <div class="math">
-\[a_i(t) = \sum_{k=0}^m a_{ik} x(t)^k\]</div>
+\[a_p^{(p)} = k_p; \;\;\;\;
+a_i^{(p)} = a_i^{(p-1)} + k_p a_{p-i}^{(p-1)}\]</div>
+<div class="math">
+\[\gamma_i = \log\left(\frac{1+k_i}{1-k_i}\right); \;\;\;\;
+\gamma_{i}(t)=\sum_{j=0}^{m}\gamma_{ij}x(t)^j\]</div>
 <p class="rubric">References</p>
 <p>[1] Dupre la Tour, T. , Grenier, Y., &amp; Gramfort, A. (2017). Parametric
 estimation of spectrum driven by an exogenous signal. Acoustics, Speech
 and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 4301&#8211;4305.</p>
 <dl class="method">
-<dt id="pactools.dar_model.DAR.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.DAR.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ordar</strong> : int &gt; 0</p>
-<blockquote>
-<div><p>Order of the autoregressive model (p)</p>
-</div></blockquote>
-<p><strong>ordriv</strong> : int &gt;= 0</p>
-<blockquote>
-<div><p>Order of the taylor expansion for sigdriv (m)</p>
-</div></blockquote>
-<p><strong>criterion</strong> : None or string in (&#8216;bic&#8217;, &#8216;aic&#8217;, &#8216;logl&#8217;)</p>
-<blockquote>
-<div><p>If not None, select the criterion used for model selection.</p>
-</div></blockquote>
-<p><strong>normalize</strong> : boolean</p>
-<blockquote>
-<div><p>If True, the basis vectors are normalized to unit energy.</p>
-</div></blockquote>
-<p><strong>ortho</strong> : boolean</p>
-<blockquote>
-<div><p>If True, the basis vectors are orthogonalized.</p>
-</div></blockquote>
-<p><strong>center</strong> : boolean</p>
-<blockquote>
-<div><p>If True, we subtract the mean in sigin</p>
-</div></blockquote>
-<p><strong>iter_gain</strong> : int &gt;=0</p>
-<blockquote>
-<div><p>Maximum number of iteration in gain estimation</p>
-</div></blockquote>
-<p><strong>eps_gain</strong> : float &gt;= 0</p>
-<blockquote>
-<div><p>Threshold to stop iterations in gain estimation</p>
-</div></blockquote>
-<p><strong>use_driver_phase</strong> : boolean</p>
-<blockquote class="last">
-<div><p>If True, we divide the driver by its instantaneous amplitude.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dt id="pactools.dar_model.StableDAR.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>iter_newton=0</em>, <em>eps_newton=0.001</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.StableDAR.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a base Lattice model with Taylor expansion</p>
+<p>iter_newton : maximum number of Newton-Raphson iterations
+eps_newton  : threshold to stop Newton-Raphson iterations</p>
 </dd></dl>
 
 <p class="rubric">Methods</p>
@@ -196,19 +161,23 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.dar_model.DAR.__init__" title="pactools.dar_model.DAR.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([ordar,&nbsp;ordriv,&nbsp;criterion,&nbsp;...])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
+<tr class="row-odd"><td><a class="reference internal" href="#pactools.dar_model.StableDAR.__init__" title="pactools.dar_model.StableDAR.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([iter_newton,&nbsp;eps_newton])</td>
+<td>Creates a base Lattice model with Taylor expansion</td>
 </tr>
-</tbody>
-</table>
-</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cell</span></code>(parcor_list,&nbsp;forward_residual,&nbsp;...)</td>
+<td>Apply a single cell of the direct lattice filter</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>()</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">common_gradient</span></code>(p,&nbsp;ki)</td>
+<td>Compute common factor in gradient.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">common_hessian</span></code>(p,&nbsp;ki)</td>
+<td>Compute common factor in Hessian.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>()</td>
 <td>Creates a (deep) copy of a model</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">decode</span></code>(lar)</td>
+<td>Extracts parcor coefficients from encoded version (e.g.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">degrees_of_freedom</span></code>()</td>
 <td></td>
@@ -221,6 +190,12 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">develop_gain</span></code>(basis[,&nbsp;sigdriv,&nbsp;squared,&nbsp;log])</td>
 <td></td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">develop_parcor</span></code>(LAR,&nbsp;basis)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">encode</span></code>(ki)</td>
+<td>Encodes parcor coefficients to LAR coefficients</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_ar</span></code>()</td>
 <td>Estimates the AR model on a signal</td>
@@ -247,7 +222,7 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 <td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">last_model</span></code>()</td>
-<td></td>
+<td>overload if it&#8217;s faster to get only last model</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">likelihood_ratio</span></code>(ar0)</td>
 <td>Computation of the likelihood ratio test the null hypothesis H0 is given by model ar0; the current model (self) is tested against this model ar0 which may be either an invariant AR model (ordriv=0) or a hybrid one (invariant AR part, with driven gain).</td>
@@ -259,7 +234,7 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 <td>Creates a basis from the driving signal, with the successive powers of sigdriv and sigdriv_imag.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">next_model</span></code>()</td>
-<td></td>
+<td>Compute the AR model at successive orders</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;vmin,&nbsp;vmax,&nbsp;ax,&nbsp;...])</td>
 <td>Represent the power spectral density as a function of the driver</td>
@@ -270,11 +245,20 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">reset_criterions</span></code>()</td>
 <td>Reset stored criterions (negative log_likelihood, AIC or BIC)</td>
 </tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">synthesis</span></code>([sigdriv,&nbsp;sigin_init])</td>
+<td>Create a signal from fitted model</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">synthesize</span></code>(random_sig[,&nbsp;burn_in,&nbsp;newbasis])</td>
+<td>Apply the inverse lattice filter to synthesize</td>
+</tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_dict</span></code>()</td>
 <td>Convert the model attributes to dict</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;...])</td>
 <td>Whiten a signal with the already fitted model</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">whiten</span></code>()</td>
+<td>Apply the direct lattice filter to whiten the original signal</td>
 </tr>
 </tbody>
 </table>

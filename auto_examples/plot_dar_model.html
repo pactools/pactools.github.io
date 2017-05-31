@@ -130,7 +130,7 @@ fits a DAR model and show the modulation extracted in the DAR model.</p>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 <span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a>
-<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <span class="n">simulate_pac</span>
+<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="View documentation for pactools.simulate_pac"><span class="n">simulate_pac</span></a>
 <span class="kn">from</span> <span class="nn">pactools.dar_model</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="View documentation for pactools.dar_model.DAR"><span class="n">DAR</span></a><span class="p">,</span> <a href="http://pactools.github.io/generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="View documentation for pactools.dar_model.extract_driver"><span class="n">extract_driver</span></a>
 </pre></div>
 </div>
@@ -144,7 +144,7 @@ fits a DAR model and show the modulation extracted in the DAR model.</p>
 <span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.4</span>
 <span class="n">t_plot</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># sec</span>
 
-<span class="n">signal</span> <span class="o">=</span> <span class="n">simulate_pac</span><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
+<span class="n">signal</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="View documentation for pactools.simulate_pac"><span class="n">simulate_pac</span></a><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
                       <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span>
                       <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
@@ -205,7 +205,7 @@ Giving <code class="docutils literal"><span class="pre">method='duprelatour'</sp
 </pre></div>
 </div>
 <img alt="../_images/sphx_glr_plot_dar_model_002.png" class="align-center" src="../_images/sphx_glr_plot_dar_model_002.png" />
-<p><strong>Total running time of the script:</strong> ( 1 minutes  9.817 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  24.183 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_dar_model.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dar_model.py</span></code></a></div>
