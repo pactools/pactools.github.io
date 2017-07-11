@@ -1,5 +1,5 @@
-pactools.utils.spectrum.Spectrum
-================================
+pactools\.utils\.spectrum\.Spectrum
+===================================
 
 .. currentmodule:: pactools.utils.spectrum
 

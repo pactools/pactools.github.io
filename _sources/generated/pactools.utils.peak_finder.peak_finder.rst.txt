@@ -1,5 +1,5 @@
-pactools.utils.peak_finder.peak_finder
-======================================
+pactools\.utils\.peak\_finder\.peak\_finder
+===========================================
 
 .. currentmodule:: pactools.utils.peak_finder
 

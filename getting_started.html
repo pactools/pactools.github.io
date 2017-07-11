@@ -1,0 +1,340 @@
+
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Started with pactools &mdash; pactools 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="pactools 0.1 documentation" href="index.html"/>
+        <link rel="next" title="Gallery of Examples" href="auto_examples/index.html"/>
+        <link rel="prev" title="Welcome to pactools’ documentation!" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pactools
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started with pactools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#phase-amplitude-coupling-pac">Phase-amplitude coupling (PAC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#driven-auto-regressive-dar-models">Driven auto-regressive (DAR) models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#acknowledgment">Acknowledgment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cite-this-work">Cite this work</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Gallery of Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pactools/pactools">Fork pactools on Github</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pactools</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Getting Started with pactools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="getting-started-with-pactools">
+<h1>Getting Started with pactools<a class="headerlink" href="#getting-started-with-pactools" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://travis-ci.org/pactools/pactools"><img alt="Build Status" src="https://travis-ci.org/pactools/pactools.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/pactools/pactools"><img alt="Test coverage" src="https://codecov.io/gh/pactools/pactools/branch/master/graph/badge.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/pactools/pactools"><img alt="Python27" src="https://img.shields.io/badge/python-2.7-blue.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/pactools/pactools"><img alt="Python36" src="https://img.shields.io/badge/python-3.6-blue.svg" /></a>
+<p>This package provides tools to estimate <strong>phase-amplitude coupling (PAC)</strong>
+in neural time series.</p>
+<p>In particular, it implements the <strong>driven auto-regressive (DAR)</strong>
+models presented in the reference below [<a class="reference external" href="http://www.biorxiv.org/content/early/2017/07/06/159731">Dupre la Tour et al. 2017</a>].</p>
+<p>Read more in the <a class="reference external" href="https://pactools.github.io">documentation</a>.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>To install <code class="docutils literal"><span class="pre">pactools</span></code>, you first need to install its dependencies:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">numpy</span> <span class="n">matplotlib</span> <span class="n">scipy</span>
+</pre></div>
+</div>
+<p>Then install <code class="docutils literal"><span class="pre">pactools</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">pactools</span><span class="o">/</span><span class="n">pactools</span><span class="o">.</span><span class="n">git</span><span class="c1">#egg=pactools</span>
+</pre></div>
+</div>
+<p>To upgrade, use the <code class="docutils literal"><span class="pre">--upgrade</span></code> flag provided by <code class="docutils literal"><span class="pre">pip</span></code>.</p>
+<p>To check if everything worked fine, you can do:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import pactools&#39;</span>
+</pre></div>
+</div>
+<p>and it should not give any error messages.</p>
+</div>
+<div class="section" id="phase-amplitude-coupling-pac">
+<h2>Phase-amplitude coupling (PAC)<a class="headerlink" href="#phase-amplitude-coupling-pac" title="Permalink to this headline">¶</a></h2>
+<p>Among the different classes of cross-frequency couplings,
+phase-amplitude coupling (PAC) - i.e. high frequency activity time-locked
+to a specific phase of slow frequency oscillations - is by far the most
+acknowledged.
+PAC is typically represented with a comodulogram, which shows the strenght of
+the coupling over a grid of frequencies.
+Comodulograms can be computed in <cite>pactools</cite> with more
+than 10 different methods.</p>
+<div class="section" id="examples-using-pactools-comodulogram">
+<h3>Examples using <code class="docutils literal"><span class="pre">pactools.Comodulogram</span></code><a class="headerlink" href="#examples-using-pactools-comodulogram" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="A comodulogram shows the estimated PAC metric on a grid of frequency bands. "><div class="figure" id="id1">
+<img alt="_images/sphx_glr_plot_comodulogram_thumb.png" src="_images/sphx_glr_plot_comodulogram_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/plot_comodulogram.html#sphx-glr-auto-examples-plot-comodulogram-py"><span class="std std-ref">Comodulogram</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="It also shows the comodulogram computed with a DAR model. "><div class="figure" id="id2">
+<img alt="_images/sphx_glr_plot_dar_model_thumb.png" src="_images/sphx_glr_plot_dar_model_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/plot_dar_model.html#sphx-glr-auto-examples-plot-dar-model-py"><span class="std std-ref">Fitting a DAR model</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="It relies on the function ``raw_to_mask``, which takes as input a MNE.Raw instance and an event..."><div class="figure" id="id3">
+<img alt="_images/sphx_glr_plot_mne_epoch_masking_thumb.png" src="_images/sphx_glr_plot_mne_epoch_masking_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/plot_mne_epoch_masking.html#sphx-glr-auto-examples-plot-mne-epoch-masking-py"><span class="std std-ref">Interface with MNE-python</span></a></span></p>
+</div>
+</div><div style='clear:both'></div></div>
+</div>
+<div class="section" id="driven-auto-regressive-dar-models">
+<h2>Driven auto-regressive (DAR) models<a class="headerlink" href="#driven-auto-regressive-dar-models" title="Permalink to this headline">¶</a></h2>
+<p>One of the method is based on driven auto-regressive (DAR) models.
+As this method models the entire spectrum simultaneously, it avoids the
+pitfalls related to incorrect filtering or the use of the Hilbert transform
+on wide-band signals. As the model is probabilistic, it also provides a
+score of the model <strong>goodness of fit</strong> via the likelihood, enabling easy
+and legitimate model selection and parameter comparison;
+this data-driven feature is unique to such model-based approach.</p>
+<p>We recommend using DAR models to estimate PAC in neural time-series.
+More detail in [<a class="reference external" href="http://www.biorxiv.org/content/early/2017/07/06/159731">Dupre la Tour et al. 2017</a>].</p>
+<div class="section" id="examples-using-pactools-dar-model-dar">
+<h3>Examples using <code class="docutils literal"><span class="pre">pactools.dar_model.DAR</span></code><a class="headerlink" href="#examples-using-pactools-dar-model-dar" title="Permalink to this headline">¶</a></h3>
+<div class="sphx-glr-thumbcontainer" tooltip="It also shows the comodulogram computed with a DAR model. "><div class="figure" id="id4">
+<img alt="_images/sphx_glr_plot_dar_model_thumb.png" src="_images/sphx_glr_plot_dar_model_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/plot_dar_model.html#sphx-glr-auto-examples-plot-dar-model-py"><span class="std std-ref">Fitting a DAR model</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example disantangles the two distinct notions of phase shift and temporal delay in phase-a..."><div class="figure" id="id5">
+<img alt="_images/sphx_glr_plot_phase_delay_thumb.png" src="_images/sphx_glr_plot_phase_delay_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="auto_examples/plot_phase_delay.html#sphx-glr-auto-examples-plot-phase-delay-py"><span class="std std-ref">Phase shift and temporal delay in PAC</span></a></span></p>
+</div>
+</div><div style='clear:both'></div></div>
+</div>
+<div class="section" id="acknowledgment">
+<h2>Acknowledgment<a class="headerlink" href="#acknowledgment" title="Permalink to this headline">¶</a></h2>
+<p>This work was supported by the ERC Starting Grant SLAB ERC-YStG-676943 to
+Alexandre Gramfort, the ERC Starting Grant MindTime ERC-YStG-263584 to Virginie
+van Wassenhove, the ANR-16-CE37-0004-04 AutoTime to Valerie Doyere and Virginie
+van Wassenhove, and the Paris-Saclay IDEX NoTime to Valerie Doyere, Alexandre
+Gramfort and Virginie van Wassenhove,</p>
+</div>
+<div class="section" id="cite-this-work">
+<h2>Cite this work<a class="headerlink" href="#cite-this-work" title="Permalink to this headline">¶</a></h2>
+<p>If you use this code in your project, please cite
+[<a class="reference external" href="http://www.biorxiv.org/content/early/2017/07/06/159731">Dupre la Tour et al. 2017</a>]:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>@article {duprelatour159731,
+    author = {Dupr\&#39;e la Tour, Tom and Tallot, Lucille and Grabot, Laetitia and Doy\`ere, Val\&#39;erie and van Wassenhove, Virginie and Grenier, Yves and Gramfort, Alexandre},
+    title = {Non-linear Auto-Regressive Models for Cross-Frequency Coupling in Neural Time Series},
+    year = {2017},
+    doi = {10.1101/159731},
+    publisher = {Cold Spring Harbor Labs Journals},
+    URL = {http://www.biorxiv.org/content/early/2017/07/06/159731},
+    journal = {bioRxiv}
+}
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="auto_examples/index.html" class="btn btn-neutral float-right" title="Gallery of Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to pactools’ documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tom Dupré la Tour.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

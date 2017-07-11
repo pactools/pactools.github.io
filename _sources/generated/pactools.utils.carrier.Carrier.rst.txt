@@ -1,5 +1,5 @@
-pactools.utils.carrier.Carrier
-==============================
+pactools\.utils\.carrier\.Carrier
+=================================
 
 .. currentmodule:: pactools.utils.carrier
 

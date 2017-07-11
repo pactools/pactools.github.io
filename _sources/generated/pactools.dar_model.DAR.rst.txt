@@ -1,5 +1,5 @@
-pactools.dar_model.DAR
-======================
+pactools\.dar\_model\.DAR
+=========================
 
 .. currentmodule:: pactools.dar_model
 
@@ -41,14 +41,5 @@ pactools.dar_model.DAR
    
 
    
-   
-   .. rubric:: Attributes
-
-   .. autosummary::
-   
-      ~DAR.aic
-      ~DAR.bic
-      ~DAR.logl
-      ~DAR.ordar_
    
    
