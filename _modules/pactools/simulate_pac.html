@@ -1,19 +1,13 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>pactools.simulate_pac &#8212; pactools 0.1 documentation</title>
-    
-    <link rel="stylesheet" href="../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -27,7 +21,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
@@ -40,7 +34,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -192,7 +186,7 @@
     <span class="n">driver_real</span><span class="p">,</span> <span class="n">driver_imag</span> <span class="o">=</span> <span class="n">fir</span><span class="o">.</span><span class="n">direct</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_points</span><span class="p">))</span>
     <span class="n">driver</span> <span class="o">=</span> <span class="n">driver_real</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">driver_imag</span>
     <span class="c1"># We scale by sqrt(2) to have correct amplitude in the real-valued driver</span>
-    <span class="n">driver</span> <span class="o">*=</span> <span class="n">low_fq_amp</span> <span class="o">/</span> <span class="n">driver</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">driver</span> <span class="o">*=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">driver</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">return_driver</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">driver</span>
 
@@ -210,11 +204,11 @@
 
     <span class="c1"># create the modulation, with a sigmoid, and a phase lag</span>
     <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">phi_0</span><span class="p">)</span>
-    <span class="n">sigmoid_sharpness</span> <span class="o">=</span> <span class="n">sigmoid_sharpness</span> <span class="o">*</span> <span class="n">low_fq_amp</span>
+    <span class="n">sigmoid_sharpness</span> <span class="o">=</span> <span class="n">sigmoid_sharpness</span>
     <span class="n">modulation</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">driver</span> <span class="o">*</span> <span class="n">phase</span><span class="p">),</span> <span class="n">sharpness</span><span class="o">=</span><span class="n">sigmoid_sharpness</span><span class="p">)</span>
 
     <span class="c1"># the slow oscillation is not phased lag</span>
-    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span> <span class="o">*</span> <span class="n">low_fq_amp</span>
 
     <span class="c1"># add a delay to the slow oscillation theta</span>
     <span class="n">delay_point</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">delay</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span>
@@ -245,7 +239,7 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_
     </p>
     <p>
         &copy; Copyright 2017, Tom Dupre la Tour.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

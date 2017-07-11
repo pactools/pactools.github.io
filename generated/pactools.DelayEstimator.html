@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pactools.utils.peak_finder.peak_finder &#8212; pactools 0.1 documentation</title>
+    <title>pactools.DelayEstimator &#8212; pactools 0.1 documentation</title>
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
@@ -28,7 +28,8 @@
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="pactools.utils.spectrum.Bicoherence" href="pactools.utils.spectrum.Bicoherence.html" />
+    <link rel="next" title="pactools.PeakLocking" href="pactools.PeakLocking.html" />
+    <link rel="prev" title="pactools.Comodulogram" href="pactools.Comodulogram.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -82,7 +83,7 @@
   <ul class="dropdown-menu localtoc"
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">pactools.utils.peak_finder.peak_finder</a></li>
+<li><a class="reference internal" href="#">pactools.DelayEstimator</a></li>
 </ul>
 </ul>
 </li>
@@ -94,7 +95,7 @@
             
               <li class="hidden-sm">
 <div id="sourcelink">
-  <a href="../_sources/generated/pactools.utils.peak_finder.peak_finder.rst.txt"
+  <a href="../_sources/generated/pactools.DelayEstimator.rst.txt"
      rel="nofollow">Source</a>
 </div></li>
             
@@ -116,49 +117,87 @@
 
 <div class="container content-container">
   
-  <div class="section" id="pactools-utils-peak-finder-peak-finder">
-<h1>pactools.utils.peak_finder.peak_finder<a class="headerlink" href="#pactools-utils-peak-finder-peak-finder" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
-<dt id="pactools.utils.peak_finder.peak_finder">
-<code class="descclassname">pactools.utils.peak_finder.</code><code class="descname">peak_finder</code><span class="sig-paren">(</span><em>x0</em>, <em>thresh=None</em>, <em>extrema=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/peak_finder.html#peak_finder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.peak_finder.peak_finder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Noise tolerant fast peak finding algorithm</p>
+  <div class="section" id="pactools-delayestimator">
+<h1>pactools.DelayEstimator<a class="headerlink" href="#pactools-delayestimator" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="pactools.DelayEstimator">
+<em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">DelayEstimator</code><span class="sig-paren">(</span><em>fs</em>, <em>dar_model</em>, <em>low_fq</em>, <em>low_fq_width</em>, <em>max_delay='auto'</em>, <em>refit=True</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/delay_estimator.html#DelayEstimator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.DelayEstimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate the optimal delay between the two components in PAC</p>
+<p>In phase-amplitude coupling (PAC), the slow oscillation and the fast
+oscillations may be shifted in time with a constant temporal delay. This
+estimator compute the optimal delay, based on the maximum likelihood of DAR
+models.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x0</strong> : 1d array</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fs</strong> : float</p>
 <blockquote>
-<div><p>A real vector from the maxima will be found (required).</p>
+<div><p>Sampling frequency</p>
 </div></blockquote>
-<p><strong>thresh</strong> : float</p>
+<p><strong>dar_model</strong> : DAR instance</p>
 <blockquote>
-<div><p>The amount above surrounding data for a peak to be
-identified (default = (max(x0)-min(x0))/4). Larger values mean
-the algorithm is more selective in finding peaks.</p>
+<div><p>DAR model used to fit the signal</p>
 </div></blockquote>
-<p><strong>extrema</strong> : {-1, 1}</p>
+<p><strong>low_fq</strong> : float</p>
 <blockquote>
-<div><p>1 if maxima are desired, -1 if minima are desired
-(default = maxima, 1).</p>
+<div><p>Filtering frequency (phase signal)</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>peak_loc</strong> : array</p>
+<p><strong>low_fq_width</strong> : float</p>
 <blockquote>
-<div><p>The indices of the identified peaks in x0</p>
+<div><p>Bandwidth of the band-pass filter (phase signal)</p>
 </div></blockquote>
-<p><strong>peak_mag</strong> : array</p>
+<p><strong>max_delay</strong> : float or ‘auto’</p>
+<blockquote>
+<div><p>The delay grid will range from -max_delay to max_delay.
+If ‘auto’, it uses 0.5 / low_fq.</p>
+</div></blockquote>
+<p><strong>refit</strong> : boolean, default True</p>
+<blockquote>
+<div><p>If True, the model will be refitted with the best delay obtained</p>
+</div></blockquote>
+<p><strong>random_state</strong> : None, int or np.random.RandomState instance</p>
 <blockquote class="last">
-<div><p>The magnitude of the identified peaks</p>
+<div><p>Seed or random number generator for the surrogate analysis.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
-<p>If repeated values are found the first is identified as the peak.
-Conversion from initial Matlab code from:
-Nathanael C. Yoder (<a class="reference external" href="mailto:ncyoder&#37;&#52;&#48;purdue&#46;edu">ncyoder<span>&#64;</span>purdue<span>&#46;</span>edu</a>)</p>
+<p class="rubric">References</p>
+<p>Dupré la Tour et al. (2017). Non-linear Auto-Regressive Models for
+Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
+<dl class="method">
+<dt id="pactools.DelayEstimator.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs</em>, <em>dar_model</em>, <em>low_fq</em>, <em>low_fq_width</em>, <em>max_delay='auto'</em>, <em>refit=True</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/delay_estimator.html#DelayEstimator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.DelayEstimator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pactools.DelayEstimator.__init__" title="pactools.DelayEstimator.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;dar_model,&nbsp;low_fq,&nbsp;low_fq_width)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(low_sig[,&nbsp;high_sig,&nbsp;mask])</td>
+<td>Compute peak-locked time-averaged and time-frequency representations.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([ax,&nbsp;write_tau])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

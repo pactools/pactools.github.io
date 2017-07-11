@@ -1,19 +1,13 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>pactools.Comodulogram &#8212; pactools 0.1 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -27,14 +21,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="pactools.PeakLocking" href="pactools.PeakLocking.html" />
+    <link rel="next" title="pactools.DelayEstimator" href="pactools.DelayEstimator.html" />
     <link rel="prev" title="API Documentation" href="../api.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -42,7 +36,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -141,47 +135,47 @@
 <blockquote>
 <div><p>List of filtering frequencies (phase signal)</p>
 </div></blockquote>
-<p><strong>high_fq_range</strong> : array or list or &#8216;auto&#8217;</p>
+<p><strong>high_fq_range</strong> : array or list or ‘auto’</p>
 <blockquote>
 <div><p>List of filtering frequencies (amplitude signal)
-If &#8216;auto&#8217;, it uses np.linspace(max(low_fq_range), fs / 2.0, 40).</p>
+If ‘auto’, it uses np.linspace(max(low_fq_range), fs / 2.0, 40).</p>
 </div></blockquote>
 <p><strong>low_fq_width</strong> : float</p>
 <blockquote>
 <div><p>Bandwidth of the band-pass filter (phase signal)</p>
 </div></blockquote>
-<p><strong>high_fq_width</strong> : float or &#8216;auto&#8217;</p>
+<p><strong>high_fq_width</strong> : float or ‘auto’</p>
 <blockquote>
 <div><p>Bandwidth of the band-pass filter (amplitude signal)
-If &#8216;auto&#8217;, it uses 2 * max(low_fq_range).</p>
+If ‘auto’, it uses 2 * max(low_fq_range).</p>
 </div></blockquote>
 <p><strong>method</strong> : string or DAR instance</p>
 <blockquote>
 <div><p>Modulation index method:</p>
 <ul class="simple">
 <li><dl class="first docutils">
-<dt>String in (&#8216;ozkurt&#8217;, &#8216;canolty&#8217;, &#8216;tort&#8217;, &#8216;penny&#8217;, ), for a PAC</dt>
+<dt>String in (‘ozkurt’, ‘canolty’, ‘tort’, ‘penny’, ), for a PAC</dt>
 <dd>estimation based on filtering and using the Hilbert transform.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>String in (&#8216;vanwijk&#8217;, ) for a joint AAC and PAC estimation</dt>
+<dt>String in (‘vanwijk’, ) for a joint AAC and PAC estimation</dt>
 <dd>based on filtering and using the Hilbert transform.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>String in (&#8216;sigl&#8217;, &#8216;nagashima&#8217;, &#8216;hagihira&#8217;, &#8216;bispectrum&#8217;, ), for</dt>
+<dt>String in (‘sigl’, ‘nagashima’, ‘hagihira’, ‘bispectrum’, ), for</dt>
 <dd>a PAC estimation based on the bicoherence.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>String in (&#8216;colgin&#8217;, ) for a PAC estimation</dt>
-<dd>and in (&#8216;jiang&#8217;, ) for a PAC directionality estimation,
+<dt>String in (‘colgin’, ) for a PAC estimation</dt>
+<dd>and in (‘jiang’, ) for a PAC directionality estimation,
 based on filtering and computing coherence.</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>String in (&#8216;duprelatour&#8217;, ) or a DAR instance, for a PAC estimation</dt>
+<dt>String in (‘duprelatour’, ) or a DAR instance, for a PAC estimation</dt>
 <dd>based on a driven autoregressive model.</dd>
 </dl>
 </li>
@@ -238,7 +232,7 @@ fs and low_fq_width, with 0.5 overlap windows and no zero-padding.</p>
 <p><strong>low_fq_width_2</strong> : float</p>
 <blockquote class="last">
 <div><p>Bandwidth of the band-pass filters centered on low_fq_range, for
-the amplitude signal. Used only with &#8216;vanwijk&#8217; method.</p>
+the amplitude signal. Used only with ‘vanwijk’ method.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -256,7 +250,7 @@ the amplitude signal. Used only with &#8216;vanwijk&#8217; method.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.Comodulogram.__init__" title="pactools.Comodulogram.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;low_fq_range[,&nbsp;low_fq_width,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pactools.Comodulogram.__init__" title="pactools.Comodulogram.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;low_fq_range[,&nbsp;low_fq_width,&nbsp;…])</td>
 <td></td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(low_sig[,&nbsp;high_sig,&nbsp;mask])</td>
@@ -265,7 +259,7 @@ the amplitude signal. Used only with &#8216;vanwijk&#8217; method.</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_maximum_pac</span></code>()</td>
 <td>Get maximum PAC value in a comodulogram.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([titles,&nbsp;fig,&nbsp;axs,&nbsp;cmap,&nbsp;vmin,&nbsp;vmax,&nbsp;...])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([titles,&nbsp;axs,&nbsp;cmap,&nbsp;vmin,&nbsp;vmax,&nbsp;unit,&nbsp;…])</td>
 <td>Plot one or more comodulograms.</td>
 </tr>
 </tbody>
@@ -290,7 +284,7 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_
     </p>
     <p>
         &copy; Copyright 2017, Tom Dupre la Tour.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

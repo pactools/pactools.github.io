@@ -1,0 +1,24 @@
+pactools\.DelayEstimator
+========================
+
+.. currentmodule:: pactools
+
+.. autoclass:: DelayEstimator
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DelayEstimator.__init__
+      ~DelayEstimator.fit
+      ~DelayEstimator.plot
+   
+   
+
+   
+   
+   

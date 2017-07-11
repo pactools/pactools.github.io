@@ -1,19 +1,13 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>pactools.dar_model.StableDAR &#8212; pactools 0.1 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -27,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
@@ -42,7 +36,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -145,7 +139,7 @@ a_i^{(p)} = a_i^{(p-1)} + k_p a_{p-i}^{(p-1)}\]</div>
 <p>[1] Dupre la Tour, T. , Grenier, Y., &amp; Gramfort, A. (2017). Parametric
 estimation of spectrum driven by an exogenous signal. Acoustics, Speech
 and Signal Processing (ICASSP), 2017 IEEE International Conference on,
-4301&#8211;4305.</p>
+4301–4305.</p>
 <dl class="method">
 <dt id="pactools.dar_model.StableDAR.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>iter_newton=0</em>, <em>eps_newton=0.001</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.StableDAR.__init__" title="Permalink to this definition">¶</a></dt>
@@ -164,7 +158,7 @@ eps_newton  : threshold to stop Newton-Raphson iterations</p>
 <tr class="row-odd"><td><a class="reference internal" href="#pactools.dar_model.StableDAR.__init__" title="pactools.dar_model.StableDAR.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([iter_newton,&nbsp;eps_newton])</td>
 <td>Creates a base Lattice model with Taylor expansion</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cell</span></code>(parcor_list,&nbsp;forward_residual,&nbsp;...)</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cell</span></code>(parcor_list,&nbsp;forward_residual,&nbsp;…)</td>
 <td>Apply a single cell of the direct lattice filter</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">common_gradient</span></code>(p,&nbsp;ki)</td>
@@ -209,10 +203,10 @@ eps_newton  : threshold to stop Newton-Raphson iterations</p>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_gain</span></code>([regul])</td>
 <td>helper to handle failure in gain estimation</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;sigdriv_imag,&nbsp;...])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;sigdriv_imag,&nbsp;…])</td>
 <td>Estimate a DAR model from input signals.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit_transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;...])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit_transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;…])</td>
 <td>Same as fit, but return the residual instead of the model object</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_criterion</span></code>(criterion[,&nbsp;train])</td>
@@ -222,7 +216,7 @@ eps_newton  : threshold to stop Newton-Raphson iterations</p>
 <td></td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">last_model</span></code>()</td>
-<td>overload if it&#8217;s faster to get only last model</td>
+<td>overload if it’s faster to get only last model</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">likelihood_ratio</span></code>(ar0)</td>
 <td>Computation of the likelihood ratio test the null hypothesis H0 is given by model ar0; the current model (self) is tested against this model ar0 which may be either an invariant AR model (ordriv=0) or a hybrid one (invariant AR part, with driven gain).</td>
@@ -236,10 +230,10 @@ eps_newton  : threshold to stop Newton-Raphson iterations</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">next_model</span></code>()</td>
 <td>Compute the AR model at successive orders</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;vmin,&nbsp;vmax,&nbsp;ax,&nbsp;...])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;vmin,&nbsp;vmax,&nbsp;ax,&nbsp;…])</td>
 <td>Represent the power spectral density as a function of the driver</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_lines</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;ax,&nbsp;xlim,&nbsp;...])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_lines</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;ax,&nbsp;xlim,&nbsp;…])</td>
 <td>Represent the power spectral density as a function of</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">reset_criterions</span></code>()</td>
@@ -254,7 +248,7 @@ eps_newton  : threshold to stop Newton-Raphson iterations</p>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_dict</span></code>()</td>
 <td>Convert the model attributes to dict</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;...])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;…])</td>
 <td>Whiten a signal with the already fitted model</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">whiten</span></code>()</td>
@@ -303,7 +297,7 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_
     </p>
     <p>
         &copy; Copyright 2017, Tom Dupre la Tour.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>

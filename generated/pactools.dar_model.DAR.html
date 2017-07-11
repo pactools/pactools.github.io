@@ -1,19 +1,13 @@
 
 <!DOCTYPE html>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>pactools.dar_model.DAR &#8212; pactools 0.1 documentation</title>
-    
-    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -27,7 +21,7 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
     <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
@@ -35,14 +29,14 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pactools.dar_model.StableDAR" href="pactools.dar_model.StableDAR.html" />
-    <link rel="prev" title="pactools.raw_to_mask" href="pactools.raw_to_mask.html" />
+    <link rel="prev" title="pactools.simulate_pac" href="pactools.simulate_pac.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
 
   </head>
-  <body role="document">
+  <body>
 
   <div id="navbar" class="navbar navbar-default navbar-fixed-top">
     <div class="container">
@@ -139,7 +133,7 @@
 <p>[1] Dupre la Tour, T. , Grenier, Y., &amp; Gramfort, A. (2017). Parametric
 estimation of spectrum driven by an exogenous signal. Acoustics, Speech
 and Signal Processing (ICASSP), 2017 IEEE International Conference on,
-4301&#8211;4305.</p>
+4301–4305.</p>
 <dl class="method">
 <dt id="pactools.dar_model.DAR.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.DAR.__init__" title="Permalink to this definition">¶</a></dt>
@@ -155,7 +149,7 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 <blockquote>
 <div><p>Order of the taylor expansion for sigdriv (m)</p>
 </div></blockquote>
-<p><strong>criterion</strong> : None or string in (&#8216;bic&#8217;, &#8216;aic&#8217;, &#8216;logl&#8217;)</p>
+<p><strong>criterion</strong> : None or string in (‘bic’, ‘aic’, ‘logl’)</p>
 <blockquote>
 <div><p>If not None, select the criterion used for model selection.</p>
 </div></blockquote>
@@ -196,7 +190,7 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.dar_model.DAR.__init__" title="pactools.dar_model.DAR.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([ordar,&nbsp;ordriv,&nbsp;criterion,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pactools.dar_model.DAR.__init__" title="pactools.dar_model.DAR.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([ordar,&nbsp;ordriv,&nbsp;criterion,&nbsp;…])</td>
 <td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -234,10 +228,10 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_gain</span></code>([regul])</td>
 <td>helper to handle failure in gain estimation</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;sigdriv_imag,&nbsp;...])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;sigdriv_imag,&nbsp;…])</td>
 <td>Estimate a DAR model from input signals.</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit_transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;...])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit_transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;…])</td>
 <td>Same as fit, but return the residual instead of the model object</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_criterion</span></code>(criterion[,&nbsp;train])</td>
@@ -261,10 +255,10 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">next_model</span></code>()</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;vmin,&nbsp;vmax,&nbsp;ax,&nbsp;...])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;vmin,&nbsp;vmax,&nbsp;ax,&nbsp;…])</td>
 <td>Represent the power spectral density as a function of the driver</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_lines</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;ax,&nbsp;xlim,&nbsp;...])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_lines</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;ax,&nbsp;xlim,&nbsp;…])</td>
 <td>Represent the power spectral density as a function of</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">reset_criterions</span></code>()</td>
@@ -273,7 +267,7 @@ and Signal Processing (ICASSP), 2017 IEEE International Conference on,
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_dict</span></code>()</td>
 <td>Convert the model attributes to dict</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;...])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;…])</td>
 <td>Whiten a signal with the already fitted model</td>
 </tr>
 </tbody>
@@ -319,7 +313,7 @@ data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_orange_
     </p>
     <p>
         &copy; Copyright 2017, Tom Dupre la Tour.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.3.<br/>
     </p>
   </div>
 </footer>
