@@ -166,7 +166,7 @@
 <h1>pactools.PeakLocking<a class="headerlink" href="#pactools-peaklocking" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pactools.PeakLocking">
-<em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">PeakLocking</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='carrier', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">PeakLocking</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='pactools', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking" title="Permalink to this definition">¶</a></dt>
 <dd><p>An object to compute time average and time-frequency averaged with
 peak-locking, to analyze phase-amplitude coupling.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -199,11 +199,11 @@ If ‘auto’, it uses 2 * low_fq.</p>
 <blockquote>
 <div><p>Time to plot around the peaks (in second)</p>
 </div></blockquote>
-<p><strong>filter_method</strong> : in {‘mne’, ‘carrier’}</p>
+<p><strong>filter_method</strong> : in {‘mne’, ‘pactools’}</p>
 <blockquote>
 <div><p>Choose band pass filtering method (in multiple_band_pass)
 ‘mne’: with mne.filter.band_pass_filter
-‘carrier’: with pactools.Carrier (default)</p>
+‘pactools’: with pactools.fir.BandPassFilter (default)</p>
 </div></blockquote>
 <p><strong>peak_or_trough: in {‘peak’, ‘trough’}</strong></p>
 <blockquote>
@@ -222,7 +222,7 @@ It can also include ‘mean’, ‘std’ or ‘ste’
 </table>
 <dl class="method">
 <dt id="pactools.PeakLocking.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='carrier', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs, low_fq, low_fq_width=1.0, high_fq_range='auto', high_fq_width='auto', t_plot=1.0, filter_method='pactools', peak_or_trough='peak', percentiles=['std+', 'mean', 'std-']</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/peak_locking.html#PeakLocking.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.PeakLocking.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
@@ -280,7 +280,7 @@ It can also include ‘mean’, ‘std’ or ‘ste’
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupré la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour.
 
     </p>
   </div>

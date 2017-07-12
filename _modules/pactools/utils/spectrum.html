@@ -165,35 +165,35 @@
 
 
 <div class="viewcode-block" id="Spectrum"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum">[docs]</a><span class="k">class</span> <span class="nc">Spectrum</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Spectral estimator following Welch&#39;s method</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    block_length : int</span>
+<span class="sd">        Length of each signal block, on which we estimate the spectrum</span>
+
+<span class="sd">    fft_length : int or None</span>
+<span class="sd">        Length of FFT, should be greater or equal to block_length.</span>
+<span class="sd">        If None, it is set to block_length</span>
+
+<span class="sd">    step : int or None</span>
+<span class="sd">        Step between successive blocks</span>
+<span class="sd">        If None, it is set to half the block length (i.e. 0.5 overlap)</span>
+
+<span class="sd">    wfunc : function</span>
+<span class="sd">        Function used to compute the weitghting window on each block.</span>
+<span class="sd">        Examples: np.ones, np.hamming, np.bartlett, np.blackman, ...</span>
+
+<span class="sd">    fs : float</span>
+<span class="sd">        Sampling frequency</span>
+
+<span class="sd">    donorm : boolean</span>
+<span class="sd">        If True, the amplitude is normalized</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Spectrum.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">donorm</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Spectral estimator</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        block_length : int</span>
-<span class="sd">            Length of each signal block, on which we estimate the spectrum</span>
-
-<span class="sd">        fft_length : int or None</span>
-<span class="sd">            Length of FFT, should be greater or equal to block_length.</span>
-<span class="sd">            If None, it is set to block_length</span>
-
-<span class="sd">        step : int or None</span>
-<span class="sd">            Step between successive blocks</span>
-<span class="sd">            If None, it is set to half the block length (i.e. 0.5 overlap)</span>
-
-<span class="sd">        wfunc : function</span>
-<span class="sd">            Function used to compute the weitghting window on each block.</span>
-<span class="sd">            Examples: np.ones, np.hamming, np.bartlett, np.blackman, ...</span>
-
-<span class="sd">        fs : float</span>
-<span class="sd">            Sampling frequency</span>
-
-<span class="sd">        donorm : boolean</span>
-<span class="sd">            If True, the amplitude is normalized</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">block_length</span> <span class="o">=</span> <span class="n">block_length</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fft_length</span> <span class="o">=</span> <span class="n">fft_length</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="n">step</span>
@@ -379,34 +379,33 @@
 
 
 <div class="viewcode-block" id="Coherence"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence">[docs]</a><span class="k">class</span> <span class="nc">Coherence</span><span class="p">(</span><span class="n">Spectrum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Coherence estimator</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    block_length : int</span>
+<span class="sd">        Length of each signal block, on which we estimate the spectrum</span>
+
+<span class="sd">    fft_length : int or None</span>
+<span class="sd">        Length of FFT, should be greater or equal to block_length.</span>
+<span class="sd">        If None, it is set to block_length</span>
+
+<span class="sd">    step : int or None</span>
+<span class="sd">        Step between successive blocks</span>
+<span class="sd">        If None, it is set to half the block length (i.e. 0.5 overlap)</span>
+
+<span class="sd">    wfunc : function</span>
+<span class="sd">        Function used to compute the weitghting window on each block.</span>
+<span class="sd">        Examples: np.ones, np.hamming, np.bartlett, np.blackman, ...</span>
+
+<span class="sd">    fs : float</span>
+<span class="sd">        Sampling frequency</span>
+
+<span class="sd">    donorm : boolean</span>
+<span class="sd">        If True, the amplitude is normalized</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Coherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Coherence estimator</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        block_length : int</span>
-<span class="sd">            Length of each signal block, on which we estimate the spectrum</span>
-
-<span class="sd">        fft_length : int or None</span>
-<span class="sd">            Length of FFT, should be greater or equal to block_length.</span>
-<span class="sd">            If None, it is set to block_length</span>
-
-<span class="sd">        step : int or None</span>
-<span class="sd">            Step between successive blocks</span>
-<span class="sd">            If None, it is set to half the block length (i.e. 0.5 overlap)</span>
-
-<span class="sd">        wfunc : function</span>
-<span class="sd">            Function used to compute the weitghting window on each block.</span>
-<span class="sd">            Examples: np.ones, np.hamming, np.bartlett, np.blackman, ...</span>
-
-<span class="sd">        fs : float</span>
-<span class="sd">            Sampling frequency</span>
-
-<span class="sd">        donorm : boolean</span>
-<span class="sd">            If True, the amplitude is normalized</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Coherence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">block_length</span><span class="o">=</span><span class="n">block_length</span><span class="p">,</span>
                                         <span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
                                         <span class="n">wfunc</span><span class="o">=</span><span class="n">wfunc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
@@ -417,7 +416,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the coherence for two signals.</span>
 <span class="sd">        It is symmetrical, and slightly faster if n_signals_a &lt; n_signals_b.</span>
-
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -493,34 +491,34 @@
 
 
 <div class="viewcode-block" id="Bicoherence"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence">[docs]</a><span class="k">class</span> <span class="nc">Bicoherence</span><span class="p">(</span><span class="n">Spectrum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Bicoherence estimator</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    block_length : int</span>
+<span class="sd">        Length of each signal block, on which we estimate the spectrum</span>
+
+<span class="sd">    fft_length : int or None</span>
+<span class="sd">        Length of FFT, should be greater or equal to block_length.</span>
+<span class="sd">        If None, it is set to block_length</span>
+
+<span class="sd">    step : int or None</span>
+<span class="sd">        Step between successive blocks</span>
+<span class="sd">        If None, it is set to half the block length (i.e. 0.5 overlap)</span>
+
+<span class="sd">    wfunc : function</span>
+<span class="sd">        Function used to compute the weitghting window on each block.</span>
+<span class="sd">        Examples: np.ones, np.hamming, np.bartlett, np.blackman, ...</span>
+
+<span class="sd">    fs : float</span>
+<span class="sd">        Sampling frequency</span>
+
+<span class="sd">    donorm : boolean</span>
+<span class="sd">        If True, the amplitude is normalized</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="Bicoherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Bicoherence estimator</span>
 
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        block_length : int</span>
-<span class="sd">            Length of each signal block, on which we estimate the spectrum</span>
-
-<span class="sd">        fft_length : int or None</span>
-<span class="sd">            Length of FFT, should be greater or equal to block_length.</span>
-<span class="sd">            If None, it is set to block_length</span>
-
-<span class="sd">        step : int or None</span>
-<span class="sd">            Step between successive blocks</span>
-<span class="sd">            If None, it is set to half the block length (i.e. 0.5 overlap)</span>
-
-<span class="sd">        wfunc : function</span>
-<span class="sd">            Function used to compute the weitghting window on each block.</span>
-<span class="sd">            Examples: np.ones, np.hamming, np.bartlett, np.blackman, ...</span>
-
-<span class="sd">        fs : float</span>
-<span class="sd">            Sampling frequency</span>
-
-<span class="sd">        donorm : boolean</span>
-<span class="sd">            If True, the amplitude is normalized</span>
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Bicoherence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">block_length</span><span class="o">=</span><span class="n">block_length</span><span class="p">,</span>
                                           <span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
                                           <span class="n">wfunc</span><span class="o">=</span><span class="n">wfunc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span></div>
@@ -665,8 +663,7 @@
 
 
 <span class="k">def</span> <span class="nf">crop_for_fast_hilbert</span><span class="p">(</span><span class="n">signals</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Crop the signal to have a good prime decomposition, for hilbert filter.</span>
+    <span class="sd">&quot;&quot;&quot;Crop the signal to have a good prime decomposition, for hilbert filter.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">signals</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">tmax</span> <span class="o">=</span> <span class="n">signals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -692,7 +689,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupré la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour.
 
     </p>
   </div>

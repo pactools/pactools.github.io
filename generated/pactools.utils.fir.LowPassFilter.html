@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pactools.utils.carrier.LowPass &mdash; pactools 0.1 documentation</title>
+  <title>pactools.utils.fir.LowPassFilter &mdash; pactools 0.1 documentation</title>
   
 
   
@@ -41,7 +41,7 @@
     <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
         <link rel="up" title="API Documentation" href="../api.html"/>
         <link rel="next" title="pactools.utils.spectrum.Spectrum" href="pactools.utils.spectrum.Spectrum.html"/>
-        <link rel="prev" title="pactools.utils.carrier.Carrier" href="pactools.utils.carrier.Carrier.html"/> 
+        <link rel="prev" title="pactools.utils.fir.BandPassFilter" href="pactools.utils.fir.BandPassFilter.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -143,13 +143,13 @@
         
           <li><a href="../api.html">API Documentation</a> &raquo;</li>
         
-      <li>pactools.utils.carrier.LowPass</li>
+      <li>pactools.utils.fir.LowPassFilter</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/generated/pactools.utils.carrier.LowPass.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/generated/pactools.utils.fir.LowPassFilter.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -162,14 +162,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pactools-utils-carrier-lowpass">
-<h1>pactools.utils.carrier.LowPass<a class="headerlink" href="#pactools-utils-carrier-lowpass" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pactools-utils-fir-lowpassfilter">
+<h1>pactools.utils.fir.LowPassFilter<a class="headerlink" href="#pactools-utils-fir-lowpassfilter" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
-<dt id="pactools.utils.carrier.LowPass">
-<em class="property">class </em><code class="descclassname">pactools.utils.carrier.</code><code class="descname">LowPass</code><span class="sig-paren">(</span><em>fs=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/carrier.html#LowPass"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.carrier.LowPass" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="pactools.utils.carrier.LowPass.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/carrier.html#LowPass.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.carrier.LowPass.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="pactools.utils.fir.LowPassFilter">
+<em class="property">class </em><code class="descclassname">pactools.utils.fir.</code><code class="descname">LowPassFilter</code><span class="sig-paren">(</span><em>fs</em>, <em>fc</em>, <em>bandwidth</em>, <em>ripple_db=60.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/fir.html#LowPassFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.fir.LowPassFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low-pass FIR filter</p>
+<p>Designs a FIR filter that is a low-pass filter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fs</strong> : float</p>
+<blockquote>
+<div><p>Sampling frequency</p>
+</div></blockquote>
+<p><strong>fc</strong> : float</p>
+<blockquote>
+<div><p>Cut-off frequency of the low-pass filter</p>
+</div></blockquote>
+<p><strong>bandwidth</strong> : float</p>
+<blockquote>
+<div><p>Bandwidth of the FIR wavelet filter</p>
+</div></blockquote>
+<p><strong>ripple_db</strong> : float (default 60.0)</p>
+<blockquote class="last">
+<div><p>Positive number specifying maximum ripple in passband (dB) and minimum
+ripple in stopband, in Kaiser-window low-pass FIR filter.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools.utils</span> <span class="k">import</span> <span class="n">LowPassFilter</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">LowPassFilter</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">1.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="pactools.utils.fir.LowPassFilter.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs</em>, <em>fc</em>, <em>bandwidth</em>, <em>ripple_db=60.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/fir.html#LowPassFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.fir.LowPassFilter.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
@@ -179,17 +213,14 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.utils.carrier.LowPass.__init__" title="pactools.utils.carrier.LowPass.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([fs])</td>
+<tr class="row-odd"><td><a class="reference internal" href="#pactools.utils.fir.LowPassFilter.__init__" title="pactools.utils.fir.LowPassFilter.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;fc,&nbsp;bandwidth[,&nbsp;ripple_db])</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">design</span></code>(fs,&nbsp;fc,&nbsp;bandwidth[,&nbsp;ripple_db])</td>
-<td>Designs a FIR filter that is a low-pass filter.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">direct</span></code>(sigin)</td>
-<td>apply this filter to a signal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([fig,&nbsp;fscale,&nbsp;print_width])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([axs,&nbsp;fscale])</td>
 <td>Plots the impulse response and the transfer function of the filter.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin)</td>
+<td>Apply this filter to a signal</td>
 </tr>
 </tbody>
 </table>
@@ -210,7 +241,7 @@
         <a href="pactools.utils.spectrum.Spectrum.html" class="btn btn-neutral float-right" title="pactools.utils.spectrum.Spectrum" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pactools.utils.carrier.Carrier.html" class="btn btn-neutral" title="pactools.utils.carrier.Carrier" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pactools.utils.fir.BandPassFilter.html" class="btn btn-neutral" title="pactools.utils.fir.BandPassFilter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -219,7 +250,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupré la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour.
 
     </p>
   </div>

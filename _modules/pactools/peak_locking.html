@@ -191,10 +191,10 @@
 <span class="sd">    t_plot : float</span>
 <span class="sd">        Time to plot around the peaks (in second)</span>
 
-<span class="sd">    filter_method : in {&#39;mne&#39;, &#39;carrier&#39;}</span>
+<span class="sd">    filter_method : in {&#39;mne&#39;, &#39;pactools&#39;}</span>
 <span class="sd">        Choose band pass filtering method (in multiple_band_pass)</span>
 <span class="sd">        &#39;mne&#39;: with mne.filter.band_pass_filter</span>
-<span class="sd">        &#39;carrier&#39;: with pactools.Carrier (default)</span>
+<span class="sd">        &#39;pactools&#39;: with pactools.fir.BandPassFilter (default)</span>
 
 <span class="sd">    peak_or_trough: in {&#39;peak&#39;, &#39;trough&#39;}</span>
 <span class="sd">        Lock to the maximum (peak) of minimum (trough) of the slow</span>
@@ -207,7 +207,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="PeakLocking.__init__"><a class="viewcode-back" href="../../generated/pactools.PeakLocking.html#pactools.PeakLocking.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
-                 <span class="n">high_fq_width</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">filter_method</span><span class="o">=</span><span class="s1">&#39;carrier&#39;</span><span class="p">,</span>
+                 <span class="n">high_fq_width</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">t_plot</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">filter_method</span><span class="o">=</span><span class="s1">&#39;pactools&#39;</span><span class="p">,</span>
                  <span class="n">peak_or_trough</span><span class="o">=</span><span class="s1">&#39;peak&#39;</span><span class="p">,</span> <span class="n">percentiles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;std+&#39;</span><span class="p">,</span> <span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std-&#39;</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span> <span class="o">=</span> <span class="n">low_fq</span>
@@ -559,7 +559,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupré la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour.
 
     </p>
   </div>

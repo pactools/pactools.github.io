@@ -41,7 +41,7 @@
     <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
         <link rel="up" title="API Documentation" href="../api.html"/>
         <link rel="next" title="pactools.utils.spectrum.Coherence" href="pactools.utils.spectrum.Coherence.html"/>
-        <link rel="prev" title="pactools.utils.carrier.LowPass" href="pactools.utils.carrier.LowPass.html"/> 
+        <link rel="prev" title="pactools.utils.fir.LowPassFilter" href="pactools.utils.fir.LowPassFilter.html"/> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -167,10 +167,7 @@
 <dl class="class">
 <dt id="pactools.utils.spectrum.Spectrum">
 <em class="property">class </em><code class="descclassname">pactools.utils.spectrum.</code><code class="descname">Spectrum</code><span class="sig-paren">(</span><em>block_length=1024</em>, <em>fft_length=None</em>, <em>step=None</em>, <em>wfunc=&lt;function hamming&gt;</em>, <em>fs=1.0</em>, <em>donorm=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/spectrum.html#Spectrum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.spectrum.Spectrum" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="pactools.utils.spectrum.Spectrum.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>block_length=1024</em>, <em>fft_length=None</em>, <em>step=None</em>, <em>wfunc=&lt;function hamming&gt;</em>, <em>fs=1.0</em>, <em>donorm=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/spectrum.html#Spectrum.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.spectrum.Spectrum.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Spectral estimator</p>
+<dd><p>Spectral estimator following Welch’s method</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -206,7 +203,10 @@ Examples: np.ones, np.hamming, np.bartlett, np.blackman, …</p>
 </tr>
 </tbody>
 </table>
-</dd></dl>
+<dl class="method">
+<dt id="pactools.utils.spectrum.Spectrum.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>block_length=1024</em>, <em>fft_length=None</em>, <em>step=None</em>, <em>wfunc=&lt;function hamming&gt;</em>, <em>fs=1.0</em>, <em>donorm=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/spectrum.html#Spectrum.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.spectrum.Spectrum.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -216,7 +216,7 @@ Examples: np.ones, np.hamming, np.bartlett, np.blackman, …</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#pactools.utils.spectrum.Spectrum.__init__" title="pactools.utils.spectrum.Spectrum.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([block_length,&nbsp;fft_length,&nbsp;step,&nbsp;…])</td>
-<td>Spectral estimator</td>
+<td></td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">check_params</span></code>()</td>
 <td></td>
@@ -249,7 +249,7 @@ Examples: np.ones, np.hamming, np.bartlett, np.blackman, …</p>
         <a href="pactools.utils.spectrum.Coherence.html" class="btn btn-neutral float-right" title="pactools.utils.spectrum.Coherence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pactools.utils.carrier.LowPass.html" class="btn btn-neutral" title="pactools.utils.carrier.LowPass" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pactools.utils.fir.LowPassFilter.html" class="btn btn-neutral" title="pactools.utils.fir.LowPassFilter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -258,7 +258,7 @@ Examples: np.ones, np.hamming, np.bartlett, np.blackman, …</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupré la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour.
 
     </p>
   </div>

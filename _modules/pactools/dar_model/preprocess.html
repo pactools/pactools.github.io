@@ -159,7 +159,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="kn">from</span> <span class="nn">..utils.spectrum</span> <span class="k">import</span> <span class="n">Spectrum</span>
-<span class="kn">from</span> <span class="nn">..utils.carrier</span> <span class="k">import</span> <span class="n">Carrier</span><span class="p">,</span> <span class="n">LowPass</span>
+<span class="kn">from</span> <span class="nn">..utils.fir</span> <span class="k">import</span> <span class="n">BandPassFilter</span><span class="p">,</span> <span class="n">LowPassFilter</span>
 <span class="kn">from</span> <span class="nn">..utils.arma</span> <span class="k">import</span> <span class="n">Arma</span>
 <span class="kn">from</span> <span class="nn">..utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
@@ -293,20 +293,21 @@
         <span class="n">random_noise</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sig</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">low_pass</span><span class="p">:</span>
-        <span class="n">filt</span> <span class="o">=</span> <span class="n">LowPass</span><span class="p">()</span><span class="o">.</span><span class="n">design</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">fc</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">)</span>
+        <span class="n">filt</span> <span class="o">=</span> <span class="n">LowPassFilter</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">fc</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;extract_complex incompatible with &#39;</span>
                                       <span class="s1">&#39;low_pass filter.&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">filt</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">extract_complex</span><span class="o">=</span><span class="n">extract_complex</span><span class="p">)</span>
-        <span class="n">filt</span><span class="o">.</span><span class="n">design</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span> <span class="n">n_cycles</span><span class="p">,</span> <span class="n">bandwidth</span><span class="p">,</span> <span class="n">zero_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">filt</span> <span class="o">=</span> <span class="n">BandPassFilter</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">fc</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">=</span><span class="n">n_cycles</span><span class="p">,</span>
+                              <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span> <span class="n">zero_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">extract_complex</span><span class="o">=</span><span class="n">extract_complex</span><span class="p">)</span>
         <span class="k">if</span> <span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">draw</span> <span class="ow">or</span> <span class="s1">&#39;z&#39;</span> <span class="ow">in</span> <span class="n">draw</span><span class="p">:</span>
-            <span class="n">filt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fscale</span><span class="o">=</span><span class="s1">&#39;lin&#39;</span><span class="p">,</span> <span class="n">print_width</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">filt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fscale</span><span class="o">=</span><span class="s1">&#39;lin&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
-        <span class="n">low_sig</span><span class="p">,</span> <span class="n">low_sig_imag</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">direct</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+        <span class="n">low_sig</span><span class="p">,</span> <span class="n">low_sig_imag</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">low_sig</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">direct</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+        <span class="n">low_sig</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">fill</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># keeping driver in high_sig</span>
@@ -331,9 +332,9 @@
         <span class="n">high_sig</span> <span class="o">=</span> <span class="n">sig</span> <span class="o">-</span> <span class="n">low_sig</span>
 
         <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
-            <span class="n">fill_sig</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">direct</span><span class="p">(</span><span class="n">random_noise</span><span class="p">)</span>
+            <span class="n">fill_sig</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">random_noise</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">fill_sig</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">direct</span><span class="p">(</span><span class="n">random_noise</span><span class="p">)</span>
+            <span class="n">fill_sig</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">random_noise</span><span class="p">)</span>
         <span class="n">fill_sig</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="c1"># adjust the power of the filling signal and add it to high_sig</span>
@@ -342,8 +343,8 @@
 
         <span class="k">if</span> <span class="s1">&#39;z&#39;</span> <span class="ow">in</span> <span class="n">draw</span> <span class="ow">or</span> <span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">draw</span><span class="p">:</span>
             <span class="n">_plot_multiple_spectrum</span><span class="p">(</span>
-                <span class="p">[</span><span class="n">sig</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">sig</span> <span class="o">-</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">fill_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;bggrr&#39;</span><span class="p">)</span>
+                <span class="p">[</span><span class="n">sig</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">sig</span> <span class="o">-</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">fill_sig</span><span class="p">,</span>
+                 <span class="n">high_sig</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s1">&#39;bggrr&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;input&#39;</span><span class="p">,</span> <span class="s1">&#39;driver&#39;</span><span class="p">,</span> <span class="s1">&#39;input-driver&#39;</span><span class="p">,</span> <span class="s1">&#39;filling&#39;</span>
                         <span class="s1">&#39;output&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -364,8 +365,8 @@
     <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
     <span class="n">random_noise</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">sig</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-    <span class="n">filt</span> <span class="o">=</span> <span class="n">LowPass</span><span class="p">()</span><span class="o">.</span><span class="n">design</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">fc</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">)</span>
-    <span class="n">fill_sig</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">direct</span><span class="p">(</span><span class="n">random_noise</span><span class="p">)</span>
+    <span class="n">filt</span> <span class="o">=</span> <span class="n">LowPassFilter</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">fc</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">)</span>
+    <span class="n">fill_sig</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">random_noise</span><span class="p">)</span>
     <span class="c1"># adjust power of fill_sig and add it to high_sig</span>
     <span class="n">filled_sig</span> <span class="o">=</span> <span class="n">fill_gap</span><span class="p">(</span><span class="n">sig</span><span class="o">=</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fa</span><span class="o">=</span><span class="n">fc</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">dfa</span><span class="o">=</span><span class="n">fc</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span>
                           <span class="n">draw</span><span class="o">=</span><span class="n">draw</span><span class="p">,</span> <span class="n">fill_sig</span><span class="o">=</span><span class="n">fill_sig</span><span class="p">)</span>
@@ -488,9 +489,9 @@
     <span class="c1"># -------- bandpass filtering of white noise</span>
     <span class="k">if</span> <span class="n">fill_sig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">n_cycles</span> <span class="o">=</span> <span class="mf">1.65</span> <span class="o">*</span> <span class="n">fa</span> <span class="o">/</span> <span class="n">dfa</span>
-        <span class="n">fir</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">()</span>
-        <span class="n">fir</span><span class="o">.</span><span class="n">design</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">fa</span><span class="p">,</span> <span class="n">n_cycles</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">zero_mean</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">fill_sig</span> <span class="o">=</span> <span class="n">fir</span><span class="o">.</span><span class="n">direct</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">sig</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="n">fir</span> <span class="o">=</span> <span class="n">BandPassFilter</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">fa</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">=</span><span class="n">n_cycles</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                             <span class="n">zero_mean</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">fill_sig</span> <span class="o">=</span> <span class="n">fir</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">sig</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
 
     <span class="c1"># -------- compute the scale parameter</span>
     <span class="n">sp</span><span class="o">.</span><span class="n">periodogram</span><span class="p">(</span><span class="n">fill_sig</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -587,11 +588,13 @@
 <span class="sd">    --------</span>
 <span class="sd">    low_sig, high_sig = extract_driver(sigs, fs, 3.0):</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">frequency_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">low_fq</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">sigs</span> <span class="ow">in</span> <span class="n">multiple_extract_driver</span><span class="p">(</span>
-            <span class="n">sigs</span><span class="o">=</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">frequency_range</span><span class="o">=</span><span class="p">[</span><span class="n">low_fq</span><span class="p">],</span> <span class="n">n_cycles</span><span class="o">=</span><span class="n">n_cycles</span><span class="p">,</span>
-            <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill</span><span class="p">,</span> <span class="n">whitening</span><span class="o">=</span><span class="n">whitening</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="n">ordar</span><span class="p">,</span>
-            <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span> <span class="n">extract_complex</span><span class="o">=</span><span class="n">extract_complex</span><span class="p">,</span>
-            <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="n">draw</span><span class="p">):</span>
+            <span class="n">sigs</span><span class="o">=</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">frequency_range</span><span class="o">=</span><span class="n">frequency_range</span><span class="p">,</span>
+            <span class="n">n_cycles</span><span class="o">=</span><span class="n">n_cycles</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill</span><span class="p">,</span>
+            <span class="n">whitening</span><span class="o">=</span><span class="n">whitening</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="n">ordar</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span>
+            <span class="n">extract_complex</span><span class="o">=</span><span class="n">extract_complex</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+            <span class="n">draw</span><span class="o">=</span><span class="n">draw</span><span class="p">):</span>
         <span class="k">pass</span>
     <span class="k">return</span> <span class="n">sigs</span></div>
 
@@ -684,8 +687,8 @@
         <span class="n">random_noise</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># extract the high frequencies independently of the driver</span>
-    <span class="n">fc_low_pass</span> <span class="o">=</span> <span class="n">frequency_range</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">frequency_range</span><span class="p">[</span>
-        <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bandwidth</span>  <span class="c1"># arbitrary</span>
+    <span class="n">fc_low_pass</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">frequency_range</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">frequency_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bandwidth</span><span class="p">)</span>  <span class="c1"># arbitrary</span>
     <span class="n">low_pass_width</span> <span class="o">=</span> <span class="n">bandwidth</span>
     <span class="n">low_and_high</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">extract_and_fill</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">fc_low_pass</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">low_pass_width</span><span class="p">,</span>
@@ -753,7 +756,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupré la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour.
 
     </p>
   </div>

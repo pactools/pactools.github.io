@@ -156,7 +156,7 @@
   <h1>Source code for pactools.simulate_pac</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.utils.carrier</span> <span class="k">import</span> <span class="n">Carrier</span>
+<span class="kn">from</span> <span class="nn">.utils.fir</span> <span class="k">import</span> <span class="n">BandPassFilter</span>
 <span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
 
 
@@ -226,9 +226,9 @@
     <span class="k">if</span> <span class="n">high_fq</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">low_fq</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">fs</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid negative frequency&#39;</span><span class="p">)</span>
 
-    <span class="n">fir</span> <span class="o">=</span> <span class="n">Carrier</span><span class="p">(</span><span class="n">extract_complex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">fir</span><span class="o">.</span><span class="n">design</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">)</span>
-    <span class="n">driver_real</span><span class="p">,</span> <span class="n">driver_imag</span> <span class="o">=</span> <span class="n">fir</span><span class="o">.</span><span class="n">direct</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_points</span><span class="p">))</span>
+    <span class="n">fir</span> <span class="o">=</span> <span class="n">BandPassFilter</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                         <span class="n">bandwidth</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">extract_complex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">driver_real</span><span class="p">,</span> <span class="n">driver_imag</span> <span class="o">=</span> <span class="n">fir</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_points</span><span class="p">))</span>
     <span class="n">driver</span> <span class="o">=</span> <span class="n">driver_real</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">driver_imag</span>
     <span class="c1"># We scale by sqrt(2) to have correct amplitude in the real-valued driver</span>
     <span class="n">driver</span> <span class="o">*=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="n">driver</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -281,7 +281,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupré la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour.
 
     </p>
   </div>
