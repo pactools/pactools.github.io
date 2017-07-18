@@ -12,6 +12,7 @@ pactools\.utils\.spectrum\.Bicoherence
    .. rubric:: Methods
 
    .. autosummary::
+       :nosignatures:
    
       ~Bicoherence.__init__
       ~Bicoherence.check_params
@@ -25,3 +26,9 @@ pactools\.utils\.spectrum\.Bicoherence
    
    
    
+
+.. include:: backreferences/pactools.utils.spectrum.Bicoherence.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

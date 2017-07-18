@@ -4,3 +4,9 @@ pactools\.dar\_model\.extract\_driver
 .. currentmodule:: pactools.dar_model
 
 .. autofunction:: extract_driver
+
+.. include:: /backreferences/pactools.dar_model.extract_driver.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

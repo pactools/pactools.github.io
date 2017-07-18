@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -262,6 +261,14 @@
 <span class="sd">        Bandwidth of the band-pass filters centered on low_fq_range, for</span>
 <span class="sd">        the amplitude signal. Used only with &#39;vanwijk&#39; method.</span>
 
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from pactools.comodulogram import Comodulogram</span>
+<span class="sd">    &gt;&gt;&gt; c = Comodulogram(fs=200., low_fq_range=np.arange(2, 4, 0.2),</span>
+<span class="sd">    ...                  low_fq_width=2.)</span>
+<span class="sd">    &gt;&gt;&gt; c.fit(signal_in)</span>
+<span class="sd">    &gt;&gt;&gt; c.plot()</span>
+<span class="sd">    &gt;&gt;&gt; comod_array = c.comod_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="Comodulogram.__init__"><a class="viewcode-back" href="../../generated/pactools.Comodulogram.html#pactools.Comodulogram.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
@@ -1022,8 +1029,11 @@
               <span class="n">train_weights</span><span class="o">=</span><span class="n">train_weights</span><span class="p">)</span>
 
     <span class="c1"># estimate the length of the padding for the FFT</span>
-    <span class="n">delta_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">high_fq_range</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-    <span class="n">n_fft</span> <span class="o">=</span> <span class="n">next_power2</span><span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="n">delta_f</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">high_fq_range</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">delta_f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">high_fq_range</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">n_fft</span> <span class="o">=</span> <span class="n">next_power2</span><span class="p">(</span><span class="n">fs</span> <span class="o">/</span> <span class="n">delta_f</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n_fft</span> <span class="o">=</span> <span class="mi">1024</span>
     <span class="c1"># get PSD difference</span>
     <span class="n">spec</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_amplitude_frequency</span><span class="p">(</span><span class="n">n_fft</span><span class="o">=</span><span class="n">n_fft</span><span class="p">)</span>
 

@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -9,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pactools.dar_model.baseLattice &mdash; pactools 0.1 documentation</title>
+  <title>pactools.dar_model.base_lattice &mdash; pactools 0.1 documentation</title>
   
 
   
@@ -136,7 +135,7 @@
         
           <li><a href="../../index.html">Module code</a> &raquo;</li>
         
-      <li>pactools.dar_model.baseLattice</li>
+      <li>pactools.dar_model.base_lattice</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -153,7 +152,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for pactools.dar_model.baseLattice</h1><div class="highlight"><pre>
+  <h1>Source code for pactools.dar_model.base_lattice</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="k">import</span> <span class="n">ABCMeta</span><span class="p">,</span> <span class="n">abstractmethod</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -189,9 +188,9 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">()</span>
+                <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_basis</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">)</span>
+            <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_basis</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">)</span>
 
         <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">=</span> <span class="n">sigdriv</span><span class="o">.</span><span class="n">shape</span>
 
@@ -207,7 +206,7 @@
         <span class="n">signal</span><span class="p">[:</span><span class="n">ordar_</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigin_init</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">ordar_</span><span class="p">:]</span>
 
         <span class="c1"># compute basis corresponding to sigdriv</span>
-        <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">)</span>
+        <span class="n">newbasis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_basis</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">)</span>
 
         <span class="c1"># synthesis of the signal</span>
         <span class="n">random_sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">-</span> <span class="n">ordar_</span><span class="p">)</span>
@@ -257,10 +256,10 @@
         <span class="n">e_backward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">ordar</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># -------- prepare parcor coefficients</span>
-        <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
+        <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
         <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">)</span>
 
-        <span class="n">gain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_gain</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">gain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_gain</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># -------- create the output signal</span>
         <span class="n">sigout</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points_minus_ordar_</span><span class="p">)</span>
@@ -323,13 +322,13 @@
         <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
         <span class="n">backward</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ordar</span><span class="p">):</span>
-            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">basis</span><span class="p">)</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">basis</span><span class="p">)</span>
             <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">)</span>
             <span class="n">residual</span><span class="p">,</span> <span class="n">backward</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">,</span> <span class="n">residual</span><span class="p">,</span> <span class="n">backward</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">residual</span><span class="p">,</span> <span class="n">backward</span>
 
-    <span class="k">def</span> <span class="nf">develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">LAR</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">LAR</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
         <span class="n">single_dim</span> <span class="o">=</span> <span class="n">LAR</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span>
         <span class="n">LAR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">LAR</span><span class="p">)</span>
         <span class="c1"># n_basis, n_epochs, n_points = basis.shape</span>
@@ -371,7 +370,7 @@
         <span class="k">pass</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">common_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_common_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute common factor in gradient. The gradient is computed as</span>
 <span class="sd">        G[p] = sum from t=1 to T {g[p,t] * F(t)}</span>
 <span class="sd">        where F(t) is the vector of driving signal and its powers</span>
@@ -389,7 +388,7 @@
         <span class="k">pass</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">common_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_common_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute common factor in Hessian. The Hessian is computed as</span>
 <span class="sd">        H[p] = sum from t=1 to T {F(t) * h[p,t] * F(t).T}</span>
 <span class="sd">        where F(t) is the vector of driving signal and its powers</span>
@@ -412,14 +411,14 @@
     <span class="c1"># ------------------------------------------------ #</span>
     <span class="c1"># Functions that overload abstract methods         #</span>
     <span class="c1"># ------------------------------------------------ #</span>
-    <span class="k">def</span> <span class="nf">next_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_next_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the AR model at successive orders</span>
 
 <span class="sd">        Acts as a generator that stores the result in self.AR_</span>
 <span class="sd">        Creates the models with orders from 0 to self.ordar</span>
 
 <span class="sd">        Typical usage:</span>
-<span class="sd">        for AR_ in A.next_model():</span>
+<span class="sd">        for AR_ in A._next_model():</span>
 <span class="sd">            A.AR_ = AR_</span>
 <span class="sd">            A.ordar_ = AR_.shape[0]</span>
 
@@ -485,7 +484,7 @@
 
             <span class="c1"># n_basis, n_epochs, n_points = basis.shape</span>
             <span class="c1"># n_epochs, n_points = parcor_list.shape</span>
-            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="n">parcor</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">basis</span><span class="p">)</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_parcor</span><span class="p">(</span><span class="n">parcor</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">basis</span><span class="p">)</span>
             <span class="n">parcor_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.999999</span><span class="p">)</span>
             <span class="n">parcor_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">,</span> <span class="mf">0.999999</span><span class="p">)</span>
 
@@ -507,7 +506,7 @@
                 <span class="n">itnum</span> <span class="o">+=</span> <span class="mi">1</span>
 
                 <span class="c1"># -------- compute next residual</span>
-                <span class="n">lar_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="n">LAR</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">basis</span><span class="p">)</span>
+                <span class="n">lar_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_parcor</span><span class="p">(</span><span class="n">LAR</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">basis</span><span class="p">)</span>
                 <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">lar_list</span><span class="p">)</span>
                 <span class="n">forward_res_next</span><span class="p">,</span> <span class="n">backward_res_next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span>
                     <span class="n">parcor_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_residual</span><span class="p">[</span><span class="n">k</span><span class="p">],</span>
@@ -516,7 +515,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">backward_residual</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">backward_res_next</span>
 
                 <span class="c1"># -------- correct the current vector</span>
-                <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">common_gradient</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">parcor_list</span><span class="p">)</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_common_gradient</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">parcor_list</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">g</span> <span class="o">*=</span> <span class="n">weights</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">n_points</span><span class="p">]</span>
                 <span class="c1"># n_epochs, n_points - 1 = g.shape = h.shape</span>
@@ -526,7 +525,7 @@
                     <span class="n">g</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
                 <span class="n">gradient</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-                <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">common_hessian</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">parcor_list</span><span class="p">)</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_common_hessian</span><span class="p">(</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">parcor_list</span><span class="p">)</span>
                 <span class="n">hessian</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span>
                     <span class="p">(</span><span class="n">w_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">n_points</span><span class="p">]</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span>
                     <span class="n">w_basis</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">n_points</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">n_basis</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
@@ -536,7 +535,7 @@
                 <span class="n">LAR</span> <span class="o">-=</span> <span class="n">dLAR</span>
 
             <span class="c1"># -------- save current cell and residuals</span>
-            <span class="n">lar_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="n">LAR</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">basis</span><span class="p">)</span>
+            <span class="n">lar_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_parcor</span><span class="p">(</span><span class="n">LAR</span><span class="o">.</span><span class="n">ravel</span><span class="p">(),</span> <span class="n">basis</span><span class="p">)</span>
             <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">lar_list</span><span class="p">)</span>
 
             <span class="n">forward_res</span><span class="p">,</span> <span class="n">backward_res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">,</span>
@@ -548,7 +547,7 @@
             <span class="n">AR_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">AR_</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">LAR</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_basis</span><span class="p">))))</span>
             <span class="k">yield</span> <span class="n">AR_</span>
 
-    <span class="k">def</span> <span class="nf">estimate_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recompute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recompute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Estimates the prediction error</span>
 
 <span class="sd">        uses self.sigin, self.basis_ and AR_</span>
@@ -565,7 +564,7 @@
         <span class="k">if</span> <span class="n">recompute</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">residual_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">whiten</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">develop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_develop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the AR models and gains at instants fixed by newcols</span>
 
 <span class="sd">        returns:</span>
@@ -582,10 +581,10 @@
         <span class="c1"># -------- expand on the basis</span>
         <span class="n">AR_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">ordar</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
+            <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_parcor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
             <span class="n">parcor_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">)</span>
             <span class="n">AR_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">AR_cols</span><span class="p">,</span> <span class="n">ki2ai</span><span class="p">(</span><span class="n">parcor_list</span><span class="p">)))</span>
-        <span class="n">G_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_gain</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">G_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_gain</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">AR_cols</span><span class="p">,</span> <span class="n">G_cols</span>
 </pre></div>

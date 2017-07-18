@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -283,6 +282,15 @@ the amplitude signal. Used only with ‘vanwijk’ method.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools.comodulogram</span> <span class="k">import</span> <span class="n">Comodulogram</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Comodulogram</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mf">200.</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span>
+<span class="gp">... </span>                 <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">signal_in</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">comod_array</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">comod_</span>
+</pre></div>
+</div>
 <dl class="method">
 <dt id="pactools.Comodulogram.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>fs</em>, <em>low_fq_range</em>, <em>low_fq_width=2.0</em>, <em>high_fq_range='auto'</em>, <em>high_fq_width='auto'</em>, <em>method='tort'</em>, <em>n_surrogates=0</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>progress_bar=True</em>, <em>ax_special=None</em>, <em>minimum_shift=1.0</em>, <em>random_state=None</em>, <em>coherence_params={}</em>, <em>extract_params={}</em>, <em>low_fq_width_2=4.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/comodulogram.html#Comodulogram.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.Comodulogram.__init__" title="Permalink to this definition">¶</a></dt>
@@ -311,6 +319,21 @@ the amplitude signal. Used only with ‘vanwijk’ method.</p>
 </table>
 </dd></dl>
 
+<div class="section" id="examples-using-pactools-comodulogram">
+<h2>Examples using <code class="docutils literal"><span class="pre">pactools.Comodulogram</span></code><a class="headerlink" href="#examples-using-pactools-comodulogram" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip="A comodulogram shows the estimated PAC metric on a grid of frequency bands. "><div class="figure" id="id1">
+<img alt="../_images/sphx_glr_plot_comodulogram_thumb.png" src="../_images/sphx_glr_plot_comodulogram_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_comodulogram.html#sphx-glr-auto-examples-plot-comodulogram-py"><span class="std std-ref">Comodulogram</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="It also shows the comodulogram computed with a DAR model. "><div class="figure" id="id2">
+<img alt="../_images/sphx_glr_plot_dar_model_thumb.png" src="../_images/sphx_glr_plot_dar_model_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_dar_model.html#sphx-glr-auto-examples-plot-dar-model-py"><span class="std std-ref">Fitting a DAR model</span></a></span></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="It relies on the function ``raw_to_mask``, which takes as input a MNE.Raw instance and an event..."><div class="figure" id="id3">
+<img alt="../_images/sphx_glr_plot_mne_epoch_masking_thumb.png" src="../_images/sphx_glr_plot_mne_epoch_masking_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_mne_epoch_masking.html#sphx-glr-auto-examples-plot-mne-epoch-masking-py"><span class="std std-ref">Interface with MNE-python</span></a></span></p>
+</div>
+</div><div class="clearer"></div></div>
 </div>
 
 

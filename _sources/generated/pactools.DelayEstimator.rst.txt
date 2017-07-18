@@ -12,6 +12,7 @@ pactools\.DelayEstimator
    .. rubric:: Methods
 
    .. autosummary::
+       :nosignatures:
    
       ~DelayEstimator.__init__
       ~DelayEstimator.fit
@@ -22,3 +23,9 @@ pactools\.DelayEstimator
    
    
    
+
+.. include:: backreferences/pactools.DelayEstimator.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

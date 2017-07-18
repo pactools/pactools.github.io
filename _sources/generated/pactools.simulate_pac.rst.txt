@@ -4,3 +4,9 @@ pactools\.simulate\_pac
 .. currentmodule:: pactools
 
 .. autofunction:: simulate_pac
+
+.. include:: /backreferences/pactools.simulate_pac.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

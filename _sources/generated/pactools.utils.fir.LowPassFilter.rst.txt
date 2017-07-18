@@ -12,6 +12,7 @@ pactools\.utils\.fir\.LowPassFilter
    .. rubric:: Methods
 
    .. autosummary::
+       :nosignatures:
    
       ~LowPassFilter.__init__
       ~LowPassFilter.plot
@@ -22,3 +23,9 @@ pactools\.utils\.fir\.LowPassFilter
    
    
    
+
+.. include:: backreferences/pactools.utils.fir.LowPassFilter.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -214,10 +213,11 @@ for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>max(
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">raw_to_mask</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">ixs</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools</span> <span class="k">import</span> <span class="n">raw_to_mask</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">raw_to_mask</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">ixs</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n_masks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">one_mask</span> <span class="ow">in</span> <span class="n">mask</span><span class="p">:</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">pass</span>
+<span class="gp">... </span>    <span class="k">pass</span>
 </pre></div>
 </div>
 <p class="rubric">Attributes</p>
@@ -240,7 +240,7 @@ for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>max(
 </table>
 </dd></dl>
 
-</div>
+<div class="clearer"></div></div>
 
 
            </div>

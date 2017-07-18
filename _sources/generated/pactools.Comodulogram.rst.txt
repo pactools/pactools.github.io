@@ -12,6 +12,7 @@ pactools\.Comodulogram
    .. rubric:: Methods
 
    .. autosummary::
+       :nosignatures:
    
       ~Comodulogram.__init__
       ~Comodulogram.fit
@@ -23,3 +24,9 @@ pactools\.Comodulogram
    
    
    
+
+.. include:: backreferences/pactools.Comodulogram.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

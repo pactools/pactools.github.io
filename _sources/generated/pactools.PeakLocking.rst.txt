@@ -12,6 +12,7 @@ pactools\.PeakLocking
    .. rubric:: Methods
 
    .. autosummary::
+       :nosignatures:
    
       ~PeakLocking.__init__
       ~PeakLocking.fit
@@ -23,3 +24,9 @@ pactools\.PeakLocking
    
    
    
+
+.. include:: backreferences/pactools.PeakLocking.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

@@ -4,3 +4,9 @@ pactools\.utils\.peak\_finder\.peak\_finder
 .. currentmodule:: pactools.utils.peak_finder
 
 .. autofunction:: peak_finder
+
+.. include:: /backreferences/pactools.utils.peak_finder.peak_finder.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

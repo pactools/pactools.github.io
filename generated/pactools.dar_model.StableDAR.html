@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -172,7 +171,7 @@ This model is designed to have an stable instantaneous AR model at each
 time.</p>
 <p>This model uses the parametrization:</p>
 <div class="math">
-\[y(t) + \sum_{i=1}^p a_i(t) y(t-i)= \varepsilon(t)\]</div>
+\[y(t) + \sum_{i=1}^p a_i(t) y(t-i)= \sigma(t)\varepsilon(t)\]</div>
 <p>with:</p>
 <div class="math">
 \[a_p^{(p)} = k_p; \;\;\;\;
@@ -180,6 +179,53 @@ a_i^{(p)} = a_i^{(p-1)} + k_p a_{p-i}^{(p-1)}\]</div>
 <div class="math">
 \[\gamma_i = \log\left(\frac{1+k_i}{1-k_i}\right); \;\;\;\;
 \gamma_{i}(t)=\sum_{j=0}^{m}\gamma_{ij}x(t)^j\]</div>
+<p>and:</p>
+<div class="math">
+\[\log{\sigma(t)} = \sum_{k=0}^m b_{k} x(t)^k\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ordar</strong> : int &gt; 0</p>
+<blockquote>
+<div><p>Order of the autoregressive model (p)</p>
+</div></blockquote>
+<p><strong>ordriv</strong> : int &gt;= 0</p>
+<blockquote>
+<div><p>Order of the taylor expansion for sigdriv (m)</p>
+</div></blockquote>
+<p><strong>criterion</strong> : None or string in (‘bic’, ‘aic’, ‘logl’)</p>
+<blockquote>
+<div><p>If not None, select the criterion used for model selection.</p>
+</div></blockquote>
+<p><strong>normalize</strong> : boolean</p>
+<blockquote>
+<div><p>If True, the basis vectors are normalized to unit energy.</p>
+</div></blockquote>
+<p><strong>ortho</strong> : boolean</p>
+<blockquote>
+<div><p>If True, the basis vectors are orthogonalized.</p>
+</div></blockquote>
+<p><strong>center</strong> : boolean</p>
+<blockquote>
+<div><p>If True, we subtract the mean in sigin</p>
+</div></blockquote>
+<p><strong>iter_gain</strong> : int &gt;=0</p>
+<blockquote>
+<div><p>Maximum number of iteration in gain estimation</p>
+</div></blockquote>
+<p><strong>eps_gain</strong> : float &gt;= 0</p>
+<blockquote>
+<div><p>Threshold to stop iterations in gain estimation</p>
+</div></blockquote>
+<p><strong>use_driver_phase</strong> : boolean</p>
+<blockquote class="last">
+<div><p>If True, we divide the driver by its instantaneous amplitude.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <p class="rubric">References</p>
 <p>[1] Dupre la Tour, T. , Grenier, Y., &amp; Gramfort, A. (2017). Parametric
 estimation of spectrum driven by an exogenous signal. Acoustics, Speech
@@ -206,12 +252,6 @@ eps_newton  : threshold to stop Newton-Raphson iterations</p>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">cell</span></code>(parcor_list,&nbsp;forward_residual,&nbsp;…)</td>
 <td>Apply a single cell of the direct lattice filter</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">common_gradient</span></code>(p,&nbsp;ki)</td>
-<td>Compute common factor in gradient.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">common_hessian</span></code>(p,&nbsp;ki)</td>
-<td>Compute common factor in Hessian.</td>
-</tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>()</td>
 <td>Creates a (deep) copy of a model</td>
 </tr>
@@ -219,79 +259,37 @@ eps_newton  : threshold to stop Newton-Raphson iterations</p>
 <td>Extracts parcor coefficients from encoded version (e.g.</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">degrees_of_freedom</span></code>()</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">develop</span></code>(basis)</td>
-<td>Compute the AR models and gains at instants fixed by newcols</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">develop_all</span></code>([sigdriv,&nbsp;sigdriv_imag])</td>
-<td>Compute the AR models and gains for every instant of sigdriv</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">develop_gain</span></code>(basis[,&nbsp;sigdriv,&nbsp;squared,&nbsp;log])</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">develop_parcor</span></code>(LAR,&nbsp;basis)</td>
-<td></td>
+<td>Number of parameters of the fitted model</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">encode</span></code>(ki)</td>
 <td>Encodes parcor coefficients to LAR coefficients</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_ar</span></code>()</td>
-<td>Estimates the AR model on a signal</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_error</span></code>([recompute])</td>
-<td>Estimates the prediction error</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_fixed_gain</span></code>()</td>
-<td>Estimates a fixed gain from the predicton error <a href="#id1"><span class="problematic" id="id2">self.residual_</span></a>.</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">estimate_gain</span></code>([regul])</td>
-<td>helper to handle failure in gain estimation</td>
-</tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;sigdriv_imag,&nbsp;…])</td>
-<td>Estimate a DAR model from input signals.</td>
+<td>Estimate the model from input signals</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit_transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;…])</td>
-<td>Same as fit, but return the residual instead of the model object</td>
+<td>Same as fit, but returns the residual instead of the model object</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_criterion</span></code>(criterion[,&nbsp;train])</td>
-<td></td>
+<td>Get the criterion (logL, AIC, BIC) of the fitted model</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_title</span></code>([name,&nbsp;criterion])</td>
-<td></td>
+<td>Get the name and orders of the model</td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">last_model</span></code>()</td>
-<td>overload if it’s faster to get only last model</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">likelihood_ratio</span></code>(ar0)</td>
-<td>Computation of the likelihood ratio test the null hypothesis H0 is given by model ar0; the current model (self) is tested against this model ar0 which may be either an invariant AR model (ordriv=0) or a hybrid one (invariant AR part, with driven gain).</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">log_likelihood</span></code>([train,&nbsp;skip])</td>
-<td>Approximate computation of the logarithm of the likelihood</td>
-</tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">make_basis</span></code>([sigdriv,&nbsp;sigdriv_imag,&nbsp;ordriv])</td>
-<td>Creates a basis from the driving signal, with the successive powers of sigdriv and sigdriv_imag.</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">next_model</span></code>()</td>
-<td>Compute the AR model at successive orders</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">likelihood_ratio</span></code>(ar0)</td>
+<td>Computation of the likelihood ratio test</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;vmin,&nbsp;vmax,&nbsp;ax,&nbsp;…])</td>
-<td>Represent the power spectral density as a function of the driver</td>
+<td>Plot the PSD as a function of the driver</td>
 </tr>
 <tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_lines</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;ax,&nbsp;xlim,&nbsp;…])</td>
-<td>Represent the power spectral density as a function of</td>
+<td>Plot the PSD as a function of the driver</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">reset_criterions</span></code>()</td>
-<td>Reset stored criterions (negative log_likelihood, AIC or BIC)</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">synthesis</span></code>([sigdriv,&nbsp;sigin_init])</td>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">synthesis</span></code>([sigdriv,&nbsp;sigin_init])</td>
 <td>Create a signal from fitted model</td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">synthesize</span></code>(random_sig[,&nbsp;burn_in,&nbsp;newbasis])</td>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">synthesize</span></code>(random_sig[,&nbsp;burn_in,&nbsp;newbasis])</td>
 <td>Apply the inverse lattice filter to synthesize</td>
-</tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_dict</span></code>()</td>
-<td>Convert the model attributes to dict</td>
 </tr>
 <tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;…])</td>
 <td>Whiten a signal with the already fitted model</td>
@@ -303,7 +301,7 @@ eps_newton  : threshold to stop Newton-Raphson iterations</p>
 </table>
 </dd></dl>
 
-</div>
+<div class="clearer"></div></div>
 
 
            </div>

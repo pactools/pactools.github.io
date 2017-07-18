@@ -4,3 +4,9 @@ pactools\.raw\_to\_mask
 .. currentmodule:: pactools
 
 .. autofunction:: raw_to_mask
+
+.. include:: /backreferences/pactools.raw_to_mask.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

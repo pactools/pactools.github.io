@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -156,7 +155,7 @@
   <h1>Source code for pactools.dar_model.stable_dar</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.baseLattice</span> <span class="k">import</span> <span class="n">BaseLattice</span>
+<span class="kn">from</span> <span class="nn">.base_lattice</span> <span class="k">import</span> <span class="n">BaseLattice</span>
 
 
 <div class="viewcode-block" id="StableDAR"><a class="viewcode-back" href="../../../generated/pactools.dar_model.StableDAR.html#pactools.dar_model.StableDAR">[docs]</a><span class="k">class</span> <span class="nc">StableDAR</span><span class="p">(</span><span class="n">BaseLattice</span><span class="p">):</span>
@@ -167,7 +166,7 @@
 
 <span class="sd">    This model uses the parametrization:</span>
 
-<span class="sd">    .. math:: y(t) + \\sum_{i=1}^p a_i(t) y(t-i)= \\varepsilon(t)</span>
+<span class="sd">    .. math:: y(t) + \\sum_{i=1}^p a_i(t) y(t-i)= \\sigma(t)\\varepsilon(t)</span>
 
 <span class="sd">    with:</span>
 
@@ -176,12 +175,45 @@
 <span class="sd">    .. math:: \\gamma_i = \\log\\left(\\frac{1+k_i}{1-k_i}\\right); \;\;\;\;</span>
 <span class="sd">              \\gamma_{i}(t)=\\sum_{j=0}^{m}\\gamma_{ij}x(t)^j</span>
 
+<span class="sd">    and:</span>
+
+<span class="sd">    .. math:: \\log{\\sigma(t)} = \\sum_{k=0}^m b_{k} x(t)^k</span>
+
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    [1] Dupre la Tour, T. , Grenier, Y., &amp; Gramfort, A. (2017). Parametric</span>
 <span class="sd">    estimation of spectrum driven by an exogenous signal. Acoustics, Speech</span>
 <span class="sd">    and Signal Processing (ICASSP), 2017 IEEE International Conference on,</span>
 <span class="sd">    4301--4305.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ordar : int &gt; 0</span>
+<span class="sd">        Order of the autoregressive model (p)</span>
+
+<span class="sd">    ordriv : int &gt;= 0</span>
+<span class="sd">        Order of the taylor expansion for sigdriv (m)</span>
+
+<span class="sd">    criterion : None or string in (&#39;bic&#39;, &#39;aic&#39;, &#39;logl&#39;)</span>
+<span class="sd">        If not None, select the criterion used for model selection.</span>
+
+<span class="sd">    normalize : boolean</span>
+<span class="sd">        If True, the basis vectors are normalized to unit energy.</span>
+
+<span class="sd">    ortho : boolean</span>
+<span class="sd">        If True, the basis vectors are orthogonalized.</span>
+
+<span class="sd">    center : boolean</span>
+<span class="sd">        If True, we subtract the mean in sigin</span>
+
+<span class="sd">    iter_gain : int &gt;=0</span>
+<span class="sd">        Maximum number of iteration in gain estimation</span>
+
+<span class="sd">    eps_gain : float &gt;= 0</span>
+<span class="sd">        Threshold to stop iterations in gain estimation</span>
+
+<span class="sd">    use_driver_phase : boolean</span>
+<span class="sd">        If True, we divide the driver by its instantaneous amplitude.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># ------------------------------------------------ #</span>
     <span class="c1"># Functions that overload abstract methods         #</span>
@@ -211,7 +243,7 @@
         <span class="n">lar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">((</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">ki</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">ki</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">lar</span>
 
-    <span class="k">def</span> <span class="nf">common_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_common_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute common factor in gradient. The gradient is computed as</span>
 <span class="sd">        G[p] = sum from t=1 to T {g[p,t] * F(t)}</span>
 <span class="sd">        where F(t) is the vector of driving signal and its powers</span>
@@ -235,7 +267,7 @@
         <span class="n">g</span> <span class="o">*=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">ki</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:</span><span class="n">n_points</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>   <span class="c1"># phi&#39;[k[p,t]])</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="p">(</span><span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">common_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_common_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">ki</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute common factor in Hessian. The Hessian is computed as</span>
 <span class="sd">        H[p] = sum from t=1 to T {F(t) * h[p,t] * F(t).T}</span>
 <span class="sd">        where F(t) is the vector of driving signal and its powers</span>

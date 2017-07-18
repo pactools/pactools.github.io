@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -212,10 +211,11 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from pactools import raw_to_mask</span>
 <span class="sd">    &gt;&gt;&gt; low_sig, high_sig, mask = raw_to_mask(raw, ixs, events, tmin, tmax)</span>
 <span class="sd">    &gt;&gt;&gt; n_masks = len(mask)</span>
 <span class="sd">    &gt;&gt;&gt; for one_mask in mask:</span>
-<span class="sd">    &gt;&gt;&gt;     pass</span>
+<span class="sd">    ...     pass</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">BaseRaw</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Must supply Raw as input&#39;</span><span class="p">)</span>
@@ -241,10 +241,11 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from pactools import MaskIterator</span>
 <span class="sd">    &gt;&gt;&gt; all_masks = MaskIterator(events, tmin, tmax, n_points, fs)</span>
 <span class="sd">    &gt;&gt;&gt; n_masks = len(all_masks)</span>
 <span class="sd">    &gt;&gt;&gt; for one_mask in all_masks:</span>
-<span class="sd">    &gt;&gt;&gt;     pass</span>
+<span class="sd">    ...     pass</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>

@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -174,7 +173,7 @@
 <span class="sd">    &gt;&gt;&gt; from pactools.utils.fir import FIR</span>
 <span class="sd">    &gt;&gt;&gt; f = FIR(fir=[0.2, 0.6, 0.2])</span>
 <span class="sd">    &gt;&gt;&gt; f.plot()</span>
-<span class="sd">    &gt;&gt;&gt; output = f.transform(input)</span>
+<span class="sd">    &gt;&gt;&gt; signal_out = f.transform(signal_in)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fir</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">1</span><span class="p">)):</span>
@@ -272,7 +271,7 @@
 <span class="sd">    &gt;&gt;&gt; from pactools.utils import BandPassFilter</span>
 <span class="sd">    &gt;&gt;&gt; f = BandPassFilter(fs=100., fc=5., bandwidth=1., n_cycles=None)</span>
 <span class="sd">    &gt;&gt;&gt; f.plot()</span>
-<span class="sd">    &gt;&gt;&gt; output = f.transform(input)</span>
+<span class="sd">    &gt;&gt;&gt; signal_out = f.transform(signal_in)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="BandPassFilter.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.fir.BandPassFilter.html#pactools.utils.fir.BandPassFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">=</span><span class="mf">7.0</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zero_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -388,7 +387,7 @@
 <span class="sd">    &gt;&gt;&gt; from pactools.utils import LowPassFilter</span>
 <span class="sd">    &gt;&gt;&gt; f = LowPassFilter(fs=100., fc=5., bandwidth=1.)</span>
 <span class="sd">    &gt;&gt;&gt; f.plot()</span>
-<span class="sd">    &gt;&gt;&gt; output = f.transform(input)</span>
+<span class="sd">    &gt;&gt;&gt; signal_out = f.transform(signal_in)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="LowPassFilter.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.fir.LowPassFilter.html#pactools.utils.fir.LowPassFilter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span> <span class="n">bandwidth</span><span class="p">,</span> <span class="n">ripple_db</span><span class="o">=</span><span class="mf">60.0</span><span class="p">):</span>

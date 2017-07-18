@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
@@ -165,6 +164,7 @@
 
 <span class="kn">from</span> <span class="nn">..utils.progress_bar</span> <span class="k">import</span> <span class="n">ProgressBar</span>
 <span class="kn">from</span> <span class="nn">..utils.maths</span> <span class="k">import</span> <span class="n">squared_norm</span>
+<span class="kn">from</span> <span class="nn">..utils.deprecation</span> <span class="k">import</span> <span class="n">ignore_warnings</span>
 <span class="kn">from</span> <span class="nn">..utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_consistent_shape</span>
 <span class="kn">from</span> <span class="nn">..utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">..utils.spectrum</span> <span class="k">import</span> <span class="n">Spectrum</span>
@@ -179,37 +179,6 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                  <span class="n">ortho</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">iter_gain</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">eps_gain</span><span class="o">=</span><span class="mf">1.0e-4</span><span class="p">,</span>
                  <span class="n">progress_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_driver_phase</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        ordar : int &gt; 0</span>
-<span class="sd">            Order of the autoregressive model (p)</span>
-
-<span class="sd">        ordriv : int &gt;= 0</span>
-<span class="sd">            Order of the taylor expansion for sigdriv (m)</span>
-
-<span class="sd">        criterion : None or string in (&#39;bic&#39;, &#39;aic&#39;, &#39;logl&#39;)</span>
-<span class="sd">            If not None, select the criterion used for model selection.</span>
-
-<span class="sd">        normalize : boolean</span>
-<span class="sd">            If True, the basis vectors are normalized to unit energy.</span>
-
-<span class="sd">        ortho : boolean</span>
-<span class="sd">            If True, the basis vectors are orthogonalized.</span>
-
-<span class="sd">        center : boolean</span>
-<span class="sd">            If True, we subtract the mean in sigin</span>
-
-<span class="sd">        iter_gain : int &gt;=0</span>
-<span class="sd">            Maximum number of iteration in gain estimation</span>
-
-<span class="sd">        eps_gain : float &gt;= 0</span>
-<span class="sd">            Threshold to stop iterations in gain estimation</span>
-
-<span class="sd">        use_driver_phase : boolean</span>
-<span class="sd">            If True, we divide the driver by its instantaneous amplitude.</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># -------- save parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span> <span class="o">=</span> <span class="n">ordar</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span> <span class="o">=</span> <span class="n">criterion</span>
@@ -288,7 +257,7 @@
 
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">train_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">test_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Estimate a DAR model from input signals.</span>
+        <span class="sd">&quot;&quot;&quot;Estimate the model from input signals</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -315,10 +284,16 @@
 <span class="sd">        -------</span>
 <span class="sd">        self</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_criterions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_criterions</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_all_arrays</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">,</span> <span class="n">train_weights</span><span class="p">,</span>
                                <span class="n">test_weights</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
+
+        <span class="c1"># -------- check parameters</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;self.ordar is zero or negative&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordriv</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;self.ordriv is negative&#39;</span><span class="p">)</span>
 
         <span class="c1"># -------- prepare the estimates</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">AR_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -328,8 +303,8 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span><span class="p">:</span>
             <span class="c1"># -------- select the best order</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_order_selection</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">estimate_error</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">estimate_gain</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_error</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_gain</span><span class="p">()</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">()</span>
@@ -339,10 +314,10 @@
     <span class="k">def</span> <span class="nf">_fit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># -------- estimate a single model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ordriv_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordriv</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimate_ar</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimate_error</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimate_gain</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_make_basis</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_ar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_error</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_gain</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_compute_cross_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ordriv</span><span class="p">):</span>
         <span class="n">power_list_re</span><span class="p">,</span> <span class="n">power_list_im</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
@@ -356,9 +331,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n_basis</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">power_list_re</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">power_list_re</span><span class="p">,</span> <span class="n">power_list_im</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_basis</span>
 
-    <span class="k">def</span> <span class="nf">make_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Creates a basis from the driving signal, with the successive</span>
-<span class="sd">        powers of sigdriv and sigdriv_imag.</span>
+    <span class="k">def</span> <span class="nf">_make_basis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a basis from the driving signal</span>
+
+<span class="sd">        Creates a basis with the successive powers of sigdriv and sigdriv_imag.</span>
 
 <span class="sd">        If self.normalize is True, each component of the basis will be</span>
 <span class="sd">        normalized by its standard deviation.</span>
@@ -438,8 +414,8 @@
             <span class="k">if</span> <span class="n">ortho</span><span class="p">:</span>
                 <span class="c1"># correct current component with corrected components</span>
                 <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
-                    <span class="n">alpha</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">basis</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="o">/</span>
-                                    <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="n">basis</span><span class="p">[</span><span class="n">m</span><span class="p">]))</span>
+                    <span class="n">alpha</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">basis</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">basis</span><span class="p">[</span><span class="n">m</span><span class="p">])</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                        <span class="n">basis</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="n">basis</span><span class="p">[</span><span class="n">m</span><span class="p">]))</span>
                 <span class="n">basis</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">alpha</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:</span><span class="n">k</span><span class="p">],</span> <span class="n">basis</span><span class="p">[:</span><span class="n">k</span><span class="p">,</span> <span class="p">:])</span>
                 <span class="c1"># recompute the expression over initial components</span>
                 <span class="n">alpha</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">alpha</span><span class="p">[</span><span class="n">k</span><span class="p">,</span> <span class="p">:</span><span class="n">k</span><span class="p">],</span> <span class="n">alpha</span><span class="p">[:</span><span class="n">k</span><span class="p">,</span> <span class="p">:</span><span class="n">k</span><span class="p">])</span>
@@ -459,30 +435,22 @@
                 <span class="n">basis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">basis</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_epochs</span><span class="p">,</span> <span class="n">n_points</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">estimate_ar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_ar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Estimates the AR model on a signal</span>
 
 <span class="sd">        uses self.sigin, self.sigdriv and self.basis_ (which must be</span>
-<span class="sd">        computed with make_basis before calling estimate_ar)</span>
+<span class="sd">        computed with _make_basis before calling _estimate_ar)</span>
 <span class="sd">        self.ordar defines the order</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># -------- verify all parameters for the estimator</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;self.ordar is zero or negative&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordriv</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;self.ordriv is negative&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;basis does not yet exist&#39;</span><span class="p">)</span>
-
         <span class="c1"># -------- compute the final estimate</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">:</span>
             <span class="n">bar</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_title</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-        <span class="k">for</span> <span class="n">AR_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_model</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">AR_</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_model</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">AR_</span> <span class="o">=</span> <span class="n">AR_</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">:</span>
                 <span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                    <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span><span class="p">,</span>
-                    <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_title</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+                    <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_title</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_remove_far_masked_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">list_signals</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove unnecessary data which is masked</span>
@@ -539,9 +507,11 @@
         <span class="k">return</span> <span class="n">sig_list</span>
 
     <span class="k">def</span> <span class="nf">degrees_of_freedom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Number of parameters of the fitted model&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_basis</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the name and orders of the model&quot;&quot;&quot;</span>
         <span class="n">title</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
             <span class="n">title</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
@@ -563,6 +533,12 @@
         <span class="k">return</span> <span class="n">title</span>
 
     <span class="k">def</span> <span class="nf">get_criterion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the criterion (logL, AIC, BIC) of the fitted model</span>
+
+<span class="sd">        If a self.criterion is not None, the fit performs a grid-search over</span>
+<span class="sd">        the parameter ordar and ordriv. In such case, this method returns the</span>
+<span class="sd">        array of value of the criterion over each parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">criterion</span> <span class="o">=</span> <span class="n">criterion</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_criterion</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">)[</span><span class="n">criterion</span><span class="p">]</span>
@@ -577,7 +553,8 @@
             <span class="k">return</span> <span class="n">criterions</span>
 
         <span class="c1"># else compute the criterions base on the log likelihood</span>
-        <span class="n">logl</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_likelihood</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span><span class="p">)</span>
+        <span class="n">logl</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_log_likelihood</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span>
+                                                   <span class="n">skip</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span><span class="p">)</span>
         <span class="n">degrees</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">degrees_of_freedom</span><span class="p">()</span>
 
         <span class="c1"># Akaike Information Criterion</span>
@@ -613,7 +590,7 @@
         <span class="sd">&quot;&quot;&quot;Bayesian information criterion (BIC) of the model&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_criterion</span><span class="p">()[</span><span class="s1">&#39;bic&#39;</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">reset_criterions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_reset_criterions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reset stored criterions (negative log_likelihood, AIC or BIC)&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_selection_criterions_</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">criterions_</span> <span class="o">=</span> <span class="kc">None</span>
@@ -624,7 +601,7 @@
 <span class="sd">        self.criterion (negative log_likelihood, AIC or BIC)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># compute the basis once and for all</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_make_basis</span><span class="p">()</span>
 
         <span class="n">criterion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">criterion</span>
         <span class="c1"># -------- prepare the estimates</span>
@@ -658,16 +635,16 @@
             <span class="n">model</span><span class="o">.</span><span class="n">basis_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span><span class="p">[:</span><span class="n">n_basis</span><span class="p">]</span>
 
             <span class="c1"># -------- estimate the best AR order for this value of ordriv</span>
-            <span class="k">for</span> <span class="n">AR_</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">next_model</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">AR_</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">_next_model</span><span class="p">():</span>
                 <span class="n">model</span><span class="o">.</span><span class="n">AR_</span> <span class="o">=</span> <span class="n">AR_</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">:</span>
                     <span class="n">title</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get_title</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                     <span class="n">bar_k</span> <span class="o">+=</span> <span class="mi">1</span>
                     <span class="n">bar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bar_k</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">)</span>
 
-                <span class="n">model</span><span class="o">.</span><span class="n">estimate_error</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
-                <span class="n">model</span><span class="o">.</span><span class="n">estimate_gain</span><span class="p">()</span>
-                <span class="n">model</span><span class="o">.</span><span class="n">reset_criterions</span><span class="p">()</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">_estimate_error</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">_estimate_gain</span><span class="p">()</span>
+                <span class="n">model</span><span class="o">.</span><span class="n">_reset_criterions</span><span class="p">()</span>
                 <span class="n">this_criterion</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">_compute_criterion</span><span class="p">()</span>
                 <span class="n">logl</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">ordar_</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">ordriv_</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_criterion</span><span class="p">[</span><span class="s1">&#39;logl&#39;</span><span class="p">]</span>
                 <span class="n">aic</span><span class="p">[</span><span class="n">model</span><span class="o">.</span><span class="n">ordar_</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">ordriv_</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_criterion</span><span class="p">[</span><span class="s1">&#39;aic&#39;</span><span class="p">]</span>
@@ -700,7 +677,7 @@
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">AR_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">estimate_fixed_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_fixed_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Estimates a fixed gain from the predicton error self.residual_.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># -------- get the training data</span>
@@ -723,16 +700,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">G_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_basis</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">estimate_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;helper to handle failure in gain estimation&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_gain</span><span class="p">(</span><span class="n">regul</span><span class="o">=</span><span class="n">regul</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_driven_gain</span><span class="p">(</span><span class="n">regul</span><span class="o">=</span><span class="n">regul</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Gain estimation failed, fixed gain used. Error: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">e</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">estimate_fixed_gain</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_fixed_gain</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_estimate_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_driven_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Estimate the gain expressed over the basis by maximizing</span>
 <span class="sd">        the likelihood, through a Newton-Raphson procedure</span>
 
@@ -850,20 +827,18 @@
 
     <span class="k">def</span> <span class="nf">_compute_sigma2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Helper to compute the instantaneous variance of the model&quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">ignore_warnings</span><span class="p">():</span>
             <span class="n">logsigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
             <span class="n">sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">logsigma</span><span class="p">)</span> <span class="o">+</span> <span class="n">EPSILON</span>
 
         <span class="k">if</span> <span class="n">sigma2</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">1e5</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;estimate_gain: sigma2.max() = </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span>
-                               <span class="n">sigma2</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="s1">&#39;_estimate_gain: sigma2.max() = </span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">sigma2</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
         <span class="k">return</span> <span class="n">sigma2</span>
 
     <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                       <span class="n">train_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">test_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Same as fit, but return the residual instead of the model object</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Same as fit, but returns the residual instead of the model object&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sigin</span><span class="o">=</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span>
                  <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">,</span> <span class="n">train_weights</span><span class="o">=</span><span class="n">train_weights</span><span class="p">,</span>
                  <span class="n">test_weights</span><span class="o">=</span><span class="n">test_weights</span><span class="p">)</span>
@@ -871,20 +846,19 @@
 
     <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">test_weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Whiten a signal with the already fitted model</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Whiten a signal with the already fitted model&quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="k">assert</span> <span class="n">fs</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">reset_criterions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_criterions</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_all_arrays</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span>
                                <span class="n">test_weights</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_basis</span><span class="p">(</span>
             <span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ordriv_</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">estimate_error</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_error</span><span class="p">(</span><span class="n">recompute</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">residual_</span>
 
-    <span class="k">def</span> <span class="nf">develop_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_develop_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="c1"># n_basis, n_epochs, n_points = basis.shape</span>
         <span class="c1"># 1, n_basis = self.G_.shape</span>
         <span class="c1"># n_epochs, n_points = gain.shape</span>
@@ -895,9 +869,10 @@
             <span class="n">G_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">G_cols</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">G_cols</span>
 
-    <span class="k">def</span> <span class="nf">log_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_log_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Approximate computation of the logarithm of the likelihood</span>
-<span class="sd">        the computation uses self.residual_, self.basis_ and self.G_</span>
+
+<span class="sd">        The computation uses self.residual_, self.basis_ and self.G_</span>
 
 <span class="sd">        skip : how many initial samples to skip</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -916,7 +891,7 @@
             <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[:,</span> <span class="n">skip</span><span class="p">:]</span>
 
         <span class="c1"># -------- estimate the gain</span>
-        <span class="n">gain2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_gain</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">gain2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_gain</span><span class="p">(</span><span class="n">basis</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">gain2</span> <span class="o">+=</span> <span class="n">EPSILON</span>
 
         <span class="c1"># -------- compute the log likelihood from the residual</span>
@@ -928,23 +903,29 @@
 
     <span class="k">def</span> <span class="nf">likelihood_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ar0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Computation of the likelihood ratio test</span>
-<span class="sd">        the null hypothesis H0 is given by model ar0; the current</span>
+
+<span class="sd">        The null hypothesis H0 is given by model ar0; the current</span>
 <span class="sd">        model (self) is tested against this model ar0 which may be</span>
 <span class="sd">        either an invariant AR model (ordriv=0) or a hybrid one</span>
 <span class="sd">        (invariant AR part, with driven gain).</span>
 
-<span class="sd">        ar0 : model representing the null hypothesis</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ar0 : DAR model instance (fitted)</span>
+<span class="sd">            Model representing the null hypothesis</span>
 
-<span class="sd">        returns:</span>
-<span class="sd">        p_value : the p-value for the test (1-  F(chi2(ratio)))</span>
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        p_value : float</span>
+<span class="sd">            The p-value for the test (1-  F(chi2(ratio)))</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># -------- verify that the models have been fitted</span>
         <span class="n">ordar_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span>
         <span class="n">ordar_0</span> <span class="o">=</span> <span class="n">ar0</span><span class="o">.</span><span class="n">ordar_</span>
 
         <span class="c1"># -------- compute the log likelihood for the models</span>
-        <span class="n">logL1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_likelihood</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">ordar_1</span><span class="p">)</span>
-        <span class="n">logL0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ar0</span><span class="o">.</span><span class="n">log_likelihood</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">ordar_0</span><span class="p">)</span>
+        <span class="n">logL1</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_log_likelihood</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">ordar_1</span><span class="p">)</span>
+        <span class="n">logL0</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ar0</span><span class="o">.</span><span class="n">_estimate_log_likelihood</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">ordar_0</span><span class="p">)</span>
 
         <span class="c1"># -------- compute the log likelihood ratio</span>
         <span class="n">test</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">logL1</span> <span class="o">-</span> <span class="n">logL0</span><span class="p">)</span>
@@ -962,20 +943,20 @@
     <span class="c1"># Functions that should be overloaded              #</span>
     <span class="c1"># ------------------------------------------------ #</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">next_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_next_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the AR model at successive orders</span>
 
 <span class="sd">        Acts as a generator that stores the result in self.AR_</span>
 <span class="sd">        Creates the models with orders from 0 to self.ordar</span>
 
 <span class="sd">        Typical usage:</span>
-<span class="sd">        for AR_ in A.next_model():</span>
+<span class="sd">        for AR_ in A._next_model():</span>
 <span class="sd">            A.AR_ = AR_</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">estimate_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recompute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">recompute</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Estimates the prediction error</span>
 
 <span class="sd">        uses self.sigin, self.basis_ and AR_</span>
@@ -983,7 +964,7 @@
         <span class="k">pass</span>
 
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">develop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_develop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Compute the AR models and gains at instants fixed by newcols</span>
 
 <span class="sd">        returns:</span>
@@ -995,11 +976,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">last_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_last_model</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;overload if it&#39;s faster to get only last model&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_model</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_model</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">develop_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_develop_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the AR models and gains for every instant of sigdriv</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1008,12 +989,13 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basis_</span>
             <span class="k">except</span><span class="p">:</span>
-                <span class="n">basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">(</span><span class="n">ordriv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ordriv_</span><span class="p">)</span>
+                <span class="n">basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_basis</span><span class="p">(</span><span class="n">ordriv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ordriv_</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_basis</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">,</span>
-                                    <span class="n">ordriv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ordriv_</span><span class="p">)</span>
+            <span class="n">basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_basis</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span>
+                                     <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">,</span>
+                                     <span class="n">ordriv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ordriv_</span><span class="p">)</span>
 
-        <span class="n">AR_cols</span><span class="p">,</span> <span class="n">G_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop</span><span class="p">(</span><span class="n">basis</span><span class="o">=</span><span class="n">basis</span><span class="p">)</span>
+        <span class="n">AR_cols</span><span class="p">,</span> <span class="n">G_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop</span><span class="p">(</span><span class="n">basis</span><span class="o">=</span><span class="n">basis</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">AR_cols</span><span class="p">,</span> <span class="n">G_cols</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">sigdriv</span>
 
@@ -1031,7 +1013,7 @@
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="n">ordar_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span>
 
-        <span class="n">AR_cols</span><span class="p">,</span> <span class="n">G_cols</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sigdriv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">develop_all</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">)</span>
+        <span class="n">AR_cols</span><span class="p">,</span> <span class="n">G_cols</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">sigdriv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_develop_all</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">)</span>
         <span class="c1"># keep the only epoch</span>
         <span class="n">AR_cols</span> <span class="o">=</span> <span class="n">AR_cols</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">G_cols</span> <span class="o">=</span> <span class="n">G_cols</span><span class="p">[:</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
@@ -1128,8 +1110,7 @@
 
     <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Represent the power spectral density as a function of the driver</span>
+        <span class="sd">&quot;&quot;&quot;Plot the PSD as a function of the driver</span>
 
 <span class="sd">        self  : the AR model to plot</span>
 <span class="sd">        title : title of the plot</span>
@@ -1195,9 +1176,7 @@
 
     <span class="k">def</span> <span class="nf">plot_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                    <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Represent the power spectral density as a function of</span>
-<span class="sd">        the amplitude of the driving signal</span>
+        <span class="sd">&quot;&quot;&quot;Plot the PSD as a function of the driver</span>
 
 <span class="sd">        self    : the AR model to plot</span>
 <span class="sd">        title   : title of the plot</span>
@@ -1237,8 +1216,9 @@
 
             <span class="c1"># build label</span>
             <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">sig_complex</span> <span class="o">=</span> <span class="n">sigdriv</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i_amplitude</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">sigdriv_imag</span><span class="p">[</span>
-                    <span class="o">...</span><span class="p">,</span> <span class="n">i_amplitude</span><span class="p">]</span>
+                <span class="n">sig_complex</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigdriv</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i_amplitude</span><span class="p">]</span> <span class="o">+</span>
+                               <span class="mi">1</span><span class="n">j</span> <span class="o">*</span> <span class="n">sigdriv_imag</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i_amplitude</span><span class="p">])</span>
+
                 <span class="n">label</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$\phi_x=</span><span class="si">%s</span><span class="s1">$&#39;</span> <span class="o">%</span> <span class="n">phase_string</span><span class="p">(</span><span class="n">sig_complex</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">label</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$x=</span><span class="si">%.2f</span><span class="s1">$&#39;</span> <span class="o">%</span> <span class="n">sigdriv_imag</span><span class="p">[</span><span class="n">i_amplitude</span><span class="p">]</span>
@@ -1278,7 +1258,7 @@
         <span class="k">return</span> <span class="n">fig</span>
 
     <span class="c1"># ------------------------------------------------ #</span>
-    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Convert the model attributes to dict&quot;&quot;&quot;</span>
 
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span>
@@ -1299,7 +1279,7 @@
             <span class="kc">None</span>
 
         <span class="c1"># -------- copy other attributes</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_dict</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;AR_&#39;</span><span class="p">,</span> <span class="s1">&#39;G_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;_&#39;</span><span class="p">:</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
@@ -1313,11 +1293,25 @@
 
 
 <span class="k">def</span> <span class="nf">wgn_log_likelihood</span><span class="p">(</span><span class="n">eps</span><span class="p">,</span> <span class="n">sigma2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Returns the likelihood of a gaussian uncorrelated signal</span>
-<span class="sd">    given a model of its variance</span>
+    <span class="sd">&quot;&quot;&quot;Returns the log-likelihood of a white Gaussian noise (WGN)</span>
 
-<span class="sd">    eps    : gaussian signal (residual or innovation)</span>
-<span class="sd">    sigma2 : variance of this signal</span>
+<span class="sd">    (given a model of its variance)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    eps : array, shape (n_epochs, n_points)</span>
+<span class="sd">        Residual of the fit (a.k.a. innovation)</span>
+
+<span class="sd">    sigma2 : array, shape (n_epochs, n_points)</span>
+<span class="sd">        Estimated variance of eps</span>
+
+<span class="sd">    weights : array, shape (n_epochs, n_points), or None (default None)</span>
+<span class="sd">        Weights to apply to the log-likelihood for each time points</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    logL : float</span>
+<span class="sd">        Log-likelihood of the residual as a white Gaussian noise (WGN)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">weights_sum</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>

@@ -12,6 +12,7 @@ pactools\.utils\.fir\.BandPassFilter
    .. rubric:: Methods
 
    .. autosummary::
+       :nosignatures:
    
       ~BandPassFilter.__init__
       ~BandPassFilter.plot
@@ -22,3 +23,9 @@ pactools\.utils\.fir\.BandPassFilter
    
    
    
+
+.. include:: backreferences/pactools.utils.fir.BandPassFilter.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

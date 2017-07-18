@@ -12,30 +12,18 @@ pactools\.dar\_model\.DAR
    .. rubric:: Methods
 
    .. autosummary::
+       :nosignatures:
    
       ~DAR.__init__
       ~DAR.copy
       ~DAR.degrees_of_freedom
-      ~DAR.develop
-      ~DAR.develop_all
-      ~DAR.develop_gain
-      ~DAR.estimate_ar
-      ~DAR.estimate_error
-      ~DAR.estimate_fixed_gain
-      ~DAR.estimate_gain
       ~DAR.fit
       ~DAR.fit_transform
       ~DAR.get_criterion
       ~DAR.get_title
-      ~DAR.last_model
       ~DAR.likelihood_ratio
-      ~DAR.log_likelihood
-      ~DAR.make_basis
-      ~DAR.next_model
       ~DAR.plot
       ~DAR.plot_lines
-      ~DAR.reset_criterions
-      ~DAR.to_dict
       ~DAR.transform
    
    
@@ -43,3 +31,9 @@ pactools\.dar\_model\.DAR
    
    
    
+
+.. include:: backreferences/pactools.dar_model.DAR.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

@@ -12,6 +12,7 @@ pactools\.utils\.spectrum\.Spectrum
    .. rubric:: Methods
 
    .. autosummary::
+       :nosignatures:
    
       ~Spectrum.__init__
       ~Spectrum.check_params
@@ -24,3 +25,9 @@ pactools\.utils\.spectrum\.Spectrum
    
    
    
+
+.. include:: backreferences/pactools.utils.spectrum.Spectrum.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>
