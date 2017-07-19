@@ -27,7 +27,7 @@ A comodulogram shows the estimated PAC metric on a grid of frequency bands.
 
 
 
-Create an artificial signal with PAC
+Let's first create an artificial signal with PAC.
 
 
 
@@ -52,7 +52,7 @@ Create an artificial signal with PAC
 
 
 
-Define the range of low frequency, and the list of the method used
+Then, let's define the range of low frequency, and the list of methods used
 
 
 
@@ -71,13 +71,16 @@ Define the range of low frequency, and the list of the method used
 
 
 
-Define the subplots where the comodulogram will be plotted
+To compute the comodulogram, we need to instanciate a `Comodulogram` object,
+then call the method `fit`. The method `plot` draws the results on the given
+subplot axes.
 
 
 
 .. code-block:: python
 
 
+    # Define the subplots where the comodulogram will be plotted
     n_lines = 3
     n_columns = int(np.ceil(len(methods) / float(n_lines)))
     fig, axs = plt.subplots(
@@ -85,22 +88,7 @@ Define the subplots where the comodulogram will be plotted
     axs = axs.ravel()
 
 
-
-
-
-.. image:: /auto_examples/images/sphx_glr_plot_comodulogram_001.png
-    :align: center
-
-
-
-
-Compute the comodulograms and plot them
-
-
-
-.. code-block:: python
-
-
+    # Compute the comodulograms and plot them
     for ax, method in zip(axs, methods):
         print('%s... ' % (method, ))
         estimator = Comodulogram(fs=fs, low_fq_range=low_fq_range,
@@ -112,6 +100,9 @@ Compute the comodulograms and plot them
     plt.show()
 
 
+
+.. image:: /auto_examples/images/sphx_glr_plot_comodulogram_001.png
+    :align: center
 
 
 .. rst-class:: sphx-glr-script-out
@@ -129,7 +120,7 @@ Compute the comodulograms and plot them
     bispectrum...
 
 
-**Total running time of the script:** ( 0 minutes  11.110 seconds)
+**Total running time of the script:** ( 0 minutes  11.039 seconds)
 
 
 

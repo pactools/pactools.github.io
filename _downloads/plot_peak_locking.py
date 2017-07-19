@@ -14,7 +14,7 @@ from pactools import simulate_pac
 
 
 ###############################################################################
-# Create an artificial signal with PAC
+# Let's first create an artificial signal with PAC.
 
 fs = 200.  # Hz
 high_fq = 50.0  # Hz
@@ -30,7 +30,7 @@ signal = simulate_pac(n_points=n_points, fs=fs, high_fq=high_fq, low_fq=low_fq,
                       random_state=0)
 
 ###############################################################################
-# Plot the amplitude of each frequency, locked with the peak of the slow wave
+# Plot the amplitude of each frequency, locked with the peak of the slow wave
 
 estimator = PeakLocking(fs=fs, low_fq=low_fq, low_fq_width=2.0, t_plot=t_plot)
 estimator.fit(signal)

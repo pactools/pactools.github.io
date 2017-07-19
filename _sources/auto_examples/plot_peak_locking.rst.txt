@@ -27,7 +27,7 @@ oscillations in the results.
 
 
 
-Create an artificial signal with PAC
+Let's first create an artificial signal with PAC.
 
 
 
@@ -88,7 +88,7 @@ Plot the amplitude of each frequency, locked with the peak of the slow wave
 
 
 
-**Total running time of the script:** ( 0 minutes  0.926 seconds)
+**Total running time of the script:** ( 0 minutes  0.862 seconds)
 
 
 

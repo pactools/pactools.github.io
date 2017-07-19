@@ -14,7 +14,7 @@ from pactools import simulate_pac
 
 
 ###############################################################################
-# Create an artificial signal with PAC
+# Let's first create an artificial signal with PAC.
 
 fs = 200.  # Hz
 high_fq = 50.0  # Hz
@@ -29,7 +29,7 @@ signal = simulate_pac(n_points=n_points, fs=fs, high_fq=high_fq, low_fq=low_fq,
                       random_state=0)
 
 ###############################################################################
-# Define the range of low frequency, and the list of the method used
+# Then, let's define the range of low frequency, and the list of methods used
 
 low_fq_range = np.linspace(1, 10, 50)
 methods = [
@@ -38,8 +38,11 @@ methods = [
 ]
 
 ###############################################################################
-# Define the subplots where the comodulogram will be plotted
+# To compute the comodulogram, we need to instanciate a `Comodulogram` object,
+# then call the method `fit`. The method `plot` draws the results on the given
+# subplot axes.
 
+# Define the subplots where the comodulogram will be plotted
 n_lines = 3
 n_columns = int(np.ceil(len(methods) / float(n_lines)))
 fig, axs = plt.subplots(
@@ -47,9 +50,7 @@ fig, axs = plt.subplots(
 axs = axs.ravel()
 
 
-###############################################################################
-# Compute the comodulograms and plot them
-
+# Compute the comodulograms and plot them
 for ax, method in zip(axs, methods):
     print('%s... ' % (method, ))
     estimator = Comodulogram(fs=fs, low_fq_range=low_fq_range,

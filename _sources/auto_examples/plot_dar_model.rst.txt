@@ -27,7 +27,7 @@ It also shows the comodulogram computed with a DAR model.
 
 
 
-Create the artificial signal with PAC
+Let's first create an artificial signal with PAC.
 
 
 
@@ -135,7 +135,7 @@ Giving ``method='duprelatour'`` will default to
 
 
 
-**Total running time of the script:** ( 1 minutes  22.921 seconds)
+**Total running time of the script:** ( 1 minutes  17.179 seconds)
 
 
 
