@@ -1,0 +1,410 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Surrogate analysis &mdash; pactools 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
+        <link rel="up" title="Gallery of Examples" href="index.html"/>
+        <link rel="next" title="Fitting a DAR model" href="plot_dar_model.html"/>
+        <link rel="prev" title="Comodulogram" href="plot_comodulogram.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pactools
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with pactools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery of Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="plot_peak_locking.html">Peak-locking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_mne_epoch_masking.html">Interface with MNE-python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_comodulogram.html">Comodulogram</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Surrogate analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_dar_model.html">Fitting a DAR model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_phase_delay.html">Phase shift and temporal delay in PAC</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pactools/pactools">Fork pactools on Github</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pactools</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Gallery of Examples</a> &raquo;</li>
+        
+      <li>Surrogate analysis</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/auto_examples/plot_surrogate_analysis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="surrogate-analysis">
+<span id="sphx-glr-auto-examples-plot-surrogate-analysis-py"></span><h1>Surrogate analysis<a class="headerlink" href="#surrogate-analysis" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how to estimate a significance threshold in a comodulogram.</p>
+<p>A comodulogram shows the estimated PAC metric on a grid of frequency bands.
+In absence of PAC, a PAC metric will return values close to zero, but not
+exactly zero. To estimate if a value is significantly far from zero, we use a
+surrogate analysis.</p>
+<p>In a surrogate analysis, we recompute the comodulogram many times, adding each
+time a random time shift to remove any possible coupling between the
+components. Nota that these time shifts have to be far from zero to effectively
+remove a potential coupling. These comodulograms give us an estimation of the
+fluctuation of the metric in the absence of PAC.</p>
+<p>To derive a significance level from the list of comodulograms, we discuss here
+two different methods:
+- Computing a z-score on each couple of frequency, and thresholding at z = 4.
+- Computing a threshold at a given p-value, over a distribution of comodulogram
+maxima.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a>
+<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="View documentation for pactools.simulate_pac"><span class="n">simulate_pac</span></a>
+</pre></div>
+</div>
+<p>Let’s first create an artificial signal with PAC.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="mf">200.</span>  <span class="c1"># Hz</span>
+<span class="n">high_fq</span> <span class="o">=</span> <span class="mf">50.0</span>  <span class="c1"># Hz</span>
+<span class="n">low_fq</span> <span class="o">=</span> <span class="mf">5.0</span>  <span class="c1"># Hz</span>
+<span class="n">low_fq_width</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Hz</span>
+
+<span class="n">n_points</span> <span class="o">=</span> <span class="mi">1000</span>
+<span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.4</span>
+
+<span class="n">signal</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="View documentation for pactools.simulate_pac"><span class="n">simulate_pac</span></a><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
+                      <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span>
+                      <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then, let’s define the range of low frequency, and the PAC metric used.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">low_fq_range</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.linspace.html#numpy.linspace" title="View documentation for numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;duprelatour&#39;</span>  <span class="c1"># or &#39;tort&#39;, &#39;ozkurt&#39;, &#39;penny&#39;, &#39;colgin&#39;, ...</span>
+
+<span class="c1"># We also choose the number of comodulograms computed in the surrogate</span>
+<span class="c1"># analysis. A good rule of thumb is 10 / p_value. Example: 10 / 0.05 = 200.</span>
+<span class="n">n_surrogates</span> <span class="o">=</span> <span class="mi">200</span>
+
+<span class="c1"># As a surrogate analysis recquires to compute many comodulograms, the</span>
+<span class="c1"># computation can be slow. If you have multiple cores in your CPU, you can</span>
+<span class="c1"># leverage them using the parameter `n_jobs` &gt; 1.</span>
+<span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>To compute the comodulogram, we need to instanciate a <cite>Comodulogram</cite> object,
+then call the method <cite>fit</cite>. Adding the surrogate analysis is as simple as
+adding the <cite>n_surrogates</cite> parameter.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">estimator</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="o">=</span><span class="n">low_fq_range</span><span class="p">,</span>
+                         <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span>
+                         <span class="n">n_surrogates</span><span class="o">=</span><span class="n">n_surrogates</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                         <span class="n">n_jobs</span><span class="o">=</span><span class="n">n_jobs</span><span class="p">)</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span>                                        <span class="p">]</span> <span class="mi">0</span><span class="o">%</span> <span class="o">|</span> <span class="mf">0.00</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span>                                        <span class="p">]</span> <span class="mi">2</span><span class="o">%</span> <span class="o">|</span> <span class="mf">2.15</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.</span>                                       <span class="p">]</span> <span class="mi">4</span><span class="o">%</span> <span class="o">|</span> <span class="mf">4.21</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">..</span>                                      <span class="p">]</span> <span class="mi">6</span><span class="o">%</span> <span class="o">|</span> <span class="mf">6.25</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">...</span>                                     <span class="p">]</span> <span class="mi">8</span><span class="o">%</span> <span class="o">|</span> <span class="mf">8.29</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">....</span>                                    <span class="p">]</span> <span class="mi">10</span><span class="o">%</span> <span class="o">|</span> <span class="mf">10.36</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">....</span>                                    <span class="p">]</span> <span class="mi">12</span><span class="o">%</span> <span class="o">|</span> <span class="mf">12.42</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.....</span>                                   <span class="p">]</span> <span class="mi">14</span><span class="o">%</span> <span class="o">|</span> <span class="mf">14.49</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">......</span>                                  <span class="p">]</span> <span class="mi">16</span><span class="o">%</span> <span class="o">|</span> <span class="mf">16.65</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.......</span>                                 <span class="p">]</span> <span class="mi">18</span><span class="o">%</span> <span class="o">|</span> <span class="mf">18.85</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">........</span>                                <span class="p">]</span> <span class="mi">20</span><span class="o">%</span> <span class="o">|</span> <span class="mf">21.02</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">........</span>                                <span class="p">]</span> <span class="mi">22</span><span class="o">%</span> <span class="o">|</span> <span class="mf">23.19</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.........</span>                               <span class="p">]</span> <span class="mi">24</span><span class="o">%</span> <span class="o">|</span> <span class="mf">25.73</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">..........</span>                              <span class="p">]</span> <span class="mi">26</span><span class="o">%</span> <span class="o">|</span> <span class="mf">27.79</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">...........</span>                             <span class="p">]</span> <span class="mi">28</span><span class="o">%</span> <span class="o">|</span> <span class="mf">29.80</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">............</span>                            <span class="p">]</span> <span class="mi">30</span><span class="o">%</span> <span class="o">|</span> <span class="mf">31.82</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">............</span>                            <span class="p">]</span> <span class="mi">32</span><span class="o">%</span> <span class="o">|</span> <span class="mf">33.84</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.............</span>                           <span class="p">]</span> <span class="mi">34</span><span class="o">%</span> <span class="o">|</span> <span class="mf">35.89</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">..............</span>                          <span class="p">]</span> <span class="mi">36</span><span class="o">%</span> <span class="o">|</span> <span class="mf">38.04</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">...............</span>                         <span class="p">]</span> <span class="mi">38</span><span class="o">%</span> <span class="o">|</span> <span class="mf">40.08</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">................</span>                        <span class="p">]</span> <span class="mi">40</span><span class="o">%</span> <span class="o">|</span> <span class="mf">42.15</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">................</span>                        <span class="p">]</span> <span class="mi">42</span><span class="o">%</span> <span class="o">|</span> <span class="mf">44.35</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.................</span>                       <span class="p">]</span> <span class="mi">44</span><span class="o">%</span> <span class="o">|</span> <span class="mf">46.44</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">..................</span>                      <span class="p">]</span> <span class="mi">46</span><span class="o">%</span> <span class="o">|</span> <span class="mf">48.47</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">...................</span>                     <span class="p">]</span> <span class="mi">48</span><span class="o">%</span> <span class="o">|</span> <span class="mf">50.51</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">....................</span>                    <span class="p">]</span> <span class="mi">50</span><span class="o">%</span> <span class="o">|</span> <span class="mf">52.57</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">....................</span>                    <span class="p">]</span> <span class="mi">52</span><span class="o">%</span> <span class="o">|</span> <span class="mf">54.60</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.....................</span>                   <span class="p">]</span> <span class="mi">54</span><span class="o">%</span> <span class="o">|</span> <span class="mf">56.67</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">......................</span>                  <span class="p">]</span> <span class="mi">56</span><span class="o">%</span> <span class="o">|</span> <span class="mf">58.75</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.......................</span>                 <span class="p">]</span> <span class="mi">58</span><span class="o">%</span> <span class="o">|</span> <span class="mf">60.79</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">........................</span>                <span class="p">]</span> <span class="mi">60</span><span class="o">%</span> <span class="o">|</span> <span class="mf">62.83</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">........................</span>                <span class="p">]</span> <span class="mi">62</span><span class="o">%</span> <span class="o">|</span> <span class="mf">64.88</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.........................</span>               <span class="p">]</span> <span class="mi">64</span><span class="o">%</span> <span class="o">|</span> <span class="mf">66.92</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">..........................</span>              <span class="p">]</span> <span class="mi">66</span><span class="o">%</span> <span class="o">|</span> <span class="mf">68.95</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">...........................</span>             <span class="p">]</span> <span class="mi">68</span><span class="o">%</span> <span class="o">|</span> <span class="mf">70.98</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">............................</span>            <span class="p">]</span> <span class="mi">70</span><span class="o">%</span> <span class="o">|</span> <span class="mf">73.01</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">............................</span>            <span class="p">]</span> <span class="mi">72</span><span class="o">%</span> <span class="o">|</span> <span class="mf">75.04</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.............................</span>           <span class="p">]</span> <span class="mi">74</span><span class="o">%</span> <span class="o">|</span> <span class="mf">77.07</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">..............................</span>          <span class="p">]</span> <span class="mi">76</span><span class="o">%</span> <span class="o">|</span> <span class="mf">79.10</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">...............................</span>         <span class="p">]</span> <span class="mi">78</span><span class="o">%</span> <span class="o">|</span> <span class="mf">81.13</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">................................</span>        <span class="p">]</span> <span class="mi">80</span><span class="o">%</span> <span class="o">|</span> <span class="mf">83.15</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">................................</span>        <span class="p">]</span> <span class="mi">82</span><span class="o">%</span> <span class="o">|</span> <span class="mf">85.18</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.................................</span>       <span class="p">]</span> <span class="mi">84</span><span class="o">%</span> <span class="o">|</span> <span class="mf">87.20</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">..................................</span>      <span class="p">]</span> <span class="mi">86</span><span class="o">%</span> <span class="o">|</span> <span class="mf">89.25</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">...................................</span>     <span class="p">]</span> <span class="mi">88</span><span class="o">%</span> <span class="o">|</span> <span class="mf">91.28</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">....................................</span>    <span class="p">]</span> <span class="mi">90</span><span class="o">%</span> <span class="o">|</span> <span class="mf">93.55</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">....................................</span>    <span class="p">]</span> <span class="mi">92</span><span class="o">%</span> <span class="o">|</span> <span class="mf">96.05</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.....................................</span>   <span class="p">]</span> <span class="mi">94</span><span class="o">%</span> <span class="o">|</span> <span class="mf">98.10</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">......................................</span>  <span class="p">]</span> <span class="mi">96</span><span class="o">%</span> <span class="o">|</span> <span class="mf">100.13</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">.......................................</span> <span class="p">]</span> <span class="mi">98</span><span class="o">%</span> <span class="o">|</span> <span class="mf">102.16</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">[</span><span class="o">........................................</span><span class="p">]</span> <span class="mi">100</span><span class="o">%</span> <span class="o">|</span> <span class="mf">104.18</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="p">[</span><span class="o">........................................</span><span class="p">]</span> <span class="mi">100</span><span class="o">%</span> <span class="o">|</span> <span class="mf">104.18</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">DAR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then we plot the significance level on top of the comodulogram.
+&nbsp;Here we present two methods.</p>
+<dl class="docutils">
+<dt>&nbsp;The z-score method presented here considers independently each pair of</dt>
+<dd><p class="first">frequency of the comodulogram. For each pair, we compute the mean <cite>mu</cite> and
+standard deviation <cite>sigma</cite> of the PAC values computed over the surrogates
+signals. We then transform the original PAC values <cite>PAC</cite> (non time-shifted)
+into z-scores <cite>Z</cite>: Z = (PAC - mu) / sigma</p>
+<p class="last">This procedure, used for example in [Canolty et al, 2006], suffers from
+multiple-testing issues, and also assumes that the distribution of PAC values
+is Gaussian.</p>
+</dd>
+<dt>&nbsp;The other method presented here considers the ditribution of comodulogram</dt>
+<dd>maxima. For each surrogate comodulogram, we compute the maximum PAC value.
+From the obtained empirical distribution of maxima, we compute the</dd>
+</dl>
+<p>&nbsp;95-percentile, which corresponds to a p-value of 0.05.</p>
+<blockquote>
+<div>This method does not assume the distribution to be Gaussian, nor suffers from
+multiple-testing issues. This is the default method in the <cite>plot</cite> method.</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.subplots" title="View documentation for matplotlib.pyplot.subplots"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">z_score</span> <span class="o">=</span> <span class="mf">4.</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">contour_method</span><span class="o">=</span><span class="s1">&#39;z_score&#39;</span><span class="p">,</span> <span class="n">contour_level</span><span class="o">=</span><span class="n">z_score</span><span class="p">,</span>
+               <span class="n">titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;With a z-score on each couple of frequency&#39;</span><span class="p">],</span>
+               <span class="n">axs</span><span class="o">=</span><span class="p">[</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+<span class="n">p_value</span> <span class="o">=</span> <span class="mf">0.05</span>
+<span class="n">estimator</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">contour_method</span><span class="o">=</span><span class="s1">&#39;comod_max&#39;</span><span class="p">,</span> <span class="n">contour_level</span><span class="o">=</span><span class="n">p_value</span><span class="p">,</span>
+               <span class="n">titles</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;With a p-value on the distribution of maxima&#39;</span><span class="p">],</span>
+               <span class="n">axs</span><span class="o">=</span><span class="p">[</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+<a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.show" title="View documentation for matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_plot_surrogate_analysis_001.png" class="align-center" src="../_images/sphx_glr_plot_surrogate_analysis_001.png" />
+<p>References</p>
+<p>[Canolty et al, 2006]
+Canolty, R. T., Edwards, E., Dalal, S. S., Soltani, M., Nagarajan,
+S. S., Kirsch, H. E., … &amp; Knight, R. T. (2006). High gamma power is
+phase-locked to theta oscillations in human neocortex. science,
+313(5793), 1626-1628.</p>
+<p><strong>Total running time of the script:</strong> ( 1 minutes  44.697 seconds)</p>
+<div class="sphx-glr-footer docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/plot_surrogate_analysis.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_surrogate_analysis.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/plot_surrogate_analysis.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_surrogate_analysis.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="plot_dar_model.html" class="btn btn-neutral float-right" title="Fitting a DAR model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="plot_comodulogram.html" class="btn btn-neutral" title="Comodulogram" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tom Dupre la Tour.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

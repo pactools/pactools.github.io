@@ -69,6 +69,26 @@ Gallery of Examples
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="A comodulogram shows the estimated PAC metric on a grid of frequency bands. In absence of PAC, ...">
+
+.. only:: html
+
+    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_surrogate_analysis_thumb.png
+
+        :ref:`sphx_glr_auto_examples_plot_surrogate_analysis.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_surrogate_analysis
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="It also shows the comodulogram computed with a DAR model. ">
 
 .. only:: html
