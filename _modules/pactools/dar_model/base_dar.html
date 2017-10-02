@@ -164,7 +164,7 @@
 
 <span class="kn">from</span> <span class="nn">..utils.progress_bar</span> <span class="k">import</span> <span class="n">ProgressBar</span>
 <span class="kn">from</span> <span class="nn">..utils.maths</span> <span class="k">import</span> <span class="n">squared_norm</span>
-<span class="kn">from</span> <span class="nn">..utils.deprecation</span> <span class="k">import</span> <span class="n">ignore_warnings</span>
+<span class="c1"># from ..utils.deprecation import ignore_warnings</span>
 <span class="kn">from</span> <span class="nn">..utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_consistent_shape</span>
 <span class="kn">from</span> <span class="nn">..utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">..utils.spectrum</span> <span class="k">import</span> <span class="n">Spectrum</span>
@@ -206,7 +206,7 @@
         <span class="c1"># -------- transform the signals to 2d array of float64</span>
         <span class="n">sigin</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
         <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">)</span>
-        <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">sigdriv_imag</span><span class="p">)</span>
+        <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">sigdriv_imag</span><span class="p">,</span> <span class="n">accept_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">check_consistent_shape</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">)</span>
         <span class="n">check_consistent_shape</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">)</span>
 
@@ -241,6 +241,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">test_mask_</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_driver_phase</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordriv</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Impossible to use use_driver_phase=True &#39;</span>
+                                 <span class="s1">&#39;without giving sigdriv_imag.&#39;</span><span class="p">)</span>
             <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigdriv</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sigdriv_imag</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
             <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">sigdriv</span> <span class="o">/</span> <span class="n">amplitude</span>
             <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">sigdriv_imag</span> <span class="o">/</span> <span class="n">amplitude</span>
@@ -385,6 +388,7 @@
             <span class="n">power_list_re</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ordriv</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">power_list_im</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ordriv</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="n">n_basis</span> <span class="o">=</span> <span class="n">ordriv</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_basis</span> <span class="o">=</span> <span class="n">ordriv</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">power_list_re</span><span class="p">,</span> <span class="n">power_list_im</span><span class="p">,</span> <span class="n">n_basis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_cross_orders</span><span class="p">(</span>
                 <span class="n">ordriv</span><span class="p">)</span>
@@ -700,7 +704,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">G_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_basis</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">G_</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sigma</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_estimate_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;helper to handle failure in gain estimation&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_driven_gain</span><span class="p">(</span><span class="n">regul</span><span class="o">=</span><span class="n">regul</span><span class="p">)</span>
@@ -709,7 +713,7 @@
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_fixed_gain</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_estimate_driven_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.01</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_estimate_driven_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Estimate the gain expressed over the basis by maximizing</span>
 <span class="sd">        the likelihood, through a Newton-Raphson procedure</span>
 
@@ -827,9 +831,9 @@
 
     <span class="k">def</span> <span class="nf">_compute_sigma2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Helper to compute the instantaneous variance of the model&quot;&quot;&quot;</span>
-        <span class="k">with</span> <span class="n">ignore_warnings</span><span class="p">():</span>
-            <span class="n">logsigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
-            <span class="n">sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">logsigma</span><span class="p">)</span> <span class="o">+</span> <span class="n">EPSILON</span>
+        <span class="c1"># with ignore_warnings():</span>
+        <span class="n">logsigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">G_</span><span class="p">,</span> <span class="n">basis</span><span class="p">)</span>
+        <span class="n">sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">logsigma</span><span class="p">)</span> <span class="o">+</span> <span class="n">EPSILON</span>
 
         <span class="k">if</span> <span class="n">sigma2</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">1e5</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
@@ -1056,8 +1060,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
         <span class="n">xlim</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_driver_range</span><span class="p">(</span><span class="n">nbcols</span><span class="p">,</span> <span class="n">xlim</span><span class="p">)</span>
-        <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">)</span>
-        <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigdriv_imag</span><span class="p">)</span>
+        <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">)</span>
+        <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">sigdriv_imag</span><span class="p">,</span> <span class="n">accept_none</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># -------- compute spectra</span>
         <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis2spec</span><span class="p">(</span><span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">,</span>
@@ -1078,34 +1082,38 @@
 
         <span class="c1"># full oscillation for derivative</span>
         <span class="n">phase</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">nbcols</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
-        <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
+            <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
+            <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">xlim</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span>
 
     <span class="k">def</span> <span class="nf">_get_sigdriv_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_driver_phase</span><span class="p">:</span>
-            <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">return</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
 
+        <span class="k">if</span> <span class="n">sigdriv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigdriv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigdriv</span>
+        <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigdriv_imag</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">sigdriv</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_weights</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">sigdriv_imag</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_weights</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">95</span><span class="p">])</span>
+            <span class="n">bound_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="o">-</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">bound_min</span><span class="p">,</span> <span class="n">bound_min</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">sigdriv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">sigdriv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigdriv</span>
-            <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigdriv_imag</span>
+            <span class="n">bounds_real</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">sigdriv</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">bounds_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">sigdriv_imag</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="p">(</span><span class="n">bounds_real</span><span class="p">,</span> <span class="n">bounds_imag</span><span class="p">)</span>
 
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">sigdriv</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_weights</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">sigdriv_imag</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">train_weights</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">bounds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">95</span><span class="p">])</span>
-                <span class="n">bound_min</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="o">-</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">squared_abs</span> <span class="o">=</span> <span class="n">sigdriv</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sigdriv_imag</span> <span class="o">**</span> <span class="mi">2</span>
-                <span class="n">bound_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">squared_abs</span><span class="p">))</span>
-
-        <span class="n">bounds</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">bound_min</span><span class="p">,</span> <span class="n">bound_min</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">bounds</span>
 
     <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">frange</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1142,13 +1150,18 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">figure</span>
 
+            <span class="c1"># clean colorbar and image</span>
+            <span class="k">if</span> <span class="n">ax</span><span class="o">.</span><span class="n">images</span> <span class="o">!=</span> <span class="p">[]:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
+
         <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">frange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">frange</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span><span class="n">xlim</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">xlim</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">frange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">frange</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="c1"># -------- plot spectrum</span>
-        <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">compute_vmin_vmax</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">tick</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">compute_vmin_vmax</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">tick</span><span class="o">=.</span><span class="mi">1</span><span class="p">,</span> <span class="n">percentile</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">if</span> <span class="s1">&#39;c&#39;</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
             <span class="n">vmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">vmax</span><span class="p">,</span> <span class="o">-</span><span class="n">vmin</span><span class="p">)</span>
             <span class="n">vmin</span> <span class="o">=</span> <span class="o">-</span><span class="n">vmax</span>
@@ -1221,7 +1234,7 @@
 
                 <span class="n">label</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$\phi_x=</span><span class="si">%s</span><span class="s1">$&#39;</span> <span class="o">%</span> <span class="n">phase_string</span><span class="p">(</span><span class="n">sig_complex</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">label</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$x=</span><span class="si">%.2f</span><span class="s1">$&#39;</span> <span class="o">%</span> <span class="n">sigdriv_imag</span><span class="p">[</span><span class="n">i_amplitude</span><span class="p">]</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;$x=</span><span class="si">%.2f</span><span class="s1">$&#39;</span> <span class="o">%</span> <span class="n">sigdriv</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i_amplitude</span><span class="p">]</span>
 
             <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">frequencies</span><span class="p">,</span> <span class="n">spec</span><span class="p">[:,</span> <span class="n">i_amplitude</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
 

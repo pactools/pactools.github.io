@@ -157,10 +157,14 @@
 
 <span class="kn">from</span> <span class="nn">.utils.fir</span> <span class="k">import</span> <span class="n">BandPassFilter</span>
 <span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_random_state</span>
+<span class="kn">from</span> <span class="nn">.utils.deprecation</span> <span class="k">import</span> <span class="n">ignore_warnings</span>
 
 
+<span class="nd">@ignore_warnings</span><span class="p">(</span><span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">sharpness</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">sharpness</span> <span class="o">*</span> <span class="n">array</span><span class="p">))</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">sharpness</span> <span class="o">*</span> <span class="n">array</span><span class="p">))</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span>
 
 
 <div class="viewcode-block" id="simulate_pac"><a class="viewcode-back" href="../../generated/pactools.simulate_pac.html#pactools.simulate_pac">[docs]</a><span class="k">def</span> <span class="nf">simulate_pac</span><span class="p">(</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="p">,</span> <span class="n">noise_level</span><span class="p">,</span>

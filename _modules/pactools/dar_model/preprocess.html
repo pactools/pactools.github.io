@@ -337,7 +337,13 @@
         <span class="n">fill_sig</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">shape</span>
 
         <span class="c1"># adjust the power of the filling signal and add it to high_sig</span>
-        <span class="n">high_sig</span> <span class="o">=</span> <span class="n">fill_gap</span><span class="p">(</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fa</span><span class="o">=</span><span class="n">fc</span><span class="p">,</span> <span class="n">dfa</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="n">draw</span><span class="p">,</span>
+        <span class="k">if</span> <span class="n">low_pass</span><span class="p">:</span>
+            <span class="n">fa</span> <span class="o">=</span> <span class="n">fc</span> <span class="o">/</span> <span class="mf">2.</span>
+            <span class="n">dfa</span> <span class="o">=</span> <span class="n">fc</span> <span class="o">/</span> <span class="mf">2.</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fa</span> <span class="o">=</span> <span class="n">fc</span>
+            <span class="n">dfa</span> <span class="o">=</span> <span class="n">bandwidth</span>
+        <span class="n">high_sig</span> <span class="o">=</span> <span class="n">fill_gap</span><span class="p">(</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fa</span><span class="o">=</span><span class="n">fa</span><span class="p">,</span> <span class="n">dfa</span><span class="o">=</span><span class="n">dfa</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="n">draw</span><span class="p">,</span>
                             <span class="n">fill_sig</span><span class="o">=</span><span class="n">fill_sig</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="s1">&#39;z&#39;</span> <span class="ow">in</span> <span class="n">draw</span> <span class="ow">or</span> <span class="s1">&#39;e&#39;</span> <span class="ow">in</span> <span class="n">draw</span><span class="p">:</span>
@@ -357,9 +363,9 @@
 
 <span class="k">def</span> <span class="nf">low_pass_and_fill</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
                       <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span> <span class="o">=</span> <span class="n">extract_and_fill</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">low_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                                         <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span>
-                                         <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+    <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span> <span class="o">=</span> <span class="n">extract_and_fill</span><span class="p">(</span>
+        <span class="n">sig</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">low_pass</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span>
+        <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span> <span class="n">extract_complex</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="n">rng</span> <span class="o">=</span> <span class="n">check_random_state</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span>
     <span class="n">random_noise</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="o">*</span><span class="n">sig</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>

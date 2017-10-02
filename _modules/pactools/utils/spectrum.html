@@ -190,6 +190,7 @@
 <span class="sd">        If True, the amplitude is normalized</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Spectrum.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">donorm</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
@@ -266,8 +267,8 @@
             <span class="c1"># iterate on blocks</span>
             <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">while</span> <span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">sig</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-                <span class="n">psd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sig</span><span class="p">[</span><span class="n">block</span><span class="p">],</span> <span class="n">fft_length</span><span class="p">,</span>
-                                        <span class="mi">0</span><span class="p">))[:</span><span class="n">n_freq</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="n">psd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                    <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sig</span><span class="p">[</span><span class="n">block</span><span class="p">],</span> <span class="n">fft_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">))[:</span><span class="n">n_freq</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
                 <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="n">block</span> <span class="o">=</span> <span class="n">block</span> <span class="o">+</span> <span class="n">step</span>
             <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -287,8 +288,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">psd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">psd</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">psd</span>
 
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">fscale</span><span class="o">=</span><span class="s1">&#39;lin&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-             <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">replicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">fscale</span><span class="o">=</span><span class="s1">&#39;lin&#39;</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">replicate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        plots the power spectral density</span>
 <span class="sd">        warning: the plot will only appear after plt.show()</span>
@@ -326,7 +327,7 @@
             <span class="n">replicate</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">if</span> <span class="n">colors</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">colors</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;bgrcmyk&#39;</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)[:</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psd</span><span class="p">)]</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">psd</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -355,10 +356,12 @@
 
         <span class="k">for</span> <span class="n">label_</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">psd</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psd</span><span class="p">):</span>
             <span class="n">psd</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">psd</span><span class="p">,</span> <span class="mf">1.0e-16</span><span class="p">))</span>
+            <span class="n">color_</span> <span class="o">=</span> <span class="n">color</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">replicate</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
                 <span class="n">label</span> <span class="o">=</span> <span class="n">label_</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
-                <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">psd</span><span class="o">.</span><span class="n">T</span><span class="p">[::(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">i</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
-                          <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">freq</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">fmax</span><span class="p">,</span> <span class="n">psd</span><span class="o">.</span><span class="n">T</span><span class="p">[::(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">**</span> <span class="n">i</span><span class="p">],</span>
+                                  <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color_</span><span class="p">)</span>
+                <span class="n">color_</span> <span class="o">=</span> <span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_color</span><span class="p">()</span>
 
         <span class="n">axes</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">axes</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
@@ -403,11 +406,12 @@
 <span class="sd">    donorm : boolean</span>
 <span class="sd">        If True, the amplitude is normalized</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Coherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Coherence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">block_length</span><span class="o">=</span><span class="n">block_length</span><span class="p">,</span>
-                                        <span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
-                                        <span class="n">wfunc</span><span class="o">=</span><span class="n">wfunc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Coherence</span><span class="p">,</span>
+              <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">block_length</span><span class="o">=</span><span class="n">block_length</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span>
+                             <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span> <span class="n">wfunc</span><span class="o">=</span><span class="n">wfunc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">coherence</span> <span class="o">=</span> <span class="kc">None</span></div>
 
@@ -515,12 +519,13 @@
 <span class="sd">    donorm : boolean</span>
 <span class="sd">        If True, the amplitude is normalized</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Bicoherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
 
-        <span class="nb">super</span><span class="p">(</span><span class="n">Bicoherence</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">block_length</span><span class="o">=</span><span class="n">block_length</span><span class="p">,</span>
-                                          <span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span>
-                                          <span class="n">wfunc</span><span class="o">=</span><span class="n">wfunc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span></div>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Bicoherence</span><span class="p">,</span>
+              <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">block_length</span><span class="o">=</span><span class="n">block_length</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span>
+                             <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">,</span> <span class="n">wfunc</span><span class="o">=</span><span class="n">wfunc</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;hagihira&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
