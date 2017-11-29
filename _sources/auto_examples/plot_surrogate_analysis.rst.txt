@@ -73,7 +73,7 @@ Then, let's define the range of low frequency, and the PAC metric used.
 
 
     low_fq_range = np.linspace(1, 10, 50)
-    method = 'duprelatour'  # or 'tort', 'ozkurt', 'penny', 'colgin', ...
+    method = 'duprelatour'  # or 'tort', 'ozkurt', 'penny', 'colgin', ...
 
 
 
@@ -82,7 +82,7 @@ Then, let's define the range of low frequency, and the PAC metric used.
 
 
 We also choose the number of comodulograms computed in the surrogate
- analysis. A good rule of thumb is 10 / p_value. Example: 10 / 0.05 = 200.
+analysis. A good rule of thumb is 10 / p_value. Example: 10 / 0.05 = 200.
 
 
 
@@ -98,8 +98,8 @@ We also choose the number of comodulograms computed in the surrogate
 
 
 As a surrogate analysis recquires to compute many comodulograms, the
- computation can be slow. If you have multiple cores in your CPU, you can
- leverage them using the parameter `n_jobs` > 1.
+computation can be slow. If you have multiple cores in your CPU, you can
+leverage them using the parameter `n_jobs` > 1.
 
 
 
@@ -137,31 +137,31 @@ adding the `n_surrogates` parameter.
 
  Out::
 
-    [                                        ] 0% | 0.00 sec | comodulogram: DAR(10, 1)     [                                        ] 2% | 2.47 sec | comodulogram: DAR(10, 1)     [.                                       ] 4% | 5.03 sec | comodulogram: DAR(10, 1)     [..                                      ] 6% | 7.22 sec | comodulogram: DAR(10, 1)     [...                                     ] 8% | 9.31 sec | comodulogram: DAR(10, 1)     [....                                    ] 10% | 11.40 sec | comodulogram: DAR(10, 1)     [....                                    ] 12% | 13.49 sec | comodulogram: DAR(10, 1)     [.....                                   ] 14% | 15.60 sec | comodulogram: DAR(10, 1)     [......                                  ] 16% | 17.63 sec | comodulogram: DAR(10, 1)     [.......                                 ] 18% | 19.71 sec | comodulogram: DAR(10, 1)     [........                                ] 20% | 21.73 sec | comodulogram: DAR(10, 1)     [........                                ] 22% | 23.75 sec | comodulogram: DAR(10, 1)     [.........                               ] 24% | 25.85 sec | comodulogram: DAR(10, 1)     [..........                              ] 26% | 28.06 sec | comodulogram: DAR(10, 1)     [...........                             ] 28% | 30.31 sec | comodulogram: DAR(10, 1)     [............                            ] 30% | 32.39 sec | comodulogram: DAR(10, 1)     [............                            ] 32% | 34.41 sec | comodulogram: DAR(10, 1)     [.............                           ] 34% | 36.42 sec | comodulogram: DAR(10, 1)     [..............                          ] 36% | 38.70 sec | comodulogram: DAR(10, 1)     [...............                         ] 38% | 40.86 sec | comodulogram: DAR(10, 1)     [................                        ] 40% | 42.89 sec | comodulogram: DAR(10, 1)     [................                        ] 42% | 44.95 sec | comodulogram: DAR(10, 1)     [.................                       ] 44% | 47.00 sec | comodulogram: DAR(10, 1)     [..................                      ] 46% | 49.53 sec | comodulogram: DAR(10, 1)     [...................                     ] 48% | 52.05 sec | comodulogram: DAR(10, 1)     [....................                    ] 50% | 54.54 sec | comodulogram: DAR(10, 1)     [....................                    ] 52% | 56.76 sec | comodulogram: DAR(10, 1)     [.....................                   ] 54% | 58.86 sec | comodulogram: DAR(10, 1)     [......................                  ] 56% | 60.93 sec | comodulogram: DAR(10, 1)     [.......................                 ] 58% | 63.01 sec | comodulogram: DAR(10, 1)     [........................                ] 60% | 65.08 sec | comodulogram: DAR(10, 1)     [........................                ] 62% | 67.14 sec | comodulogram: DAR(10, 1)     [.........................               ] 64% | 69.22 sec | comodulogram: DAR(10, 1)     [..........................              ] 66% | 71.28 sec | comodulogram: DAR(10, 1)     [...........................             ] 68% | 73.34 sec | comodulogram: DAR(10, 1)     [............................            ] 70% | 75.41 sec | comodulogram: DAR(10, 1)     [............................            ] 72% | 77.48 sec | comodulogram: DAR(10, 1)     [.............................           ] 74% | 79.56 sec | comodulogram: DAR(10, 1)     [..............................          ] 76% | 81.62 sec | comodulogram: DAR(10, 1)     [...............................         ] 78% | 83.68 sec | comodulogram: DAR(10, 1)     [................................        ] 80% | 85.75 sec | comodulogram: DAR(10, 1)     [................................        ] 82% | 87.81 sec | comodulogram: DAR(10, 1)     [.................................       ] 84% | 89.90 sec | comodulogram: DAR(10, 1)     [..................................      ] 86% | 91.97 sec | comodulogram: DAR(10, 1)     [...................................     ] 88% | 94.13 sec | comodulogram: DAR(10, 1)     [....................................    ] 90% | 96.23 sec | comodulogram: DAR(10, 1)     [....................................    ] 92% | 98.45 sec | comodulogram: DAR(10, 1)     [.....................................   ] 94% | 100.53 sec | comodulogram: DAR(10, 1)     [......................................  ] 96% | 102.70 sec | comodulogram: DAR(10, 1)     [....................................... ] 98% | 105.04 sec | comodulogram: DAR(10, 1)     [........................................] 100% | 107.64 sec | comodulogram: DAR(10, 1) 
-    [........................................] 100% | 107.64 sec | comodulogram: DAR(10, 1)
+    [                                        ] 0% | 0.00 sec | comodulogram: DAR(10, 1)     [                                        ] 2% | 2.13 sec | comodulogram: DAR(10, 1)     [.                                       ] 4% | 4.18 sec | comodulogram: DAR(10, 1)     [..                                      ] 6% | 6.21 sec | comodulogram: DAR(10, 1)     [...                                     ] 8% | 8.28 sec | comodulogram: DAR(10, 1)     [....                                    ] 10% | 10.33 sec | comodulogram: DAR(10, 1)     [....                                    ] 12% | 12.39 sec | comodulogram: DAR(10, 1)     [.....                                   ] 14% | 14.45 sec | comodulogram: DAR(10, 1)     [......                                  ] 16% | 16.52 sec | comodulogram: DAR(10, 1)     [.......                                 ] 18% | 18.58 sec | comodulogram: DAR(10, 1)     [........                                ] 20% | 20.85 sec | comodulogram: DAR(10, 1)     [........                                ] 22% | 22.98 sec | comodulogram: DAR(10, 1)     [.........                               ] 24% | 25.02 sec | comodulogram: DAR(10, 1)     [..........                              ] 26% | 27.13 sec | comodulogram: DAR(10, 1)     [...........                             ] 28% | 29.23 sec | comodulogram: DAR(10, 1)     [............                            ] 30% | 31.31 sec | comodulogram: DAR(10, 1)     [............                            ] 32% | 33.41 sec | comodulogram: DAR(10, 1)     [.............                           ] 34% | 35.72 sec | comodulogram: DAR(10, 1)     [..............                          ] 36% | 38.31 sec | comodulogram: DAR(10, 1)     [...............                         ] 38% | 40.51 sec | comodulogram: DAR(10, 1)     [................                        ] 40% | 42.55 sec | comodulogram: DAR(10, 1)     [................                        ] 42% | 44.58 sec | comodulogram: DAR(10, 1)     [.................                       ] 44% | 46.72 sec | comodulogram: DAR(10, 1)     [..................                      ] 46% | 48.78 sec | comodulogram: DAR(10, 1)     [...................                     ] 48% | 51.00 sec | comodulogram: DAR(10, 1)     [....................                    ] 50% | 53.27 sec | comodulogram: DAR(10, 1)     [....................                    ] 52% | 55.70 sec | comodulogram: DAR(10, 1)     [.....................                   ] 54% | 58.19 sec | comodulogram: DAR(10, 1)     [......................                  ] 56% | 60.50 sec | comodulogram: DAR(10, 1)     [.......................                 ] 58% | 62.62 sec | comodulogram: DAR(10, 1)     [........................                ] 60% | 64.70 sec | comodulogram: DAR(10, 1)     [........................                ] 62% | 66.79 sec | comodulogram: DAR(10, 1)     [.........................               ] 64% | 69.15 sec | comodulogram: DAR(10, 1)     [..........................              ] 66% | 71.61 sec | comodulogram: DAR(10, 1)     [...........................             ] 68% | 73.92 sec | comodulogram: DAR(10, 1)     [............................            ] 70% | 76.26 sec | comodulogram: DAR(10, 1)     [............................            ] 72% | 78.55 sec | comodulogram: DAR(10, 1)     [.............................           ] 74% | 80.70 sec | comodulogram: DAR(10, 1)     [..............................          ] 76% | 82.75 sec | comodulogram: DAR(10, 1)     [...............................         ] 78% | 84.83 sec | comodulogram: DAR(10, 1)     [................................        ] 80% | 86.93 sec | comodulogram: DAR(10, 1)     [................................        ] 82% | 88.99 sec | comodulogram: DAR(10, 1)     [.................................       ] 84% | 91.33 sec | comodulogram: DAR(10, 1)     [..................................      ] 86% | 93.52 sec | comodulogram: DAR(10, 1)     [...................................     ] 88% | 95.62 sec | comodulogram: DAR(10, 1)     [....................................    ] 90% | 97.65 sec | comodulogram: DAR(10, 1)     [....................................    ] 92% | 99.68 sec | comodulogram: DAR(10, 1)     [.....................................   ] 94% | 101.74 sec | comodulogram: DAR(10, 1)     [......................................  ] 96% | 104.30 sec | comodulogram: DAR(10, 1)     [....................................... ] 98% | 106.60 sec | comodulogram: DAR(10, 1)     [........................................] 100% | 108.69 sec | comodulogram: DAR(10, 1) 
+    [........................................] 100% | 108.69 sec | comodulogram: DAR(10, 1)
 
 
 Then we plot the significance level on top of the comodulogram.
- Here we present two methods.
+Here we present two methods.
 
- The z-score method presented here considers independently each pair of
- frequency of the comodulogram. For each pair, we compute the mean `mu` and
- standard deviation `sigma` of the PAC values computed over the surrogates
- signals. We then transform the original PAC values `PAC` (non time-shifted)
- into z-scores `Z`: Z = (PAC - mu) / sigma
+The z-score method presented here considers independently each pair of
+frequency of the comodulogram. For each pair, we compute the mean `mu` and
+standard deviation `sigma` of the PAC values computed over the surrogates
+signals. We then transform the original PAC values `PAC` (non time-shifted)
+into z-scores `Z`: Z = (PAC - mu) / sigma
 
- This procedure, used for example in [Canolty et al, 2006], suffers from
- multiple-testing issues, and also assumes that the distribution of PAC values
- is Gaussian.
+This procedure, used for example in [Canolty et al, 2006], suffers from
+multiple-testing issues, and also assumes that the distribution of PAC values
+is Gaussian.
 
 
- The other method presented here considers the ditribution of comodulogram
- maxima. For each surrogate comodulogram, we compute the maximum PAC value.
- From the obtained empirical distribution of maxima, we compute the
- 95-percentile, which corresponds to a p-value of 0.05.
+The other method presented here considers the ditribution of comodulogram
+maxima. For each surrogate comodulogram, we compute the maximum PAC value.
+From the obtained empirical distribution of maxima, we compute the
+95-percentile, which corresponds to a p-value of 0.05.
 
- This method does not assume the distribution to be Gaussian, nor suffers from
- multiple-testing issues. This is the default method in the `plot` method.
+This method does not assume the distribution to be Gaussian, nor suffers from
+multiple-testing issues. This is the default method in the `plot` method.
 
 
 
@@ -200,7 +200,7 @@ phase-locked to theta oscillations in human neocortex. science,
 313(5793), 1626-1628.
 
 
-**Total running time of the script:** ( 1 minutes  48.148 seconds)
+**Total running time of the script:** ( 1 minutes  49.210 seconds)
 
 
 

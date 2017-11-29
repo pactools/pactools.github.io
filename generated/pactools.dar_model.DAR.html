@@ -165,7 +165,7 @@
 <h1>pactools.dar_model.DAR<a class="headerlink" href="#pactools-dar-model-dar" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pactools.dar_model.DAR">
-<em class="property">class </em><code class="descclassname">pactools.dar_model.</code><code class="descname">DAR</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/dar.html#DAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.DAR" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pactools.dar_model.</code><code class="descname">DAR</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em>, <em>max_ordar=None</em>, <em>warn_gain_estimation_failure=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/dar.html#DAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.DAR" title="Permalink to this definition">¶</a></dt>
 <dd><p>A driven auto-regressive (DAR) model, as described in [1].</p>
 <p>This model uses the simple parametrization:</p>
 <div class="math">
@@ -226,7 +226,7 @@ V., Grenier, Y., &amp; Gramfort, A. (2017). Non-linear Auto-Regressive Models
 for Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
 <dl class="method">
 <dt id="pactools.dar_model.DAR.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.DAR.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em>, <em>max_ordar=None</em>, <em>warn_gain_estimation_failure=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.DAR.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
