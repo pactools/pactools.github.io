@@ -1,0 +1,187 @@
+
+
+.. _sphx_glr_auto_examples_plot_spurious_pac.py:
+
+
+Spurious PAC with spikes
+------------------------
+
+This example demonstrates how a spike train can generate a significant amount
+of phase-amplitude coupling (PAC), even though there is no nested oscillations.
+This phenomenon is usually referred as spurious PAC.
+
+References
+==========
+Dupre la Tour et al. (2017). Non-linear Auto-Regressive Models for
+Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.
+
+
+
+.. code-block:: python
+
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy.signal
+
+    from pactools import Comodulogram, REFERENCES
+    from pactools.utils.pink_noise import pink_noise
+    from pactools.utils.validation import check_random_state
+
+
+    def simulate_spurious_pac(n_points, fs, spike_amp=1.5, spike_fwhm=0.01,
+                              spike_fq=10., spike_interval_jitter=0.2,
+                              random_state=None):
+        """Simulate some spurious phase-amplitude coupling (PAC) with spikes
+
+        References
+        ----------
+        Gerber, E. M., Sadeh, B., Ward, A., Knight, R. T., & Deouell, L. Y. (2016).
+        Non-sinusoidal activity can produce cross-frequency coupling in cortical
+        signals in the absence of functional interaction between neural sources.
+        PloS one, 11(12), e0167351
+        """
+        n_points = int(n_points)
+        fs = float(fs)
+        rng = check_random_state(random_state)
+
+        # draw the position of the spikes
+        interval_min = 1. / float(spike_fq) * (1. - spike_interval_jitter)
+        interval_max = 1. / float(spike_fq) * (1. + spike_interval_jitter)
+        n_spikes_max = np.int(n_points / fs / interval_min)
+        spike_intervals = rng.uniform(low=interval_min, high=interval_max,
+                                      size=n_spikes_max)
+        spike_positions = np.cumsum(np.int_(spike_intervals * fs))
+        spike_positions = spike_positions[spike_positions < n_points]
+
+        # build the spike time series, using a convolution
+        spikes = np.zeros(n_points)
+        spikes[spike_positions] = spike_amp
+        # full width at half maximum to standard deviation convertion
+        spike_std = spike_fwhm / (2 * np.sqrt(2 * np.log(2)))
+        spike_shape = scipy.signal.gaussian(M=np.int(spike_std * fs * 10),
+                                            std=spike_std * fs)
+        spikes = scipy.signal.fftconvolve(spikes, spike_shape, mode='same')
+
+        noise = pink_noise(n_points, slope=1.)
+
+        return spikes + noise, spikes
+
+
+
+
+
+
+
+
+Let's generate the spurious PAC signal
+
+
+
+.. code-block:: python
+
+    fs = 1000.  # Hz
+    n_points = 60000
+    spike_amp = 1.5
+    random_state = 0
+
+    # generate the signal
+    signal, spikes = simulate_spurious_pac(
+        n_points=n_points, fs=fs, random_state=random_state, spike_amp=spike_amp)
+
+    # plot the signal and the spikes
+    n_points_plot = np.int(1. * fs)
+    time = np.arange(n_points_plot) / fs
+    fig, axs = plt.subplots(nrows=2, figsize=(10, 6), sharex=True)
+    axs[0].plot(time, signal[:n_points_plot], color='C0')
+    axs[0].set(title='spikes + pink noise')
+    axs[1].plot(time, spikes[:n_points_plot], color='C1')
+    axs[1].set(xlabel='Time (sec)', title='spikes')
+    plt.show()
+
+
+
+
+.. image:: /auto_examples/images/sphx_glr_plot_spurious_pac_001.png
+    :align: center
+
+
+
+
+Compute the comodulograms
+
+
+
+.. code-block:: python
+
+
+    methods = ['ozkurt', 'penny', 'tort', 'duprelatour']
+    low_fq_range = np.linspace(1., 20., 60)
+    high_fq_range = np.linspace(low_fq_range[-1], 100., 60)
+    low_fq_width = 4.  # Hz
+
+    # A good rule of thumb is n_surrogates = 10 / p_value. Example: 10 / 0.05 = 200
+    # Here we use 10 to be fast
+    n_surrogates = 10
+    p_value = 0.05
+    n_jobs = 11
+
+    # prepare the plot axes
+    n_lines = 1
+    n_columns = int(np.ceil(len(methods) / float(n_lines)))
+    figsize = (4 * n_columns, 3 * n_lines)
+    fig, axs = plt.subplots(nrows=n_lines, ncols=n_columns, figsize=figsize)
+    axs = axs.ravel()
+
+    for ax, method in zip(axs, methods):
+        # compute the comodulograms
+        estimator = Comodulogram(fs=fs, low_fq_range=low_fq_range,
+                                 high_fq_range=high_fq_range,
+                                 low_fq_width=low_fq_width, method=method,
+                                 n_surrogates=n_surrogates, n_jobs=n_jobs)
+        estimator.fit(signal)
+
+        # plot the comodulogram with contour levels
+        estimator.plot(contour_method='comod_max', contour_level=p_value, axs=[ax],
+                       titles=[REFERENCES[method]])
+
+    fig.tight_layout()
+    plt.show()
+
+
+
+.. image:: /auto_examples/images/sphx_glr_plot_spurious_pac_002.png
+    :align: center
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [                                        ] 0% | 0.00 sec | comodulogram: ozkurt     [                                        ] 2% | 5.90 sec | comodulogram: ozkurt     [.                                       ] 3% | 6.26 sec | comodulogram: ozkurt     [..                                      ] 5% | 6.58 sec | comodulogram: ozkurt     [..                                      ] 7% | 6.89 sec | comodulogram: ozkurt     [...                                     ] 8% | 7.17 sec | comodulogram: ozkurt     [....                                    ] 10% | 7.49 sec | comodulogram: ozkurt     [....                                    ] 12% | 7.82 sec | comodulogram: ozkurt     [.....                                   ] 13% | 8.17 sec | comodulogram: ozkurt     [......                                  ] 15% | 8.47 sec | comodulogram: ozkurt     [......                                  ] 17% | 8.81 sec | comodulogram: ozkurt     [.......                                 ] 18% | 9.11 sec | comodulogram: ozkurt     [........                                ] 20% | 9.42 sec | comodulogram: ozkurt     [........                                ] 22% | 9.71 sec | comodulogram: ozkurt     [.........                               ] 23% | 10.01 sec | comodulogram: ozkurt     [..........                              ] 25% | 10.32 sec | comodulogram: ozkurt     [..........                              ] 27% | 10.60 sec | comodulogram: ozkurt     [...........                             ] 28% | 10.93 sec | comodulogram: ozkurt     [............                            ] 30% | 11.22 sec | comodulogram: ozkurt     [............                            ] 32% | 11.52 sec | comodulogram: ozkurt     [.............                           ] 33% | 11.81 sec | comodulogram: ozkurt     [..............                          ] 35% | 12.09 sec | comodulogram: ozkurt     [..............                          ] 37% | 12.39 sec | comodulogram: ozkurt     [...............                         ] 38% | 12.67 sec | comodulogram: ozkurt     [................                        ] 40% | 12.98 sec | comodulogram: ozkurt     [................                        ] 42% | 13.22 sec | comodulogram: ozkurt     [.................                       ] 43% | 13.49 sec | comodulogram: ozkurt     [..................                      ] 45% | 13.79 sec | comodulogram: ozkurt     [..................                      ] 47% | 14.11 sec | comodulogram: ozkurt     [...................                     ] 48% | 14.37 sec | comodulogram: ozkurt     [....................                    ] 50% | 14.66 sec | comodulogram: ozkurt     [....................                    ] 52% | 14.94 sec | comodulogram: ozkurt     [.....................                   ] 53% | 15.23 sec | comodulogram: ozkurt     [......................                  ] 55% | 15.53 sec | comodulogram: ozkurt     [......................                  ] 57% | 15.82 sec | comodulogram: ozkurt     [.......................                 ] 58% | 16.11 sec | comodulogram: ozkurt     [........................                ] 60% | 16.43 sec | comodulogram: ozkurt     [........................                ] 62% | 16.72 sec | comodulogram: ozkurt     [.........................               ] 63% | 17.02 sec | comodulogram: ozkurt     [..........................              ] 65% | 17.35 sec | comodulogram: ozkurt     [..........................              ] 67% | 17.62 sec | comodulogram: ozkurt     [...........................             ] 68% | 17.91 sec | comodulogram: ozkurt     [............................            ] 70% | 18.24 sec | comodulogram: ozkurt     [............................            ] 72% | 18.51 sec | comodulogram: ozkurt     [.............................           ] 73% | 18.80 sec | comodulogram: ozkurt     [..............................          ] 75% | 19.13 sec | comodulogram: ozkurt     [..............................          ] 77% | 19.46 sec | comodulogram: ozkurt     [...............................         ] 78% | 19.75 sec | comodulogram: ozkurt     [................................        ] 80% | 20.04 sec | comodulogram: ozkurt     [................................        ] 82% | 20.37 sec | comodulogram: ozkurt     [.................................       ] 83% | 20.73 sec | comodulogram: ozkurt     [..................................      ] 85% | 21.00 sec | comodulogram: ozkurt     [..................................      ] 87% | 21.31 sec | comodulogram: ozkurt     [...................................     ] 88% | 21.62 sec | comodulogram: ozkurt     [....................................    ] 90% | 21.90 sec | comodulogram: ozkurt     [....................................    ] 92% | 22.20 sec | comodulogram: ozkurt     [.....................................   ] 93% | 22.50 sec | comodulogram: ozkurt     [......................................  ] 95% | 22.82 sec | comodulogram: ozkurt     [......................................  ] 97% | 23.12 sec | comodulogram: ozkurt     [....................................... ] 98% | 23.40 sec | comodulogram: ozkurt     [........................................] 100% | 23.68 sec | comodulogram: ozkurt 
+    [                                        ] 0% | 0.00 sec | comodulogram: penny     [                                        ] 2% | 2.83 sec | comodulogram: penny     [.                                       ] 3% | 4.93 sec | comodulogram: penny     [..                                      ] 5% | 7.20 sec | comodulogram: penny     [..                                      ] 7% | 9.89 sec | comodulogram: penny     [...                                     ] 8% | 12.52 sec | comodulogram: penny     [....                                    ] 10% | 14.96 sec | comodulogram: penny     [....                                    ] 12% | 17.35 sec | comodulogram: penny     [.....                                   ] 13% | 19.54 sec | comodulogram: penny     [......                                  ] 15% | 21.74 sec | comodulogram: penny     [......                                  ] 17% | 24.09 sec | comodulogram: penny     [.......                                 ] 18% | 26.60 sec | comodulogram: penny     [........                                ] 20% | 29.16 sec | comodulogram: penny     [........                                ] 22% | 31.14 sec | comodulogram: penny     [.........                               ] 23% | 33.17 sec | comodulogram: penny     [..........                              ] 25% | 35.44 sec | comodulogram: penny     [..........                              ] 27% | 37.76 sec | comodulogram: penny     [...........                             ] 28% | 40.52 sec | comodulogram: penny     [............                            ] 30% | 43.14 sec | comodulogram: penny     [............                            ] 32% | 45.81 sec | comodulogram: penny     [.............                           ] 33% | 48.30 sec | comodulogram: penny     [..............                          ] 35% | 50.66 sec | comodulogram: penny     [..............                          ] 37% | 53.06 sec | comodulogram: penny     [...............                         ] 38% | 55.34 sec | comodulogram: penny     [................                        ] 40% | 57.10 sec | comodulogram: penny     [................                        ] 42% | 59.43 sec | comodulogram: penny     [.................                       ] 43% | 61.79 sec | comodulogram: penny     [..................                      ] 45% | 64.31 sec | comodulogram: penny     [..................                      ] 47% | 66.51 sec | comodulogram: penny     [...................                     ] 48% | 68.79 sec | comodulogram: penny     [....................                    ] 50% | 71.19 sec | comodulogram: penny     [....................                    ] 52% | 73.94 sec | comodulogram: penny     [.....................                   ] 53% | 76.07 sec | comodulogram: penny     [......................                  ] 55% | 78.56 sec | comodulogram: penny     [......................                  ] 57% | 80.80 sec | comodulogram: penny     [.......................                 ] 58% | 83.20 sec | comodulogram: penny     [........................                ] 60% | 85.66 sec | comodulogram: penny     [........................                ] 62% | 87.69 sec | comodulogram: penny     [.........................               ] 63% | 90.21 sec | comodulogram: penny     [..........................              ] 65% | 92.29 sec | comodulogram: penny     [..........................              ] 67% | 94.63 sec | comodulogram: penny     [...........................             ] 68% | 96.88 sec | comodulogram: penny     [............................            ] 70% | 99.01 sec | comodulogram: penny     [............................            ] 72% | 101.63 sec | comodulogram: penny     [.............................           ] 73% | 103.83 sec | comodulogram: penny     [..............................          ] 75% | 105.09 sec | comodulogram: penny     [..............................          ] 77% | 107.27 sec | comodulogram: penny     [...............................         ] 78% | 110.02 sec | comodulogram: penny     [................................        ] 80% | 112.08 sec | comodulogram: penny     [................................        ] 82% | 114.58 sec | comodulogram: penny     [.................................       ] 83% | 117.24 sec | comodulogram: penny     [..................................      ] 85% | 119.63 sec | comodulogram: penny     [..................................      ] 87% | 122.22 sec | comodulogram: penny     [...................................     ] 88% | 124.56 sec | comodulogram: penny     [....................................    ] 90% | 127.27 sec | comodulogram: penny     [....................................    ] 92% | 129.72 sec | comodulogram: penny     [.....................................   ] 93% | 132.60 sec | comodulogram: penny     [......................................  ] 95% | 135.14 sec | comodulogram: penny     [......................................  ] 97% | 137.33 sec | comodulogram: penny     [....................................... ] 98% | 139.78 sec | comodulogram: penny     [........................................] 100% | 142.11 sec | comodulogram: penny 
+    [                                        ] 0% | 0.00 sec | comodulogram: tort     [                                        ] 2% | 2.03 sec | comodulogram: tort     [.                                       ] 3% | 2.49 sec | comodulogram: tort     [..                                      ] 5% | 2.97 sec | comodulogram: tort     [..                                      ] 7% | 3.39 sec | comodulogram: tort     [...                                     ] 8% | 3.92 sec | comodulogram: tort     [....                                    ] 10% | 4.46 sec | comodulogram: tort     [....                                    ] 12% | 4.95 sec | comodulogram: tort     [.....                                   ] 13% | 5.40 sec | comodulogram: tort     [......                                  ] 15% | 5.86 sec | comodulogram: tort     [......                                  ] 17% | 6.34 sec | comodulogram: tort     [.......                                 ] 18% | 6.79 sec | comodulogram: tort     [........                                ] 20% | 7.23 sec | comodulogram: tort     [........                                ] 22% | 7.74 sec | comodulogram: tort     [.........                               ] 23% | 8.21 sec | comodulogram: tort     [..........                              ] 25% | 8.71 sec | comodulogram: tort     [..........                              ] 27% | 9.16 sec | comodulogram: tort     [...........                             ] 28% | 9.61 sec | comodulogram: tort     [............                            ] 30% | 10.12 sec | comodulogram: tort     [............                            ] 32% | 10.59 sec | comodulogram: tort     [.............                           ] 33% | 11.11 sec | comodulogram: tort     [..............                          ] 35% | 11.57 sec | comodulogram: tort     [..............                          ] 37% | 12.00 sec | comodulogram: tort     [...............                         ] 38% | 12.48 sec | comodulogram: tort     [................                        ] 40% | 12.95 sec | comodulogram: tort     [................                        ] 42% | 13.44 sec | comodulogram: tort     [.................                       ] 43% | 13.86 sec | comodulogram: tort     [..................                      ] 45% | 14.34 sec | comodulogram: tort     [..................                      ] 47% | 14.83 sec | comodulogram: tort     [...................                     ] 48% | 15.30 sec | comodulogram: tort     [....................                    ] 50% | 15.84 sec | comodulogram: tort     [....................                    ] 52% | 16.28 sec | comodulogram: tort     [.....................                   ] 53% | 16.76 sec | comodulogram: tort     [......................                  ] 55% | 17.29 sec | comodulogram: tort     [......................                  ] 57% | 17.77 sec | comodulogram: tort     [.......................                 ] 58% | 18.32 sec | comodulogram: tort     [........................                ] 60% | 18.88 sec | comodulogram: tort     [........................                ] 62% | 19.33 sec | comodulogram: tort     [.........................               ] 63% | 19.82 sec | comodulogram: tort     [..........................              ] 65% | 20.27 sec | comodulogram: tort     [..........................              ] 67% | 20.77 sec | comodulogram: tort     [...........................             ] 68% | 21.31 sec | comodulogram: tort     [............................            ] 70% | 21.77 sec | comodulogram: tort     [............................            ] 72% | 22.27 sec | comodulogram: tort     [.............................           ] 73% | 22.77 sec | comodulogram: tort     [..............................          ] 75% | 23.25 sec | comodulogram: tort     [..............................          ] 77% | 23.84 sec | comodulogram: tort     [...............................         ] 78% | 24.35 sec | comodulogram: tort     [................................        ] 80% | 24.84 sec | comodulogram: tort     [................................        ] 82% | 25.30 sec | comodulogram: tort     [.................................       ] 83% | 25.78 sec | comodulogram: tort     [..................................      ] 85% | 26.36 sec | comodulogram: tort     [..................................      ] 87% | 26.93 sec | comodulogram: tort     [...................................     ] 88% | 27.48 sec | comodulogram: tort     [....................................    ] 90% | 27.98 sec | comodulogram: tort     [....................................    ] 92% | 28.46 sec | comodulogram: tort     [.....................................   ] 93% | 28.95 sec | comodulogram: tort     [......................................  ] 95% | 29.46 sec | comodulogram: tort     [......................................  ] 97% | 29.95 sec | comodulogram: tort     [....................................... ] 98% | 30.43 sec | comodulogram: tort     [........................................] 100% | 30.91 sec | comodulogram: tort 
+    [                                        ] 0% | 0.00 sec | comodulogram: DAR(10, 1)     [                                        ] 2% | 0.11 sec | comodulogram: DAR(10, 1)     [.                                       ] 3% | 0.12 sec | comodulogram: DAR(10, 1)     [..                                      ] 5% | 0.16 sec | comodulogram: DAR(10, 1)     [..                                      ] 7% | 0.18 sec | comodulogram: DAR(10, 1)     [...                                     ] 8% | 0.22 sec | comodulogram: DAR(10, 1)     [....                                    ] 10% | 0.27 sec | comodulogram: DAR(10, 1)     [....                                    ] 12% | 0.37 sec | comodulogram: DAR(10, 1)     [.....                                   ] 13% | 0.45 sec | comodulogram: DAR(10, 1)     [......                                  ] 15% | 0.57 sec | comodulogram: DAR(10, 1)     [......                                  ] 17% | 0.69 sec | comodulogram: DAR(10, 1)     [.......                                 ] 18% | 0.80 sec | comodulogram: DAR(10, 1)     [........                                ] 20% | 1.02 sec | comodulogram: DAR(10, 1)     [........                                ] 22% | 1.18 sec | comodulogram: DAR(10, 1)     [.........                               ] 23% | 1.32 sec | comodulogram: DAR(10, 1)     [..........                              ] 25% | 1.43 sec | comodulogram: DAR(10, 1)     [..........                              ] 27% | 1.60 sec | comodulogram: DAR(10, 1)     [...........                             ] 28% | 1.82 sec | comodulogram: DAR(10, 1)     [............                            ] 30% | 1.94 sec | comodulogram: DAR(10, 1)     [............                            ] 32% | 2.03 sec | comodulogram: DAR(10, 1)     [.............                           ] 33% | 2.07 sec | comodulogram: DAR(10, 1)     [..............                          ] 35% | 2.11 sec | comodulogram: DAR(10, 1)     [..............                          ] 37% | 3.63 sec | comodulogram: DAR(10, 1)     [...............                         ] 38% | 3.75 sec | comodulogram: DAR(10, 1)     [................                        ] 40% | 4.24 sec | comodulogram: DAR(10, 1)     [................                        ] 42% | 4.47 sec | comodulogram: DAR(10, 1)     [.................                       ] 43% | 4.86 sec | comodulogram: DAR(10, 1)     [..................                      ] 45% | 5.72 sec | comodulogram: DAR(10, 1)     [..................                      ] 47% | 5.87 sec | comodulogram: DAR(10, 1)     [...................                     ] 48% | 6.12 sec | comodulogram: DAR(10, 1)     [....................                    ] 50% | 6.26 sec | comodulogram: DAR(10, 1)     [....................                    ] 52% | 6.77 sec | comodulogram: DAR(10, 1)     [.....................                   ] 53% | 6.94 sec | comodulogram: DAR(10, 1)     [......................                  ] 55% | 7.19 sec | comodulogram: DAR(10, 1)     [......................                  ] 57% | 8.38 sec | comodulogram: DAR(10, 1)     [.......................                 ] 58% | 9.05 sec | comodulogram: DAR(10, 1)     [........................                ] 60% | 9.80 sec | comodulogram: DAR(10, 1)     [........................                ] 62% | 10.07 sec | comodulogram: DAR(10, 1)     [.........................               ] 63% | 10.29 sec | comodulogram: DAR(10, 1)     [..........................              ] 65% | 10.37 sec | comodulogram: DAR(10, 1)     [..........................              ] 67% | 11.05 sec | comodulogram: DAR(10, 1)     [...........................             ] 68% | 12.00 sec | comodulogram: DAR(10, 1)     [............................            ] 70% | 12.07 sec | comodulogram: DAR(10, 1)     [............................            ] 72% | 12.36 sec | comodulogram: DAR(10, 1)     [.............................           ] 73% | 12.45 sec | comodulogram: DAR(10, 1)     [..............................          ] 75% | 13.10 sec | comodulogram: DAR(10, 1)     [..............................          ] 77% | 13.27 sec | comodulogram: DAR(10, 1)     [...............................         ] 78% | 13.64 sec | comodulogram: DAR(10, 1)     [................................        ] 80% | 14.67 sec | comodulogram: DAR(10, 1)     [................................        ] 82% | 14.84 sec | comodulogram: DAR(10, 1)     [.................................       ] 83% | 15.10 sec | comodulogram: DAR(10, 1)     [..................................      ] 85% | 15.68 sec | comodulogram: DAR(10, 1)     [..................................      ] 87% | 15.76 sec | comodulogram: DAR(10, 1)     [...................................     ] 88% | 16.75 sec | comodulogram: DAR(10, 1)     [....................................    ] 90% | 17.28 sec | comodulogram: DAR(10, 1)     [....................................    ] 92% | 17.90 sec | comodulogram: DAR(10, 1)     [.....................................   ] 93% | 18.01 sec | comodulogram: DAR(10, 1)     [......................................  ] 95% | 18.15 sec | comodulogram: DAR(10, 1)     [......................................  ] 97% | 18.90 sec | comodulogram: DAR(10, 1)     [....................................... ] 98% | 19.20 sec | comodulogram: DAR(10, 1)     [........................................] 100% | 20.01 sec | comodulogram: DAR(10, 1) 
+    [........................................] 100% | 27.35 sec | comodulogram: DAR(10, 1)
+
+
+**Total running time of the script:** ( 3 minutes  46.158 seconds)
+
+
+
+.. container:: sphx-glr-footer
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Python source code: plot_spurious_pac.py <plot_spurious_pac.py>`
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Jupyter notebook: plot_spurious_pac.ipynb <plot_spurious_pac.ipynb>`
+
+.. rst-class:: sphx-glr-signature
+
+    `Generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_
