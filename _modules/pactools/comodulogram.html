@@ -160,8 +160,6 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">interp1d</span><span class="p">,</span> <span class="n">interp2d</span>
 
-<span class="kn">from</span> <span class="nn">mne.externals.h5io</span> <span class="k">import</span> <span class="n">write_hdf5</span><span class="p">,</span> <span class="n">read_hdf5</span>
-
 <span class="kn">from</span> <span class="nn">.dar_model.base_dar</span> <span class="k">import</span> <span class="n">BaseDAR</span>
 <span class="kn">from</span> <span class="nn">.dar_model.dar</span> <span class="k">import</span> <span class="n">DAR</span>
 <span class="kn">from</span> <span class="nn">.dar_model.preprocess</span> <span class="k">import</span> <span class="n">multiple_extract_driver</span>
@@ -173,7 +171,7 @@
 <span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_consistent_shape</span><span class="p">,</span> <span class="n">check_is_fitted</span>
 <span class="kn">from</span> <span class="nn">.utils.viz</span> <span class="k">import</span> <span class="n">add_colorbar</span>
 <span class="kn">from</span> <span class="nn">.bandpass_filter</span> <span class="k">import</span> <span class="n">multiple_band_pass</span>
-<span class="kn">from</span> <span class="nn">.mne_api</span> <span class="k">import</span> <span class="n">MaskIterator</span>
+<span class="kn">from</span> <span class="nn">.mne_api</span> <span class="k">import</span> <span class="n">MaskIterator</span><span class="p">,</span> <span class="n">_check_mne</span>
 
 <span class="n">N_BINS_TORT</span> <span class="o">=</span> <span class="mi">18</span>
 
@@ -715,6 +713,27 @@
             <span class="k">return</span> <span class="n">low_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">high_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_pac_value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save a comodulogram object on disk with h5py.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        fname : string</span>
+<span class="sd">            Filename to use.</span>
+<span class="sd">        overwrite : boolean</span>
+<span class="sd">            If True, overwrite file if it exists.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from pactools.comodulogram import Comodulgram, read_comodulogram</span>
+<span class="sd">        &gt;&gt;&gt; est = Comodulogram(fs=1000., low_fq_range=[1, 2, 3])</span>
+<span class="sd">        &gt;&gt;&gt; fname = &#39;/my_filename.hdf5&#39;</span>
+<span class="sd">        &gt;&gt;&gt; est.save(fname)</span>
+<span class="sd">        &gt;&gt;&gt; est2 = read_comodulogram(fname)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mne</span> <span class="o">=</span> <span class="n">_check_mne</span><span class="p">(</span><span class="s1">&#39;Comodulogram.save&#39;</span><span class="p">)</span>
+        <span class="n">write_hdf5</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">externals</span><span class="o">.</span><span class="n">h5io</span><span class="o">.</span><span class="n">write_hdf5</span>
+
         <span class="n">save_vars</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="k">if</span> <span class="s1">&#39;random_state&#39;</span> <span class="ow">in</span> <span class="n">save_vars</span><span class="p">:</span>
             <span class="n">rs</span> <span class="o">=</span> <span class="n">save_vars</span><span class="p">[</span><span class="s1">&#39;random_state&#39;</span><span class="p">]</span>
@@ -1228,6 +1247,9 @@
 
 
 <span class="k">def</span> <span class="nf">read_comodulogram</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+    <span class="n">mne</span> <span class="o">=</span> <span class="n">_check_mne</span><span class="p">(</span><span class="s1">&#39;read_comodulogram&#39;</span><span class="p">)</span>
+    <span class="n">read_hdf5</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">externals</span><span class="o">.</span><span class="n">h5io</span><span class="o">.</span><span class="n">read_hdf5</span>
+
     <span class="n">data</span> <span class="o">=</span> <span class="n">read_hdf5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;comodulogram&#39;</span><span class="p">,</span> <span class="n">slash</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
     <span class="n">init_params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)}</span>
     <span class="k">if</span> <span class="s1">&#39;random_state&#39;</span> <span class="ow">in</span> <span class="n">init_params</span><span class="p">:</span>
