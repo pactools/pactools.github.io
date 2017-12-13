@@ -160,6 +160,8 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">interp1d</span><span class="p">,</span> <span class="n">interp2d</span>
 
+<span class="kn">from</span> <span class="nn">mne.externals.h5io</span> <span class="k">import</span> <span class="n">write_hdf5</span><span class="p">,</span> <span class="n">read_hdf5</span>
+
 <span class="kn">from</span> <span class="nn">.dar_model.base_dar</span> <span class="k">import</span> <span class="n">BaseDAR</span>
 <span class="kn">from</span> <span class="nn">.dar_model.dar</span> <span class="k">import</span> <span class="n">DAR</span>
 <span class="kn">from</span> <span class="nn">.dar_model.preprocess</span> <span class="k">import</span> <span class="n">multiple_extract_driver</span>
@@ -710,7 +712,17 @@
         <span class="k">if</span> <span class="n">return_array</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">high_fq</span><span class="p">,</span> <span class="n">max_pac_value</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">low_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">high_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_pac_value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+            <span class="k">return</span> <span class="n">low_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">high_fq</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">max_pac_value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">save_vars</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="k">if</span> <span class="s1">&#39;random_state&#39;</span> <span class="ow">in</span> <span class="n">save_vars</span><span class="p">:</span>
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">save_vars</span><span class="p">[</span><span class="s1">&#39;random_state&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">:</span>
+                <span class="n">save_vars</span><span class="p">[</span><span class="s1">&#39;random_state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mtrand&#39;</span>
+                <span class="n">save_vars</span><span class="p">[</span><span class="s1">&#39;random_state_state_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
+        <span class="n">write_hdf5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">save_vars</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;comodulogram&#39;</span><span class="p">,</span>
+                   <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">slash</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_comodulogram</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">filtered_low</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
@@ -1213,6 +1225,24 @@
     <span class="n">shifts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">return</span> <span class="n">shifts</span>
+
+
+<span class="k">def</span> <span class="nf">read_comodulogram</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">read_hdf5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;comodulogram&#39;</span><span class="p">,</span> <span class="n">slash</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span>
+    <span class="n">init_params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)}</span>
+    <span class="k">if</span> <span class="s1">&#39;random_state&#39;</span> <span class="ow">in</span> <span class="n">init_params</span><span class="p">:</span>
+        <span class="n">rs</span> <span class="o">=</span> <span class="n">init_params</span><span class="p">[</span><span class="s1">&#39;random_state&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">rs</span> <span class="o">==</span> <span class="s1">&#39;mtrand&#39;</span><span class="p">:</span>
+            <span class="n">rs_state</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;random_state_state_&#39;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;random_state_state_&#39;</span><span class="p">]</span>
+            <span class="n">rs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">()</span>
+            <span class="n">rs</span><span class="o">.</span><span class="n">set_state</span><span class="p">(</span><span class="n">rs_state</span><span class="p">)</span>
+            <span class="n">init_params</span><span class="p">[</span><span class="s1">&#39;random_state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span>
+    <span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)}</span>
+    <span class="n">inst</span> <span class="o">=</span> <span class="n">Comodulogram</span><span class="p">(</span><span class="o">**</span><span class="n">init_params</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">inst</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">inst</span>
 </pre></div>
 
            </div>
