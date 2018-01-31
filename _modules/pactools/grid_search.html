@@ -1,0 +1,728 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pactools.grid_search &mdash; pactools 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pactools 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pactools
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started with pactools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../auto_examples/index.html">Gallery of Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Documentation</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pactools/pactools">Fork pactools on Github</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pactools</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pactools.grid_search</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pactools.grid_search</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">sklearn.base</span> <span class="k">import</span> <span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span>
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="k">import</span> <span class="n">model_selection</span>
+
+<span class="kn">from</span> <span class="nn">.dar_model</span> <span class="k">import</span> <span class="n">DAR</span><span class="p">,</span> <span class="n">extract_driver</span>
+<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_is_fitted</span>
+<span class="kn">from</span> <span class="nn">.utils.progress_bar</span> <span class="k">import</span> <span class="n">ProgressBar</span>
+<span class="kn">from</span> <span class="nn">.utils.parallel</span> <span class="k">import</span> <span class="n">Parallel</span>
+
+
+<div class="viewcode-block" id="DARSklearn"><a class="viewcode-back" href="../../generated/pactools.DARSklearn.html#pactools.DARSklearn">[docs]</a><span class="k">class</span> <span class="nc">DARSklearn</span><span class="p">(</span><span class="n">DAR</span><span class="p">,</span> <span class="n">BaseEstimator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Different interface to DAR models, to use in scikit-learn&#39;s GridSearchCV</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fs : float</span>
+<span class="sd">        Sampling frequency</span>
+
+<span class="sd">    max_ordar : int &gt;= 0</span>
+<span class="sd">        Maximum ordar over a potential cross-validation scheme.</span>
+<span class="sd">        The log-likelihood does not use the first max_ordar points in its</span>
+<span class="sd">        computation, to fairly compare different ordar over cross-validation.</span>
+
+<span class="sd">    ordar : int &gt;= 0</span>
+<span class="sd">        Order of the autoregressive model (p)</span>
+
+<span class="sd">    ordriv : int &gt;= 0</span>
+<span class="sd">        Order of the taylor expansion for sigdriv (m)</span>
+
+<span class="sd">    normalize : boolean</span>
+<span class="sd">        If True, the basis vectors are normalized to unit energy.</span>
+
+<span class="sd">    ortho : boolean</span>
+<span class="sd">        If True, the basis vectors are orthogonalized.</span>
+
+<span class="sd">    center : boolean</span>
+<span class="sd">        If True, we subtract the mean in sigin</span>
+
+<span class="sd">    iter_gain : int &gt;=0</span>
+<span class="sd">        Maximum number of iteration in gain estimation</span>
+
+<span class="sd">    eps_gain : float &gt;= 0</span>
+<span class="sd">        Threshold to stop iterations in gain estimation</span>
+
+<span class="sd">    use_driver_phase : boolean</span>
+<span class="sd">        If True, we divide the driver by its instantaneous amplitude.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from sklearn.model_selection import GridSearchCV</span>
+<span class="sd">    &gt;&gt;&gt; from pactools.grid_search import DARSklearn</span>
+<span class="sd">    &gt;&gt;&gt; model = DARSklearn(fs=fs)</span>
+<span class="sd">    &gt;&gt;&gt; param_grid = {&#39;ordar&#39;: [10, 20, 30], &#39;ordriv&#39;: [0, 1, 2]}</span>
+<span class="sd">    &gt;&gt;&gt; gscv = GridSearchCV(model, param_grid=param_grid)</span>
+<span class="sd">    &gt;&gt;&gt; X = MultipleArray(sigin, sigdriv, sigdriv_imag)</span>
+<span class="sd">    &gt;&gt;&gt; gscv.fit(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(gscv.cv_results_)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DARSklearn.__init__"><a class="viewcode-back" href="../../generated/pactools.DARSklearn.html#pactools.DARSklearn.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">max_ordar</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">ortho</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">iter_gain</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">eps_gain</span><span class="o">=</span><span class="mf">1.0e-4</span><span class="p">,</span>
+                 <span class="n">progress_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_driver_phase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">warn_gain_estimation_failure</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DARSklearn</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">ordar</span><span class="o">=</span><span class="n">ordar</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="n">ordriv</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span>
+            <span class="n">ortho</span><span class="o">=</span><span class="n">ortho</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">iter_gain</span><span class="o">=</span><span class="n">iter_gain</span><span class="p">,</span> <span class="n">eps_gain</span><span class="o">=</span><span class="n">eps_gain</span><span class="p">,</span>
+            <span class="n">progress_bar</span><span class="o">=</span><span class="n">progress_bar</span><span class="p">,</span> <span class="n">use_driver_phase</span><span class="o">=</span><span class="n">use_driver_phase</span><span class="p">,</span>
+            <span class="n">max_ordar</span><span class="o">=</span><span class="n">max_ordar</span><span class="p">,</span>
+            <span class="n">warn_gain_estimation_failure</span><span class="o">=</span><span class="n">warn_gain_estimation_failure</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span></div>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit the DAR model</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : MultipleArray with three signals:</span>
+<span class="sd">            sigin : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that is to be modeled</span>
+
+<span class="sd">            sigdriv : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that drives the model</span>
+
+<span class="sd">            sigdriv_imag : array, shape (n_epochs, n_points), or None</span>
+<span class="sd">                Second driver, containing the imaginary part of the driver</span>
+<span class="sd">                Is not None only if extract_complex is True.</span>
+
+<span class="sd">        y : None</span>
+<span class="sd">            Not used</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DARSklearn</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sigin</span><span class="o">=</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+                                    <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">fit_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fit the model and transform sigin into the residuals</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : MultipleArray with three signals:</span>
+<span class="sd">            sigin : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that is to be modeled</span>
+
+<span class="sd">            sigdriv : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that drives the model</span>
+
+<span class="sd">            sigdriv_imag : array, shape (n_epochs, n_points), or None</span>
+<span class="sd">                Second driver, containing the imaginary part of the driver</span>
+<span class="sd">                Is not None only if extract_complex is True.</span>
+
+<span class="sd">        y : None</span>
+<span class="sd">            Not used</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        residuals : array, shape (n_epochs, n_points)</span>
+<span class="sd">            Residuals of sigin unexplained by the model</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Transform sigin into the residuals unexplained by the fitted model</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : MultipleArray with three signals:</span>
+<span class="sd">            sigin : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that is to be modeled</span>
+
+<span class="sd">            sigdriv : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that drives the model</span>
+
+<span class="sd">            sigdriv_imag : array, shape (n_epochs, n_points), or None</span>
+<span class="sd">                Second driver, containing the imaginary part of the driver</span>
+<span class="sd">                Is not None only if extract_complex is True.</span>
+
+<span class="sd">        y : None</span>
+<span class="sd">            Not used</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        residuals : array, shape (n_epochs, n_points)</span>
+<span class="sd">            Residuals of sigin unexplained by the fitted model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">check_is_fitted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;AR_&#39;</span><span class="p">)</span>
+        <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">DARSklearn</span><span class="p">,</span>
+                     <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sigin</span><span class="o">=</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span>
+                                     <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Difference in log-likelihood of this model and a model AR(0)</span>
+
+<span class="sd">        We subtract the log-likelihood of an autoregressive model at order 0,</span>
+<span class="sd">        in order to have a reference stable over cross-validation splits.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : MultipleArray with three signals:</span>
+<span class="sd">            sigin : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that is to be modeled</span>
+
+<span class="sd">            sigdriv : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that drives the model</span>
+
+<span class="sd">            sigdriv_imag : array, shape (n_epochs, n_points), or None</span>
+<span class="sd">                Second driver, containing the imaginary part of the driver</span>
+<span class="sd">                Is not None only if extract_complex is True.</span>
+
+<span class="sd">        y : None</span>
+<span class="sd">            Not used</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        score : float</span>
+<span class="sd">            Difference in log-likelihood of this model and a model AR(0).</span>
+<span class="sd">            The high is the better.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logl</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span>
+
+        <span class="n">max_ordar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_ordar</span>
+        <span class="k">if</span> <span class="n">max_ordar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s1">&#39;max_ordar should not be zero, since it biases the grid search&#39;</span>
+                <span class="s1">&#39; over ordar. Set max_ordar to the maximum value of ordar in &#39;</span>
+                <span class="s1">&#39;the grid search, or bigger.&#39;</span><span class="p">)</span>
+        <span class="c1"># remove the log likelihood of an AR(0) to better compare likelihoods</span>
+        <span class="n">score</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_log_likelihood_ref</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="n">max_ordar</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">score</span></div>
+
+
+<div class="viewcode-block" id="AddDriverDelay"><a class="viewcode-back" href="../../generated/pactools.AddDriverDelay.html#pactools.AddDriverDelay">[docs]</a><span class="k">class</span> <span class="nc">AddDriverDelay</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Transformer which adds a time delay in the driver of a DAR model</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from sklearn.model_selection import GridSearchCV</span>
+<span class="sd">    &gt;&gt;&gt; from sklearn.pipeline import pipeline</span>
+<span class="sd">    &gt;&gt;&gt; from pactools.grid_search import DARSklearn, AddDriverDelay</span>
+<span class="sd">    &gt;&gt;&gt; from pactools.grid_search import MultipleArray</span>
+<span class="sd">    &gt;&gt;&gt; param_grid = {</span>
+<span class="sd">    ...     &#39;dar__ordar&#39;: [10, 20, 30],</span>
+<span class="sd">    ...     &#39;dar__ordriv&#39;: [0, 1, 2],</span>
+<span class="sd">    ...     &#39;add__delay&#39;: [-10, 0, 10]</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; model = Pipeline(steps=[</span>
+<span class="sd">    ...     (&#39;add&#39;, AddDriverDelay()),</span>
+<span class="sd">    ...     (&#39;dar&#39;, DARSklearn(fs=fs, max_ordar=30)),</span>
+<span class="sd">    ... ])</span>
+<span class="sd">    &gt;&gt;&gt; X = MultipleArray(sigin, sigdriv, sigdriv_imag)</span>
+<span class="sd">    &gt;&gt;&gt; gscv.fit(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(gscv.cv_results_)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AddDriverDelay.__init__"><a class="viewcode-back" href="../../generated/pactools.AddDriverDelay.html#pactools.AddDriverDelay.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">n_decay</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delay</span> <span class="o">=</span> <span class="n">delay</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_decay</span> <span class="o">=</span> <span class="n">n_decay</span></div>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;No fit is needed&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Apply the temporal delay on sigdriv and sigdriv_imag</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : MultipleArray with three signals:</span>
+<span class="sd">            sigin : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that is to be modeled</span>
+
+<span class="sd">            sigdriv : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that drives the model</span>
+
+<span class="sd">            sigdriv_imag : array, shape (n_epochs, n_points), or None</span>
+<span class="sd">                Second driver, containing the imaginary part of the driver</span>
+<span class="sd">                Is not None only if extract_complex is True.</span>
+
+<span class="sd">        y : None</span>
+<span class="sd">            Not used</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Xt : MultipleArray with three signals:</span>
+<span class="sd">            sigin : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that is to be modeled</span>
+
+<span class="sd">            sigdriv : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that drives the model</span>
+
+<span class="sd">            sigdriv_imag : array, shape (n_epochs, n_points), or None</span>
+<span class="sd">                Second driver, containing the imaginary part of the driver</span>
+<span class="sd">                Is not None only if extract_complex is True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+
+        <span class="c1"># window decay for temporal continuity after np.roll</span>
+        <span class="n">n_decay</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_decay</span>
+        <span class="n">window</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">blackman</span><span class="p">(</span><span class="n">n_decay</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)[:</span><span class="n">n_decay</span><span class="p">]</span>
+
+        <span class="k">def</span> <span class="nf">window_and_roll</span><span class="p">(</span><span class="n">sig</span><span class="p">):</span>
+            <span class="n">sig</span> <span class="o">=</span> <span class="n">sig</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># copy to avoid modifying original</span>
+            <span class="n">sig</span><span class="p">[:,</span> <span class="p">:</span><span class="n">n_decay</span><span class="p">]</span> <span class="o">*=</span> <span class="n">window</span>
+            <span class="n">sig</span><span class="p">[:,</span> <span class="o">-</span><span class="n">n_decay</span><span class="p">:]</span> <span class="o">*=</span> <span class="n">window</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delay</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">sig</span>
+
+        <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">window_and_roll</span><span class="p">(</span><span class="n">sigdriv</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sigdriv_imag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">window_and_roll</span><span class="p">(</span><span class="n">sigdriv_imag</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">MultipleArray</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ExtractDriver"><a class="viewcode-back" href="../../generated/pactools.ExtractDriver.html#pactools.ExtractDriver">[docs]</a><span class="k">class</span> <span class="nc">ExtractDriver</span><span class="p">(</span><span class="n">BaseEstimator</span><span class="p">,</span> <span class="n">TransformerMixin</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns bandpass filtered and a highpass filtered signals</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fs : float</span>
+<span class="sd">        Sampling frequency</span>
+
+<span class="sd">    low_fq : float</span>
+<span class="sd">        Center frequency of bandpass filters.</span>
+
+<span class="sd">    max_low_fq : float</span>
+<span class="sd">        Maximum `low_fq` over a potential cross-validation scheme.</span>
+
+<span class="sd">    low_fq_width : float</span>
+<span class="sd">        Bandwidth of the bandpass filters.</span>
+
+<span class="sd">    fill : in {0, 1, 2}</span>
+<span class="sd">        Filling strategy for the modeled signal `sigin`:</span>
+<span class="sd">        0 : keep the signal unchanged: sigin = high_sig</span>
+<span class="sd">        1 : remove the bandpass filtered signal: sigin = high_sig - sigdriv</span>
+<span class="sd">        2 : remove and replace by bandpass filtered Gaussian white noise</span>
+
+<span class="sd">    whitening : in {&#39;before&#39;, &#39;after&#39;, None}</span>
+<span class="sd">        Define when the whitening is done compared to the filtering.</span>
+
+<span class="sd">    ordar : int &gt;= 0</span>
+<span class="sd">        Order of the AR model used for whitening</span>
+
+<span class="sd">    normalize : boolean</span>
+<span class="sd">        Whether to scale the signals to have unit norm `sigin`.</span>
+<span class="sd">        Both drivers `sigdriv` and `sigdriv_imag` are scaled with the same</span>
+<span class="sd">        scales.</span>
+
+<span class="sd">    extract_complex : boolean</span>
+<span class="sd">        Whether to extract a complex driver (`sigdriv` and `sigdriv_imag`)</span>
+
+<span class="sd">    random_state : None, int or np.random.RandomState instance</span>
+<span class="sd">        Seed or random number generator for the white noise filling strategy.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from sklearn.model_selection import GridSearchCV</span>
+<span class="sd">    &gt;&gt;&gt; from sklearn.pipeline import pipeline</span>
+<span class="sd">    &gt;&gt;&gt; from pactools.grid_search import DARSklearn, ExtractDriver</span>
+<span class="sd">    &gt;&gt;&gt; from pactools.grid_search import MultipleArray</span>
+<span class="sd">    &gt;&gt;&gt; param_grid = {</span>
+<span class="sd">    ...     &#39;dar__ordar&#39;: [10, 20, 30],</span>
+<span class="sd">    ...     &#39;dar__ordriv&#39;: [0, 1, 2],</span>
+<span class="sd">    ...     &#39;driver__low_fq&#39;: [4.0, 4.5, 5.0]</span>
+<span class="sd">    ... }</span>
+<span class="sd">    &gt;&gt;&gt; model = Pipeline(steps=[</span>
+<span class="sd">    ...     (&#39;driver&#39;, ExtractDriver(fs=fs, max_low_fq=5.0)),</span>
+<span class="sd">    ...     (&#39;dar&#39;, DARSklearn(fs=fs, max_ordar=30)),</span>
+<span class="sd">    ... ])</span>
+<span class="sd">    &gt;&gt;&gt; X = MultipleArray(low_sig, None)</span>
+<span class="sd">    &gt;&gt;&gt; gscv.fit(X)</span>
+<span class="sd">    &gt;&gt;&gt; print(gscv.cv_results_)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ExtractDriver.__init__"><a class="viewcode-back" href="../../generated/pactools.ExtractDriver.html#pactools.ExtractDriver.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">max_low_fq</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                 <span class="n">whitening</span><span class="o">=</span><span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">extract_complex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span> <span class="o">=</span> <span class="n">low_fq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_low_fq</span> <span class="o">=</span> <span class="n">max_low_fq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">low_fq_width</span> <span class="o">=</span> <span class="n">low_fq_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fill</span> <span class="o">=</span> <span class="n">fill</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">whitening</span> <span class="o">=</span> <span class="n">whitening</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span> <span class="o">=</span> <span class="n">ordar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">normalize</span> <span class="o">=</span> <span class="n">normalize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">extract_complex</span> <span class="o">=</span> <span class="n">extract_complex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">random_state</span></div>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;No fit is needed&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        X : MultipleArray with two signals:</span>
+<span class="sd">            low_sig : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Input data for the phase signal</span>
+
+<span class="sd">            high_sig : array or None, shape (n_epochs, n_points)</span>
+<span class="sd">                Input data for the amplitude signal.</span>
+<span class="sd">                If None, we use low_sig for both signals.</span>
+
+<span class="sd">        y : None</span>
+<span class="sd">            Not used</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Xt : MultipleArray with three signals:</span>
+<span class="sd">            sigin : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that is to be modeled</span>
+
+<span class="sd">            sigdriv : array, shape (n_epochs, n_points)</span>
+<span class="sd">                Signal that drives the model</span>
+
+<span class="sd">            sigdriv_imag : array, shape (n_epochs, n_points), or None</span>
+<span class="sd">                Second driver, containing the imaginary part of the driver</span>
+<span class="sd">                Is not None only if extract_complex is True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+
+        <span class="n">n_epochs</span> <span class="o">=</span> <span class="n">low_sig</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">high_sig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigs</span> <span class="o">=</span> <span class="n">low_sig</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># hack to call only once extract</span>
+            <span class="n">high_sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">high_sig</span><span class="p">)</span>
+            <span class="n">sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">]</span>
+
+        <span class="n">filtered_signals</span> <span class="o">=</span> <span class="n">extract_driver</span><span class="p">(</span>
+            <span class="n">sigs</span><span class="o">=</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">bandwidth</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fill</span><span class="p">,</span>
+            <span class="n">whitening</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">whitening</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ordar</span><span class="p">,</span>
+            <span class="n">normalize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">normalize</span><span class="p">,</span> <span class="n">extract_complex</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">extract_complex</span><span class="p">,</span>
+            <span class="n">random_state</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">random_state</span><span class="p">,</span> <span class="n">max_low_fq</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_low_fq</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_complex</span><span class="p">:</span>
+            <span class="n">filtered_low</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">filtered_low_imag</span> <span class="o">=</span> <span class="n">filtered_signals</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filtered_low</span><span class="p">,</span> <span class="n">filtered_high</span> <span class="o">=</span> <span class="n">filtered_signals</span>
+
+        <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">high_sig</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sigin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">)</span>
+            <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_complex</span><span class="p">:</span>
+                <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low_imag</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sigin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">[</span><span class="n">n_epochs</span><span class="p">:])</span>
+            <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[:</span><span class="n">n_epochs</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_complex</span><span class="p">:</span>
+                <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low_imag</span><span class="p">[:</span><span class="n">n_epochs</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">MultipleArray</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MultipleArray"><a class="viewcode-back" href="../../generated/pactools.MultipleArray.html#pactools.MultipleArray">[docs]</a><span class="k">class</span> <span class="nc">MultipleArray</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Store a list of arrays into a single object and handle indexing for them</span>
+
+<span class="sd">    This is to be used as X in GridSearchCV(DARSklearn()).fit(X)</span>
+<span class="sd">    Some of the arrays can be None.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    *signals : several ndarray or None</span>
+<span class="sd">        Stored signals</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; from pactools.grid_search import MultipleArray</span>
+<span class="sd">    &gt;&gt;&gt; ma = MultipleArray(np.ones(3, 10), None, None, np.zeros(3, 10, 2))</span>
+<span class="sd">    &gt;&gt;&gt; print(ma)</span>
+<span class="sd">    &gt;&gt;&gt; print(ma[1:])</span>
+
+<span class="sd">    &gt;&gt;&gt; from sklearn.model_selection import GridSearchCV</span>
+<span class="sd">    &gt;&gt;&gt; from pactools.grid_search import DARSklearn</span>
+<span class="sd">    &gt;&gt;&gt; model = DARSklearn(fs=fs)</span>
+<span class="sd">    &gt;&gt;&gt; param_grid = {&#39;ordar&#39;: [10, 20, 30], &#39;ordriv&#39;: [0, 1, 2]}</span>
+<span class="sd">    &gt;&gt;&gt; gscv = GridSearchCV(model, param_grid=param_grid)</span>
+<span class="sd">    &gt;&gt;&gt; X = MultipleArray(sigin, sigdriv, sigdriv_imag)</span>
+<span class="sd">    &gt;&gt;&gt; gscv.fit(X)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MultipleArray.__init__"><a class="viewcode-back" href="../../generated/pactools.MultipleArray.html#pactools.MultipleArray.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">signals</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signals</span> <span class="o">=</span> <span class="n">signals</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shape</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Only return the shape of the first array&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">signals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="k">def</span> <span class="nf">take</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">X</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">X</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signals</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">MultipleArray</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MultipleArray:</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="k">for</span> <span class="n">X</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signals</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;MultipleArray:</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">repr</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="k">for</span> <span class="n">X</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signals</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">):</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">X</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span> <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">X</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">signals</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">MultipleArray</span><span class="p">(</span><span class="o">*</span><span class="n">tmp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">signals</span></div>
+
+
+<span class="k">class</span> <span class="nc">GridSearchCVProgressBar</span><span class="p">(</span><span class="n">model_selection</span><span class="o">.</span><span class="n">GridSearchCV</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Monkey patch Parallel to have a progress bar during grid search&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_get_param_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return ParameterGrid instance for the given param_grid&quot;&quot;&quot;</span>
+
+        <span class="n">iterator</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">GridSearchCVProgressBar</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_get_param_iterator</span><span class="p">()</span>
+        <span class="n">iterator</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+        <span class="n">n_candidates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+
+        <span class="n">cv</span> <span class="o">=</span> <span class="n">model_selection</span><span class="o">.</span><span class="n">_split</span><span class="o">.</span><span class="n">check_cv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cv</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">n_splits</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cv</span><span class="p">,</span> <span class="s1">&#39;n_splits&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">max_value</span> <span class="o">=</span> <span class="n">n_candidates</span> <span class="o">*</span> <span class="n">n_splits</span>
+
+        <span class="k">class</span> <span class="nc">ParallelProgressBar</span><span class="p">(</span><span class="n">Parallel</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterable</span><span class="p">):</span>
+                <span class="n">bar</span> <span class="o">=</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="n">max_value</span><span class="o">=</span><span class="n">max_value</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;GridSearchCV&#39;</span><span class="p">)</span>
+                <span class="n">iterable</span> <span class="o">=</span> <span class="n">bar</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">ParallelProgressBar</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+
+        <span class="c1"># Monkey patch</span>
+        <span class="n">model_selection</span><span class="o">.</span><span class="n">_search</span><span class="o">.</span><span class="n">Parallel</span> <span class="o">=</span> <span class="n">ParallelProgressBar</span>
+
+        <span class="k">return</span> <span class="n">iterator</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tom Dupre la Tour.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

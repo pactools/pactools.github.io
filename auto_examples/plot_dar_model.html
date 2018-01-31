@@ -39,7 +39,7 @@
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
         <link rel="up" title="Gallery of Examples" href="index.html"/>
-        <link rel="next" title="Spurious PAC with spikes" href="plot_spurious_pac.html"/>
+        <link rel="next" title="Grid-search and cross-validation" href="plot_grid_search.html"/>
         <link rel="prev" title="Surrogate analysis" href="plot_surrogate_analysis.html"/> 
 
   
@@ -94,6 +94,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plot_comodulogram.html">Comodulogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_surrogate_analysis.html">Surrogate analysis</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Fitting a DAR model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_grid_search.html">Grid-search and cross-validation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_spurious_pac.html">Spurious PAC with spikes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_phase_delay.html">Phase shift and temporal delay in PAC</a></li>
 </ul>
@@ -186,7 +187,6 @@ fits a DAR model and show the modulation extracted in the DAR model.</p>
 
 <span class="n">n_points</span> <span class="o">=</span> <span class="mi">10000</span>
 <span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.4</span>
-<span class="n">t_plot</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># sec</span>
 
 <span class="n">signal</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="View documentation for pactools.simulate_pac"><span class="n">simulate_pac</span></a><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
                       <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span>
@@ -249,7 +249,7 @@ Giving <code class="docutils literal"><span class="pre">method='duprelatour'</sp
 </pre></div>
 </div>
 <img alt="../_images/sphx_glr_plot_dar_model_002.png" class="align-center" src="../_images/sphx_glr_plot_dar_model_002.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  25.077 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  21.560 seconds)</p>
 <div class="sphx-glr-footer docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/plot_dar_model.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dar_model.py</span></code></a></div>
@@ -269,7 +269,7 @@ Giving <code class="docutils literal"><span class="pre">method='duprelatour'</sp
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_spurious_pac.html" class="btn btn-neutral float-right" title="Spurious PAC with spikes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_grid_search.html" class="btn btn-neutral float-right" title="Grid-search and cross-validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="plot_surrogate_analysis.html" class="btn btn-neutral" title="Surrogate analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

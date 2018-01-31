@@ -740,6 +740,8 @@
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">:</span>
                 <span class="n">save_vars</span><span class="p">[</span><span class="s1">&#39;random_state&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mtrand&#39;</span>
                 <span class="n">save_vars</span><span class="p">[</span><span class="s1">&#39;random_state_state_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">:</span>
+                <span class="n">save_vars</span><span class="p">[</span><span class="s1">&#39;progress_bar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">write_hdf5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">save_vars</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;comodulogram&#39;</span><span class="p">,</span>
                    <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">slash</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span></div>
 

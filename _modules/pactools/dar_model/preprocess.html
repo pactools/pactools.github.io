@@ -539,7 +539,8 @@
 
 <div class="viewcode-block" id="extract_driver"><a class="viewcode-back" href="../../../generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver">[docs]</a><span class="k">def</span> <span class="nf">extract_driver</span><span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
                    <span class="n">whitening</span><span class="o">=</span><span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                   <span class="n">extract_complex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+                   <span class="n">extract_complex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                   <span class="n">max_low_fq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extract the driver with filtering and fill the rest of the signal.</span>
 
 <span class="sd">    The driver is extracted with a bandpass filter, subtracted from the signal,</span>
@@ -596,6 +597,9 @@
 <span class="sd">            - &#39;w&#39; : whitening step</span>
 <span class="sd">            - &#39;z&#39; : all</span>
 
+<span class="sd">    max_low_fq : float or None</span>
+<span class="sd">        Maximum low_fq over a potential cross-validation scheme.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    low_sigs : array, shape (n_epochs, n_points)</span>
@@ -610,7 +614,7 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    low_sig, high_sig = extract_driver(sigs, fs, 3.0):</span>
+<span class="sd">    &gt;&gt;&gt; low_sig, high_sig, low_sigs_imag = extract_driver(sigs, fs, 3.0)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">frequency_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">low_fq</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">sigs</span> <span class="ow">in</span> <span class="n">multiple_extract_driver</span><span class="p">(</span>
@@ -618,7 +622,7 @@
             <span class="n">n_cycles</span><span class="o">=</span><span class="n">n_cycles</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">bandwidth</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">fill</span><span class="p">,</span>
             <span class="n">whitening</span><span class="o">=</span><span class="n">whitening</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="n">ordar</span><span class="p">,</span> <span class="n">normalize</span><span class="o">=</span><span class="n">normalize</span><span class="p">,</span>
             <span class="n">extract_complex</span><span class="o">=</span><span class="n">extract_complex</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
-            <span class="n">draw</span><span class="o">=</span><span class="n">draw</span><span class="p">):</span>
+            <span class="n">draw</span><span class="o">=</span><span class="n">draw</span><span class="p">,</span> <span class="n">max_low_fq</span><span class="o">=</span><span class="n">max_low_fq</span><span class="p">):</span>
         <span class="k">pass</span>
     <span class="k">return</span> <span class="n">sigs</span></div>
 
@@ -626,7 +630,7 @@
 <span class="k">def</span> <span class="nf">multiple_extract_driver</span><span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">frequency_range</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                             <span class="n">bandwidth</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">whitening</span><span class="o">=</span><span class="s1">&#39;after&#39;</span><span class="p">,</span> <span class="n">ordar</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
                             <span class="n">normalize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">extract_complex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                            <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+                            <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">draw</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">max_low_fq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Extract the driver for several bandpass center frequency.</span>
 
 <span class="sd">    Parameters</span>
@@ -680,6 +684,9 @@
 <span class="sd">            - &#39;w&#39; : whitening step</span>
 <span class="sd">            - &#39;z&#39; : all</span>
 
+<span class="sd">    max_low_fq : float or None</span>
+<span class="sd">        Maximum low_fq over a potential cross-validation scheme.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    low_sigs : array, shape (n_epochs, n_points)</span>
@@ -692,10 +699,11 @@
 <span class="sd">        Imaginary part of the bandpass filtered signal</span>
 <span class="sd">        Returned only if extract_complex is True.</span>
 
-<span class="sd">    Example</span>
-<span class="sd">    -------</span>
-<span class="sd">    for (low_sig, high_sig) in multiple_extract_driver(sigs, fs, [2., 3., 4.]):</span>
-<span class="sd">        pass</span>
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; for (low_sig, high_sig, low_sigs_imag) in multiple_extract_driver(</span>
+<span class="sd">    ...         sigs, fs, [2., 3., 4.]):</span>
+<span class="sd">    ...     pass</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">frequency_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">frequency_range</span><span class="p">)</span>
     <span class="n">sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigs</span><span class="p">)</span>
@@ -711,8 +719,9 @@
         <span class="n">random_noise</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># extract the high frequencies independently of the driver</span>
-    <span class="n">fc_low_pass</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">frequency_range</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">frequency_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">bandwidth</span><span class="p">)</span>  <span class="c1"># arbitrary</span>
+    <span class="k">if</span> <span class="n">max_low_fq</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">max_low_fq</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">frequency_range</span><span class="p">)</span>
+    <span class="n">fc_low_pass</span> <span class="o">=</span> <span class="p">(</span><span class="n">max_low_fq</span> <span class="o">+</span> <span class="n">bandwidth</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># arbitrary</span>
     <span class="n">low_pass_width</span> <span class="o">=</span> <span class="n">bandwidth</span>
     <span class="n">low_and_high</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">extract_and_fill</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="n">fc_low_pass</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">low_pass_width</span><span class="p">,</span>
@@ -759,8 +768,8 @@
 
         <span class="n">_show_plot</span><span class="p">(</span><span class="n">draw</span><span class="p">)</span>
 
-        <span class="n">low_sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">low_sigs</span><span class="p">)</span>
-        <span class="n">high_sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">high_sigs</span><span class="p">)</span>
+        <span class="n">low_sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">low_sigs</span><span class="p">)</span>
+        <span class="n">high_sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">high_sigs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
             <span class="n">low_sigs_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">low_sigs_imag</span><span class="p">)</span>
             <span class="k">yield</span> <span class="n">low_sigs</span><span class="p">,</span> <span class="n">high_sigs</span><span class="p">,</span> <span class="n">low_sigs_imag</span>

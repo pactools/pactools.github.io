@@ -1,0 +1,42 @@
+pactools\.DARSklearn
+====================
+
+.. currentmodule:: pactools
+
+.. autoclass:: DARSklearn
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+       :nosignatures:
+   
+      ~DARSklearn.__init__
+      ~DARSklearn.copy
+      ~DARSklearn.degrees_of_freedom
+      ~DARSklearn.fit
+      ~DARSklearn.fit_transform
+      ~DARSklearn.get_criterion
+      ~DARSklearn.get_params
+      ~DARSklearn.get_title
+      ~DARSklearn.likelihood_ratio
+      ~DARSklearn.plot
+      ~DARSklearn.plot_lines
+      ~DARSklearn.score
+      ~DARSklearn.set_params
+      ~DARSklearn.transform
+   
+   
+
+   
+   
+   
+
+.. include:: backreferences/pactools.DARSklearn.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

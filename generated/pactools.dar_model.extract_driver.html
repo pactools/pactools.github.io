@@ -91,6 +91,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Gallery of Examples</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../api.html#phase-amplitude-coupling-pac">Phase amplitude coupling (PAC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scikit-learn-gridsearchcv-api">scikit-learn GridSearchCV API</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../api.html#driven-auto-regressive-dar-models">Driven auto-regressive (DAR) models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#utilities">Utilities</a></li>
 </ul>
@@ -165,7 +166,7 @@
 <h1>pactools.dar_model.extract_driver<a class="headerlink" href="#pactools-dar-model-extract-driver" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pactools.dar_model.extract_driver">
-<code class="descclassname">pactools.dar_model.</code><code class="descname">extract_driver</code><span class="sig-paren">(</span><em>sigs</em>, <em>fs</em>, <em>low_fq</em>, <em>n_cycles=None</em>, <em>bandwidth=1.0</em>, <em>fill=2</em>, <em>whitening='after'</em>, <em>ordar=10</em>, <em>normalize=False</em>, <em>extract_complex=True</em>, <em>random_state=None</em>, <em>draw=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/preprocess.html#extract_driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.extract_driver" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pactools.dar_model.</code><code class="descname">extract_driver</code><span class="sig-paren">(</span><em>sigs</em>, <em>fs</em>, <em>low_fq</em>, <em>n_cycles=None</em>, <em>bandwidth=1.0</em>, <em>fill=2</em>, <em>whitening='after'</em>, <em>ordar=10</em>, <em>normalize=False</em>, <em>extract_complex=True</em>, <em>random_state=None</em>, <em>draw=''</em>, <em>max_low_fq=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/preprocess.html#extract_driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.extract_driver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the driver with filtering and fill the rest of the signal.</p>
 <p>The driver is extracted with a bandpass filter, subtracted from the signal,
 and the frequency gap is filled with filtered white noise.</p>
@@ -237,6 +238,10 @@ The low_sigs are scaled with the same scales.</p>
 </ul>
 </div></blockquote>
 </div></blockquote>
+<p><strong>max_low_fq</strong> : float or None</p>
+<blockquote>
+<div><p>Maximum low_fq over a potential cross-validation scheme.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>low_sigs</strong> : array, shape (n_epochs, n_points)</p>
@@ -257,7 +262,9 @@ Returned only if extract_complex is True.</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>low_sig, high_sig = extract_driver(sigs, fs, 3.0):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">low_sigs_imag</span> <span class="o">=</span> <span class="n">extract_driver</span><span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <div class="clearer"></div></div>

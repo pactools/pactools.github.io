@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Gallery of Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#phase-amplitude-coupling-pac">Phase amplitude coupling (PAC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scikit-learn-gridsearchcv-api">scikit-learn GridSearchCV API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#driven-auto-regressive-dar-models">Driven auto-regressive (DAR) models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#utilities">Utilities</a></li>
 </ul>
@@ -182,6 +183,29 @@
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pactools.simulate_pac.html#pactools.simulate_pac" title="pactools.simulate_pac"><code class="xref py py-obj docutils literal"><span class="pre">simulate_pac</span></code></a></td>
 <td>Simulate a 1D signal with artificial phase amplitude coupling (PAC).</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="scikit-learn-gridsearchcv-api">
+<h2>scikit-learn GridSearchCV API<a class="headerlink" href="#scikit-learn-gridsearchcv-api" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.DARSklearn.html#pactools.DARSklearn" title="pactools.DARSklearn"><code class="xref py py-obj docutils literal"><span class="pre">DARSklearn</span></code></a></td>
+<td>Different interface to DAR models, to use in scikit-learn’s GridSearchCV</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pactools.ExtractDriver.html#pactools.ExtractDriver" title="pactools.ExtractDriver"><code class="xref py py-obj docutils literal"><span class="pre">ExtractDriver</span></code></a></td>
+<td>Returns bandpass filtered and a highpass filtered signals</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.AddDriverDelay.html#pactools.AddDriverDelay" title="pactools.AddDriverDelay"><code class="xref py py-obj docutils literal"><span class="pre">AddDriverDelay</span></code></a></td>
+<td>Transformer which adds a time delay in the driver of a DAR model</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pactools.MultipleArray.html#pactools.MultipleArray" title="pactools.MultipleArray"><code class="xref py py-obj docutils literal"><span class="pre">MultipleArray</span></code></a></td>
+<td>Store a list of arrays into a single object and handle indexing for them</td>
 </tr>
 </tbody>
 </table>

@@ -193,7 +193,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">warn_gain_estimation_failure</span> <span class="o">=</span> <span class="n">warn_gain_estimation_failure</span>
 
         <span class="c1"># for fair loglikelihood comparison</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_ordar</span> <span class="o">=</span> <span class="n">max_ordar</span> <span class="k">if</span> <span class="n">max_ordar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ordar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_ordar</span> <span class="o">=</span> <span class="n">max_ordar</span>
 
         <span class="c1"># power of the Taylor expansion</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ordriv</span> <span class="o">=</span> <span class="n">ordriv</span>
@@ -254,7 +254,7 @@
             <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">sigdriv_imag</span> <span class="o">/</span> <span class="n">amplitude</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">center</span><span class="p">:</span>
-            <span class="n">sigin</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
+            <span class="n">sigin</span> <span class="o">=</span> <span class="n">sigin</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
 
         <span class="c1"># -------- save signals as attributes of the model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sigin</span> <span class="o">=</span> <span class="n">sigin</span>
@@ -298,8 +298,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
 
         <span class="c1"># -------- check parameters</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;self.ordar is zero or negative&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;self.ordar is negative&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordriv</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;self.ordriv is negative&#39;</span><span class="p">)</span>
 
@@ -315,6 +315,8 @@
 
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_fit</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_fit_std</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="bp">self</span>
 
@@ -561,8 +563,10 @@
             <span class="k">return</span> <span class="n">criterions</span>
 
         <span class="c1"># else compute the criterions base on the log likelihood</span>
-        <span class="n">logl</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_log_likelihood</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span>
-                                                   <span class="n">skip</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">max_ordar</span><span class="p">)</span>
+        <span class="n">max_ordar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_ordar</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_ordar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">max_ordar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span>
+        <span class="n">logl</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_log_likelihood</span><span class="p">(</span><span class="n">train</span><span class="o">=</span><span class="n">train</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="n">max_ordar</span><span class="p">)</span>
         <span class="n">degrees</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">degrees_of_freedom</span><span class="p">()</span>
 
         <span class="c1"># Akaike Information Criterion</span>
@@ -715,6 +719,10 @@
 
     <span class="k">def</span> <span class="nf">_estimate_gain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">regul</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;helper to handle failure in gain estimation&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordriv</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_fixed_gain</span><span class="p">()</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_estimate_driven_gain</span><span class="p">(</span><span class="n">regul</span><span class="o">=</span><span class="n">regul</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -885,6 +893,45 @@
                 <span class="n">G_cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">G_cols</span><span class="p">)</span> <span class="o">+</span> <span class="n">EPSILON</span> <span class="o">*</span> <span class="mi">10</span>
         <span class="k">return</span> <span class="n">G_cols</span>
 
+    <span class="k">def</span> <span class="nf">_estimate_fit_std</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Estimate the likelihood of a model with ordar=0, ordriv=0&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">train</span><span class="p">:</span>
+            <span class="n">sigin</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_train_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sigin</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sigin</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_test_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sigin</span><span class="p">])</span>
+
+        <span class="n">sigin</span> <span class="o">=</span> <span class="n">sigin</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar_</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">average</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+            <span class="n">sigma2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">((</span><span class="n">sigin</span> <span class="o">-</span> <span class="n">average</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+            <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sigma2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fit_std_</span> <span class="o">=</span> <span class="n">sigma</span>
+
+    <span class="k">def</span> <span class="nf">_estimate_log_likelihood_ref</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Estimate the likelihood of a model with ordar=0, ordriv=0&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">train</span><span class="p">:</span>
+            <span class="n">sigin</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_train_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sigin</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sigin</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_test_data</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">sigin</span><span class="p">])</span>
+
+        <span class="n">gain2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fit_std_</span> <span class="o">**</span> <span class="mi">2</span>
+
+        <span class="c1"># skip first samples</span>
+        <span class="n">sigin</span> <span class="o">=</span> <span class="n">sigin</span><span class="p">[:,</span> <span class="n">skip</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[:,</span> <span class="n">skip</span><span class="p">:]</span>
+
+        <span class="n">logL</span> <span class="o">=</span> <span class="n">wgn_log_likelihood</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">gain2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">tmax</span> <span class="o">=</span> <span class="n">sigin</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="k">return</span> <span class="n">logL</span><span class="p">,</span> <span class="n">tmax</span>
+
     <span class="k">def</span> <span class="nf">_estimate_log_likelihood</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Approximate computation of the logarithm of the likelihood</span>
 
@@ -913,7 +960,6 @@
         <span class="n">logL</span> <span class="o">=</span> <span class="n">wgn_log_likelihood</span><span class="p">(</span><span class="n">residual</span><span class="p">,</span> <span class="n">gain2</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
 
         <span class="n">tmax</span> <span class="o">=</span> <span class="n">gain2</span><span class="o">.</span><span class="n">size</span>
-
         <span class="k">return</span> <span class="n">logL</span><span class="p">,</span> <span class="n">tmax</span>
 
     <span class="k">def</span> <span class="nf">likelihood_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ar0</span><span class="p">):</span>

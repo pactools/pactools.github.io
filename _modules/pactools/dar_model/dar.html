@@ -182,7 +182,7 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    ordar : int &gt; 0</span>
+<span class="sd">    ordar : int &gt;= 0</span>
 <span class="sd">        Order of the autoregressive model (p)</span>
 
 <span class="sd">    ordriv : int &gt;= 0</span>
@@ -249,8 +249,9 @@
         <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ordar</span>
 
         <span class="c1"># -------- model at order 0</span>
-        <span class="n">AR_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
-        <span class="k">yield</span> <span class="n">AR_</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">only_last</span> <span class="ow">or</span> <span class="n">K</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">AR_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+            <span class="k">yield</span> <span class="n">AR_</span>
 
         <span class="k">if</span> <span class="n">K</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># -------- prepare regression signals</span>

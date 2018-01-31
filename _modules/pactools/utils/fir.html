@@ -180,7 +180,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fir</span> <span class="o">=</span> <span class="n">fir</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">fs</span>
 
-    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Apply this filter to a signal</span>
 
 <span class="sd">        Parameters</span>
@@ -190,19 +190,28 @@
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        filtered : array, shape (n_points, ) or (n_signals, n_points)</span>
+<span class="sd">        out : array, shape (n_points, ) or (n_signals, n_points)</span>
 <span class="sd">            Filtered signal</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">sigin_ndim</span> <span class="o">=</span> <span class="n">sigin</span><span class="o">.</span><span class="n">ndim</span>
         <span class="n">sigin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
-        <span class="n">filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">signal</span><span class="o">.</span><span class="n">fftconvolve</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="p">,</span> <span class="s1">&#39;same&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">sigin</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">out</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">sigin</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+            <span class="k">assert</span> <span class="n">out</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="ow">in</span> <span class="s1">&#39;fc&#39;</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sigin</span><span class="p">):</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">fftconvolve</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="p">,</span> <span class="s1">&#39;same&#39;</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
 
         <span class="k">if</span> <span class="n">sigin_ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">filtered</span> <span class="o">=</span> <span class="n">filtered</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">filtered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">filtered</span><span class="p">)</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">filtered</span>
+        <span class="k">return</span> <span class="n">out</span>
 
     <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fscale</span><span class="o">=</span><span class="s1">&#39;log&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -228,8 +237,7 @@
         <span class="n">s</span> <span class="o">=</span> <span class="n">Spectrum</span><span class="p">(</span><span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
                      <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">,</span> <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">,</span> <span class="n">donorm</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">s</span><span class="o">.</span><span class="n">periodogram</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="p">)</span>
-        <span class="n">s</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;Transfer function of FIR filter&#39;</span><span class="p">,</span> <span class="n">fscale</span><span class="o">=</span><span class="n">fscale</span><span class="p">,</span>
-               <span class="n">axes</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">s</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;Transfer function of FIR filter&#39;</span><span class="p">,</span> <span class="n">fscale</span><span class="o">=</span><span class="n">fscale</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
         <span class="c1"># plots</span>
         <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fir</span><span class="p">)</span>
@@ -329,7 +337,7 @@
         <span class="n">order</span> <span class="o">=</span> <span class="n">half_order</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">order</span>
 
-    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigin</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_imag</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Apply this filter to a signal</span>
 
 <span class="sd">        Parameters</span>
@@ -346,11 +354,11 @@
 <span class="sd">            Only when extract_complex is true.</span>
 <span class="sd">            Filtered signal with the imaginary part of the filter</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">filtered</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BandPassFilter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
+        <span class="n">filtered</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">BandPassFilter</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">extract_complex</span><span class="p">:</span>
             <span class="n">fir</span> <span class="o">=</span> <span class="n">FIR</span><span class="p">(</span><span class="n">fir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fir_imag</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
-            <span class="n">filtered_imag</span> <span class="o">=</span> <span class="n">fir</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
+            <span class="n">filtered_imag</span> <span class="o">=</span> <span class="n">fir</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">sigin</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">out_imag</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">filtered</span><span class="p">,</span> <span class="n">filtered_imag</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">filtered</span>
