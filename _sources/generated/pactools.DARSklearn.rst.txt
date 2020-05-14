@@ -1,5 +1,5 @@
-pactools\.DARSklearn
-====================
+pactools.DARSklearn
+===================
 
 .. currentmodule:: pactools
 
@@ -32,6 +32,17 @@ pactools\.DARSklearn
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+       :nosignatures:
+   
+      ~DARSklearn.aic
+      ~DARSklearn.bic
+      ~DARSklearn.logl
+      ~DARSklearn.ordar_
+      ~DARSklearn.tmax
    
    
 

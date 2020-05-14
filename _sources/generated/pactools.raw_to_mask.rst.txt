@@ -1,5 +1,5 @@
-pactools\.raw\_to\_mask
-=======================
+pactools.raw\_to\_mask
+======================
 
 .. currentmodule:: pactools
 

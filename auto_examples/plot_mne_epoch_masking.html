@@ -17,45 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
-        <link rel="up" title="Gallery of Examples" href="index.html"/>
-        <link rel="next" title="Comodulogram" href="plot_comodulogram.html"/>
-        <link rel="prev" title="Peak-locking" href="plot_peak_locking.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Grid-search and cross-validation" href="plot_grid_search.html" />
+    <link rel="prev" title="Fitting a DAR model" href="plot_dar_model.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,10 +85,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with pactools</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery of Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_peak_locking.html">Peak-locking</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Interface with MNE-python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_comodulogram.html">Comodulogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_surrogate_analysis.html">Surrogate analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_dar_model.html">Fitting a DAR model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Interface with MNE-python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_grid_search.html">Grid-search and cross-validation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_spurious_pac.html">Spurious PAC with spikes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_phase_delay.html">Phase shift and temporal delay in PAC</a></li>
@@ -112,7 +107,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pactools</a>
@@ -120,9 +115,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -166,205 +162,222 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="interface-with-mne-python">
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-mne-epoch-masking-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="interface-with-mne-python">
 <span id="sphx-glr-auto-examples-plot-mne-epoch-masking-py"></span><h1>Interface with MNE-python<a class="headerlink" href="#interface-with-mne-python" title="Permalink to this headline">¶</a></h1>
 <p>This example shows how to use this package with MNE-python.</p>
-<p>It relies on the function <code class="docutils literal"><span class="pre">raw_to_mask</span></code>, which takes as input a MNE.Raw
+<p>It relies on the function <code class="docutils literal notranslate"><span class="pre">raw_to_mask</span></code>, which takes as input a MNE.Raw
 instance and an events array, and returns the corresponding input signals
-and masks for the <code class="docutils literal"><span class="pre">Comodulogram.fit</span></code> method.</p>
-<p>Note that this example is quite bad since it does not contain any
-phase-amplitude coupling. It is just an API example.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mne</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+and masks for the <code class="docutils literal notranslate"><span class="pre">Comodulogram.fit</span></code> method.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.raw_to_mask.html#pactools.raw_to_mask" title="View documentation for pactools.raw_to_mask"><span class="n">raw_to_mask</span></a><span class="p">,</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a>
+<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="pactools.simulate_pac" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-function"><span class="n">simulate_pac</span></a><span class="p">,</span> <a href="http://pactools.github.io/generated/pactools.raw_to_mask.html#pactools.raw_to_mask" title="pactools.raw_to_mask" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-function"><span class="n">raw_to_mask</span></a><span class="p">,</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class"><span class="n">Comodulogram</span></a><span class="p">,</span> <span class="n">MaskIterator</span>
 </pre></div>
 </div>
-<p>Load the dataset</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">data_path</span> <span class="o">=</span> <a href="http://martinos.org/mne/stable/generated/mne.datasets.sample.data_path.html#mne.datasets.sample.data_path" title="View documentation for mne.datasets.sample.data_path"><span class="n">mne</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">data_path</span></a><span class="p">()</span>
-<span class="n">raw_fname</span> <span class="o">=</span> <span class="n">data_path</span> <span class="o">+</span> <span class="s1">&#39;/MEG/sample/sample_audvis_filt-0-40_raw.fif&#39;</span>
-<span class="n">event_fname</span> <span class="o">=</span> <span class="n">data_path</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;/MEG/sample/sample_audvis_filt-0-40_raw-&#39;</span>
-                           <span class="s1">&#39;eve.fif&#39;</span><span class="p">)</span>
-<span class="n">raw</span> <span class="o">=</span> <a href="http://martinos.org/mne/stable/generated/mne.io.read_raw_fif.html#mne.io.read_raw_fif" title="View documentation for mne.io.read_raw_fif"><span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_raw_fif</span></a><span class="p">(</span><span class="n">raw_fname</span><span class="p">,</span> <span class="n">preload</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-<span class="n">events</span> <span class="o">=</span> <a href="http://martinos.org/mne/stable/generated/mne.read_events.html#mne.read_events" title="View documentation for mne.read_events"><span class="n">mne</span><span class="o">.</span><span class="n">read_events</span></a><span class="p">(</span><span class="n">event_fname</span><span class="p">)</span>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/tom/.conda/envs/py38/lib/python3.8/site-packages/mne/viz/backends/renderer.py:32: ImportWarning: can&#39;t resolve package from __spec__ or __package__, falling back on __name__ and __path__
+  _mod = importlib.__import__(
+</pre></div>
+</div>
+<p>Simulate a dataset and save it out</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">n_events</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="mf">1.</span>  <span class="c1"># mean onset of PAC in seconds</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.25</span>  <span class="c1"># standard deviation of onset of PAC in seconds</span>
+<span class="n">trial_len</span> <span class="o">=</span> <span class="mf">2.</span>  <span class="c1"># len of the simulated trial in seconds</span>
+<span class="n">first_samp</span> <span class="o">=</span> <span class="mi">5</span>  <span class="c1"># seconds before the first sample and after the last</span>
+
+<span class="n">fs</span> <span class="o">=</span> <span class="mf">200.</span>  <span class="c1"># Hz</span>
+<span class="n">high_fq</span> <span class="o">=</span> <span class="mf">50.0</span>  <span class="c1"># Hz</span>
+<span class="n">low_fq</span> <span class="o">=</span> <span class="mf">3.0</span>  <span class="c1"># Hz</span>
+<span class="n">low_fq_width</span> <span class="o">=</span> <span class="mf">2.0</span>  <span class="c1"># Hz</span>
+
+<span class="n">n_points</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">trial_len</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span>
+<span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.4</span>
+
+
+<span class="k">def</span> <span class="nf">gaussian1d</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+    <span class="k">return</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.exp" title="numpy.exp" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-data"><span class="n">np</span><span class="o">.</span><span class="n">exp</span></a><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">((</span><span class="n">array</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">/</span> <span class="n">sigma</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+
+<span class="c1"># leave one channel for events and make signal as long as events</span>
+<span class="c1"># with a bit of room on either side so events don&#39;t get cut off</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal</span></a> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_points</span> <span class="o">*</span> <span class="n">n_events</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">first_samp</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)))</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">events</span></a> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.zeros" title="numpy.zeros" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-function"><span class="n">np</span><span class="o">.</span><span class="n">zeros</span></a><span class="p">((</span><span class="n">n_events</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">events</span></a><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">((</span><span class="n">first_samp</span> <span class="o">+</span> <span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="n">fs</span><span class="p">,</span>
+                         <span class="n">n_points</span> <span class="o">*</span> <span class="n">n_events</span> <span class="o">+</span> <span class="p">(</span><span class="n">first_samp</span> <span class="o">+</span> <span class="n">mu</span><span class="p">)</span> <span class="o">*</span> <span class="n">fs</span><span class="p">,</span>
+                         <span class="n">trial_len</span> <span class="o">*</span> <span class="n">fs</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">events</span></a><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ones" title="numpy.ones" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-function"><span class="n">np</span><span class="o">.</span><span class="n">ones</span></a><span class="p">((</span><span class="n">n_events</span><span class="p">))</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">mod_fun</span></a> <span class="o">=</span> <span class="n">gaussian1d</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="n">n_points</span><span class="p">),</span> <span class="n">mu</span> <span class="o">*</span> <span class="n">fs</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_events</span><span class="p">):</span>
+    <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal_no_pac</span></a> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="pactools.simulate_pac" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-function"><span class="n">simulate_pac</span></a><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span>
+                                 <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
+                                 <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
+                                 <span class="n">noise_level</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+    <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal_pac</span></a> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="pactools.simulate_pac" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-function"><span class="n">simulate_pac</span></a><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span>
+                              <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
+                              <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
+                              <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+    <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal</span></a><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">*</span> <span class="n">n_points</span><span class="p">:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">n_points</span><span class="p">]</span> <span class="o">=</span> \
+        <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal_pac</span></a> <span class="o">*</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">mod_fun</span></a> <span class="o">+</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal_no_pac</span></a> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">mod_fun</span></a><span class="p">)</span>
+
+<span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">([</span><span class="s1">&#39;Ch1&#39;</span><span class="p">,</span> <span class="s1">&#39;STI 014&#39;</span><span class="p">],</span> <span class="n">fs</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="s1">&#39;stim&#39;</span><span class="p">])</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">RawArray</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal</span></a><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">add_events</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">events</span></a><span class="p">,</span> <span class="n">stim_channel</span><span class="o">=</span><span class="s1">&#39;STI 014&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating RawArray with float64 data, n_channels=2, n_times=42000
+    Range : 0 ... 41999 =      0.000 ...   209.995 secs
+Ready.
+</pre></div>
+</div>
+<p>Let’s plot the signal and its power spectral density to visualize the data.
+As shown in the plots below, there is a peak for the driver frequency at
+3 Hz and a peak for the carrier frequency at 50 Hz but phase-amplitude
+coupling cannot be seen in the evoked plot by eye because the signal is
+averaged over different phases for each epoch.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">raw</span><span class="o">.</span><span class="n">plot_psd</span><span class="p">(</span><span class="n">fmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">Epochs</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">events</span></a><span class="p">,</span> <span class="n">tmin</span><span class="o">=-</span><span class="mi">3</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">epochs</span><span class="o">.</span><span class="n">average</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img alt="../_images/sphx_glr_plot_mne_epoch_masking_001.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_mne_epoch_masking_001.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_mne_epoch_masking_002.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_mne_epoch_masking_002.png" />
+</li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Effective window size : 10.240 (s)
+Need more than one channel to make topography for eeg. Disabling interactivity.
+/home/tom/work/github/pactools/examples/plot_mne_epoch_masking.py:71: RuntimeWarning: Channel locations not available. Disabling spatial colors.
+  raw.plot_psd(fmax=60)
+100 matching events found
+Applying baseline correction (mode: mean)
+Not setting metadata
+0 projection items activated
+Need more than one channel to make topography for eeg. Disabling interactivity.
+
+&lt;Figure size 640x300 with 1 Axes&gt;
+</pre></div>
+</div>
+<p>Let’s save the raw object out for input/output demonstration purposes</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">root</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">_TempDir</span><span class="p">()</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;pac_example-raw.fif&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Writing /tmp/tmp_mne_tempdir_1v72636y/pac_example-raw.fif
+Closing /tmp/tmp_mne_tempdir_1v72636y/pac_example-raw.fif [done]
 </pre></div>
 </div>
 <p>Here we define how to build the epochs: which channels will be selected, and
 on which time window around each event.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># select the time interval around the events</span>
-<span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">raw</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">Raw</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;pac_example-raw.fif&#39;</span><span class="p">))</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">events</span></a> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">find_events</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+
+<span class="c1"># select the time interval around the events</span>
+<span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span> <span class="o">=</span> <span class="n">mu</span> <span class="o">-</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">mu</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">sigma</span>
 <span class="c1"># select the channels (phase_channel, amplitude_channel)</span>
-<span class="n">ixs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">ixs</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Opening raw data file /tmp/tmp_mne_tempdir_1v72636y/pac_example-raw.fif...
+Isotrak not found
+    Range : 0 ... 41999 =      0.000 ...   209.995 secs
+Ready.
+100 events found
+Event IDs: [1]
 </pre></div>
 </div>
 <p>Then, we create the inputs with the function raw_to_mask, which creates the
 input arrays and the mask arrays. These arrays are then given to a
 comodulogram instance with the <cite>fit</cite> method, and the <cite>plot</cite> method draws the
 results.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># create the input array for Comodulogram.fit</span>
-<span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.raw_to_mask.html#pactools.raw_to_mask" title="View documentation for pactools.raw_to_mask"><span class="n">raw_to_mask</span></a><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">ixs</span><span class="o">=</span><span class="n">ixs</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create the input array for Comodulogram.fit</span>
+
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">low_sig</span></a><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">high_sig</span></a><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.raw_to_mask.html#pactools.raw_to_mask" title="pactools.raw_to_mask" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-function"><span class="n">raw_to_mask</span></a><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">ixs</span><span class="o">=</span><span class="n">ixs</span><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">events</span></a><span class="o">=</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">events</span></a><span class="p">,</span> <span class="n">tmin</span><span class="o">=</span><span class="n">tmin</span><span class="p">,</span>
                                       <span class="n">tmax</span><span class="o">=</span><span class="n">tmax</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The mask is an iterable which goes over the _unique_ events in the event
+array (if it is 3D). PAC is estimated where the <cite>mask</cite> is <cite>False</cite>.
+Alternatively, we could also compute the <cite>MaskIterator</cite> object directly.
+This is useful if you want to compute PAC on other kinds of time series,
+for example source time courses.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">low_sig</span></a><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">high_sig</span></a> <span class="o">=</span> <span class="n">raw</span><span class="p">[</span><span class="n">ixs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">:][</span><span class="mi">0</span><span class="p">],</span> <span class="n">raw</span><span class="p">[</span><span class="n">ixs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">:][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">MaskIterator</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">events</span></a><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">n_times</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">])</span>
+
 <span class="c1"># create the instance of Comodulogram</span>
-<span class="n">estimator</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">],</span>
-                         <span class="n">low_fq_range</span><span class="o">=</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.linspace.html#numpy.linspace" title="View documentation for numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
-                         <span class="n">method</span><span class="o">=</span><span class="s1">&#39;tort&#39;</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class"><span class="n">Comodulogram</span></a><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">],</span>
+                         <span class="n">low_fq_range</span><span class="o">=</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span>
+                         <span class="n">method</span><span class="o">=</span><span class="s1">&#39;duprelatour&#39;</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="c1"># compute the comodulogram</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
+<a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">low_sig</span></a><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">high_sig</span></a><span class="p">,</span> <span class="n">mask</span><span class="p">)</span>
 <span class="c1"># plot the results</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tight_layout</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.show" title="View documentation for matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+<a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tight_layout</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/sphx_glr_plot_mne_epoch_masking_001.png" class="align-center" src="../_images/sphx_glr_plot_mne_epoch_masking_001.png" />
+<img alt="../_images/sphx_glr_plot_mne_epoch_masking_003.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_mne_epoch_masking_003.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span>                                        <span class="p">]</span> <span class="mi">0</span><span class="o">%</span> <span class="o">|</span> <span class="mf">0.00</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span>                                        <span class="p">]</span> <span class="mi">1</span><span class="o">%</span> <span class="o">|</span> <span class="mf">1.03</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span>                                        <span class="p">]</span> <span class="mi">2</span><span class="o">%</span> <span class="o">|</span> <span class="mf">1.26</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.</span>                                       <span class="p">]</span> <span class="mi">2</span><span class="o">%</span> <span class="o">|</span> <span class="mf">1.50</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.</span>                                       <span class="p">]</span> <span class="mi">3</span><span class="o">%</span> <span class="o">|</span> <span class="mf">1.73</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.</span>                                       <span class="p">]</span> <span class="mi">4</span><span class="o">%</span> <span class="o">|</span> <span class="mf">1.96</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..</span>                                      <span class="p">]</span> <span class="mi">5</span><span class="o">%</span> <span class="o">|</span> <span class="mf">2.20</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..</span>                                      <span class="p">]</span> <span class="mi">6</span><span class="o">%</span> <span class="o">|</span> <span class="mf">2.44</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..</span>                                      <span class="p">]</span> <span class="mi">7</span><span class="o">%</span> <span class="o">|</span> <span class="mf">2.69</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...</span>                                     <span class="p">]</span> <span class="mi">8</span><span class="o">%</span> <span class="o">|</span> <span class="mf">2.94</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...</span>                                     <span class="p">]</span> <span class="mi">8</span><span class="o">%</span> <span class="o">|</span> <span class="mf">3.20</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...</span>                                     <span class="p">]</span> <span class="mi">9</span><span class="o">%</span> <span class="o">|</span> <span class="mf">3.47</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">....</span>                                    <span class="p">]</span> <span class="mi">10</span><span class="o">%</span> <span class="o">|</span> <span class="mf">3.73</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">....</span>                                    <span class="p">]</span> <span class="mi">11</span><span class="o">%</span> <span class="o">|</span> <span class="mf">3.99</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">....</span>                                    <span class="p">]</span> <span class="mi">12</span><span class="o">%</span> <span class="o">|</span> <span class="mf">4.26</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.....</span>                                   <span class="p">]</span> <span class="mi">12</span><span class="o">%</span> <span class="o">|</span> <span class="mf">4.52</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.....</span>                                   <span class="p">]</span> <span class="mi">13</span><span class="o">%</span> <span class="o">|</span> <span class="mf">4.79</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.....</span>                                   <span class="p">]</span> <span class="mi">14</span><span class="o">%</span> <span class="o">|</span> <span class="mf">5.05</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">......</span>                                  <span class="p">]</span> <span class="mi">15</span><span class="o">%</span> <span class="o">|</span> <span class="mf">5.32</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">......</span>                                  <span class="p">]</span> <span class="mi">16</span><span class="o">%</span> <span class="o">|</span> <span class="mf">5.59</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">......</span>                                  <span class="p">]</span> <span class="mi">17</span><span class="o">%</span> <span class="o">|</span> <span class="mf">5.87</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.......</span>                                 <span class="p">]</span> <span class="mi">18</span><span class="o">%</span> <span class="o">|</span> <span class="mf">6.19</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.......</span>                                 <span class="p">]</span> <span class="mi">18</span><span class="o">%</span> <span class="o">|</span> <span class="mf">6.41</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.......</span>                                 <span class="p">]</span> <span class="mi">19</span><span class="o">%</span> <span class="o">|</span> <span class="mf">6.63</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">........</span>                                <span class="p">]</span> <span class="mi">20</span><span class="o">%</span> <span class="o">|</span> <span class="mf">6.86</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">........</span>                                <span class="p">]</span> <span class="mi">21</span><span class="o">%</span> <span class="o">|</span> <span class="mf">7.09</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">........</span>                                <span class="p">]</span> <span class="mi">22</span><span class="o">%</span> <span class="o">|</span> <span class="mf">7.32</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.........</span>                               <span class="p">]</span> <span class="mi">22</span><span class="o">%</span> <span class="o">|</span> <span class="mf">7.56</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.........</span>                               <span class="p">]</span> <span class="mi">23</span><span class="o">%</span> <span class="o">|</span> <span class="mf">7.81</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.........</span>                               <span class="p">]</span> <span class="mi">24</span><span class="o">%</span> <span class="o">|</span> <span class="mf">8.06</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..........</span>                              <span class="p">]</span> <span class="mi">25</span><span class="o">%</span> <span class="o">|</span> <span class="mf">8.31</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..........</span>                              <span class="p">]</span> <span class="mi">26</span><span class="o">%</span> <span class="o">|</span> <span class="mf">8.57</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..........</span>                              <span class="p">]</span> <span class="mi">27</span><span class="o">%</span> <span class="o">|</span> <span class="mf">8.83</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...........</span>                             <span class="p">]</span> <span class="mi">28</span><span class="o">%</span> <span class="o">|</span> <span class="mf">9.09</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...........</span>                             <span class="p">]</span> <span class="mi">28</span><span class="o">%</span> <span class="o">|</span> <span class="mf">9.36</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...........</span>                             <span class="p">]</span> <span class="mi">29</span><span class="o">%</span> <span class="o">|</span> <span class="mf">9.62</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">............</span>                            <span class="p">]</span> <span class="mi">30</span><span class="o">%</span> <span class="o">|</span> <span class="mf">9.89</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">............</span>                            <span class="p">]</span> <span class="mi">31</span><span class="o">%</span> <span class="o">|</span> <span class="mf">10.15</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">............</span>                            <span class="p">]</span> <span class="mi">32</span><span class="o">%</span> <span class="o">|</span> <span class="mf">10.42</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.............</span>                           <span class="p">]</span> <span class="mi">32</span><span class="o">%</span> <span class="o">|</span> <span class="mf">10.69</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.............</span>                           <span class="p">]</span> <span class="mi">33</span><span class="o">%</span> <span class="o">|</span> <span class="mf">10.96</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.............</span>                           <span class="p">]</span> <span class="mi">34</span><span class="o">%</span> <span class="o">|</span> <span class="mf">11.28</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..............</span>                          <span class="p">]</span> <span class="mi">35</span><span class="o">%</span> <span class="o">|</span> <span class="mf">11.50</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..............</span>                          <span class="p">]</span> <span class="mi">36</span><span class="o">%</span> <span class="o">|</span> <span class="mf">11.73</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..............</span>                          <span class="p">]</span> <span class="mi">37</span><span class="o">%</span> <span class="o">|</span> <span class="mf">11.96</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...............</span>                         <span class="p">]</span> <span class="mi">38</span><span class="o">%</span> <span class="o">|</span> <span class="mf">12.19</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...............</span>                         <span class="p">]</span> <span class="mi">38</span><span class="o">%</span> <span class="o">|</span> <span class="mf">12.43</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...............</span>                         <span class="p">]</span> <span class="mi">39</span><span class="o">%</span> <span class="o">|</span> <span class="mf">12.67</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">................</span>                        <span class="p">]</span> <span class="mi">40</span><span class="o">%</span> <span class="o">|</span> <span class="mf">12.91</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">................</span>                        <span class="p">]</span> <span class="mi">41</span><span class="o">%</span> <span class="o">|</span> <span class="mf">13.16</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">................</span>                        <span class="p">]</span> <span class="mi">42</span><span class="o">%</span> <span class="o">|</span> <span class="mf">13.42</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.................</span>                       <span class="p">]</span> <span class="mi">42</span><span class="o">%</span> <span class="o">|</span> <span class="mf">13.68</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.................</span>                       <span class="p">]</span> <span class="mi">43</span><span class="o">%</span> <span class="o">|</span> <span class="mf">13.94</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.................</span>                       <span class="p">]</span> <span class="mi">44</span><span class="o">%</span> <span class="o">|</span> <span class="mf">14.20</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..................</span>                      <span class="p">]</span> <span class="mi">45</span><span class="o">%</span> <span class="o">|</span> <span class="mf">14.46</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..................</span>                      <span class="p">]</span> <span class="mi">46</span><span class="o">%</span> <span class="o">|</span> <span class="mf">14.73</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..................</span>                      <span class="p">]</span> <span class="mi">47</span><span class="o">%</span> <span class="o">|</span> <span class="mf">14.99</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...................</span>                     <span class="p">]</span> <span class="mi">48</span><span class="o">%</span> <span class="o">|</span> <span class="mf">15.26</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...................</span>                     <span class="p">]</span> <span class="mi">48</span><span class="o">%</span> <span class="o">|</span> <span class="mf">15.53</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...................</span>                     <span class="p">]</span> <span class="mi">49</span><span class="o">%</span> <span class="o">|</span> <span class="mf">15.80</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">....................</span>                    <span class="p">]</span> <span class="mi">50</span><span class="o">%</span> <span class="o">|</span> <span class="mf">16.07</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">....................</span>                    <span class="p">]</span> <span class="mi">51</span><span class="o">%</span> <span class="o">|</span> <span class="mf">16.39</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">....................</span>                    <span class="p">]</span> <span class="mi">52</span><span class="o">%</span> <span class="o">|</span> <span class="mf">16.60</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.....................</span>                   <span class="p">]</span> <span class="mi">52</span><span class="o">%</span> <span class="o">|</span> <span class="mf">16.82</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.....................</span>                   <span class="p">]</span> <span class="mi">53</span><span class="o">%</span> <span class="o">|</span> <span class="mf">17.05</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.....................</span>                   <span class="p">]</span> <span class="mi">54</span><span class="o">%</span> <span class="o">|</span> <span class="mf">17.28</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">......................</span>                  <span class="p">]</span> <span class="mi">55</span><span class="o">%</span> <span class="o">|</span> <span class="mf">17.52</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">......................</span>                  <span class="p">]</span> <span class="mi">56</span><span class="o">%</span> <span class="o">|</span> <span class="mf">17.76</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">......................</span>                  <span class="p">]</span> <span class="mi">57</span><span class="o">%</span> <span class="o">|</span> <span class="mf">18.01</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.......................</span>                 <span class="p">]</span> <span class="mi">57</span><span class="o">%</span> <span class="o">|</span> <span class="mf">18.25</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.......................</span>                 <span class="p">]</span> <span class="mi">58</span><span class="o">%</span> <span class="o">|</span> <span class="mf">18.51</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.......................</span>                 <span class="p">]</span> <span class="mi">59</span><span class="o">%</span> <span class="o">|</span> <span class="mf">18.77</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">........................</span>                <span class="p">]</span> <span class="mi">60</span><span class="o">%</span> <span class="o">|</span> <span class="mf">19.03</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">........................</span>                <span class="p">]</span> <span class="mi">61</span><span class="o">%</span> <span class="o">|</span> <span class="mf">19.29</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">........................</span>                <span class="p">]</span> <span class="mi">62</span><span class="o">%</span> <span class="o">|</span> <span class="mf">19.56</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.........................</span>               <span class="p">]</span> <span class="mi">62</span><span class="o">%</span> <span class="o">|</span> <span class="mf">19.82</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.........................</span>               <span class="p">]</span> <span class="mi">63</span><span class="o">%</span> <span class="o">|</span> <span class="mf">20.08</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.........................</span>               <span class="p">]</span> <span class="mi">64</span><span class="o">%</span> <span class="o">|</span> <span class="mf">20.35</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..........................</span>              <span class="p">]</span> <span class="mi">65</span><span class="o">%</span> <span class="o">|</span> <span class="mf">20.62</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..........................</span>              <span class="p">]</span> <span class="mi">66</span><span class="o">%</span> <span class="o">|</span> <span class="mf">20.89</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..........................</span>              <span class="p">]</span> <span class="mi">67</span><span class="o">%</span> <span class="o">|</span> <span class="mf">21.16</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...........................</span>             <span class="p">]</span> <span class="mi">68</span><span class="o">%</span> <span class="o">|</span> <span class="mf">21.46</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...........................</span>             <span class="p">]</span> <span class="mi">68</span><span class="o">%</span> <span class="o">|</span> <span class="mf">21.68</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...........................</span>             <span class="p">]</span> <span class="mi">69</span><span class="o">%</span> <span class="o">|</span> <span class="mf">21.89</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">............................</span>            <span class="p">]</span> <span class="mi">70</span><span class="o">%</span> <span class="o">|</span> <span class="mf">22.11</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">............................</span>            <span class="p">]</span> <span class="mi">71</span><span class="o">%</span> <span class="o">|</span> <span class="mf">22.33</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">............................</span>            <span class="p">]</span> <span class="mi">72</span><span class="o">%</span> <span class="o">|</span> <span class="mf">22.55</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.............................</span>           <span class="p">]</span> <span class="mi">72</span><span class="o">%</span> <span class="o">|</span> <span class="mf">22.79</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.............................</span>           <span class="p">]</span> <span class="mi">73</span><span class="o">%</span> <span class="o">|</span> <span class="mf">23.02</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.............................</span>           <span class="p">]</span> <span class="mi">74</span><span class="o">%</span> <span class="o">|</span> <span class="mf">23.26</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..............................</span>          <span class="p">]</span> <span class="mi">75</span><span class="o">%</span> <span class="o">|</span> <span class="mf">23.51</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..............................</span>          <span class="p">]</span> <span class="mi">76</span><span class="o">%</span> <span class="o">|</span> <span class="mf">23.76</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..............................</span>          <span class="p">]</span> <span class="mi">77</span><span class="o">%</span> <span class="o">|</span> <span class="mf">24.01</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...............................</span>         <span class="p">]</span> <span class="mi">78</span><span class="o">%</span> <span class="o">|</span> <span class="mf">24.26</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...............................</span>         <span class="p">]</span> <span class="mi">78</span><span class="o">%</span> <span class="o">|</span> <span class="mf">24.51</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...............................</span>         <span class="p">]</span> <span class="mi">79</span><span class="o">%</span> <span class="o">|</span> <span class="mf">24.77</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">................................</span>        <span class="p">]</span> <span class="mi">80</span><span class="o">%</span> <span class="o">|</span> <span class="mf">25.02</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">................................</span>        <span class="p">]</span> <span class="mi">81</span><span class="o">%</span> <span class="o">|</span> <span class="mf">25.28</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">................................</span>        <span class="p">]</span> <span class="mi">82</span><span class="o">%</span> <span class="o">|</span> <span class="mf">25.54</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.................................</span>       <span class="p">]</span> <span class="mi">82</span><span class="o">%</span> <span class="o">|</span> <span class="mf">25.80</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.................................</span>       <span class="p">]</span> <span class="mi">83</span><span class="o">%</span> <span class="o">|</span> <span class="mf">26.06</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.................................</span>       <span class="p">]</span> <span class="mi">84</span><span class="o">%</span> <span class="o">|</span> <span class="mf">26.37</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..................................</span>      <span class="p">]</span> <span class="mi">85</span><span class="o">%</span> <span class="o">|</span> <span class="mf">26.58</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..................................</span>      <span class="p">]</span> <span class="mi">86</span><span class="o">%</span> <span class="o">|</span> <span class="mf">26.79</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">..................................</span>      <span class="p">]</span> <span class="mi">87</span><span class="o">%</span> <span class="o">|</span> <span class="mf">27.01</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...................................</span>     <span class="p">]</span> <span class="mi">88</span><span class="o">%</span> <span class="o">|</span> <span class="mf">27.24</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...................................</span>     <span class="p">]</span> <span class="mi">88</span><span class="o">%</span> <span class="o">|</span> <span class="mf">27.46</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">...................................</span>     <span class="p">]</span> <span class="mi">89</span><span class="o">%</span> <span class="o">|</span> <span class="mf">27.70</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">....................................</span>    <span class="p">]</span> <span class="mi">90</span><span class="o">%</span> <span class="o">|</span> <span class="mf">27.95</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">....................................</span>    <span class="p">]</span> <span class="mi">91</span><span class="o">%</span> <span class="o">|</span> <span class="mf">28.20</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">....................................</span>    <span class="p">]</span> <span class="mi">92</span><span class="o">%</span> <span class="o">|</span> <span class="mf">28.46</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.....................................</span>   <span class="p">]</span> <span class="mi">92</span><span class="o">%</span> <span class="o">|</span> <span class="mf">28.72</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.....................................</span>   <span class="p">]</span> <span class="mi">93</span><span class="o">%</span> <span class="o">|</span> <span class="mf">28.98</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.....................................</span>   <span class="p">]</span> <span class="mi">94</span><span class="o">%</span> <span class="o">|</span> <span class="mf">29.24</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">......................................</span>  <span class="p">]</span> <span class="mi">95</span><span class="o">%</span> <span class="o">|</span> <span class="mf">29.51</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">......................................</span>  <span class="p">]</span> <span class="mi">96</span><span class="o">%</span> <span class="o">|</span> <span class="mf">29.77</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">......................................</span>  <span class="p">]</span> <span class="mi">97</span><span class="o">%</span> <span class="o">|</span> <span class="mf">30.03</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.......................................</span> <span class="p">]</span> <span class="mi">98</span><span class="o">%</span> <span class="o">|</span> <span class="mf">30.30</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.......................................</span> <span class="p">]</span> <span class="mi">98</span><span class="o">%</span> <span class="o">|</span> <span class="mf">30.59</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">.......................................</span> <span class="p">]</span> <span class="mi">99</span><span class="o">%</span> <span class="o">|</span> <span class="mf">30.85</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
-<span class="p">[</span><span class="o">........................................</span><span class="p">]</span> <span class="mi">100</span><span class="o">%</span> <span class="o">|</span> <span class="mf">31.12</span> <span class="n">sec</span> <span class="o">|</span> <span class="n">comodulogram</span><span class="p">:</span> <span class="n">tort</span>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[                                        ] 0% | 0.00 sec | comodulogram: DAR(10, 1)
+[..                                      ] 5% | 0.29 sec | comodulogram: DAR(10, 1)
+[....                                    ] 10% | 0.40 sec | comodulogram: DAR(10, 1)
+[......                                  ] 15% | 0.51 sec | comodulogram: DAR(10, 1)
+[........                                ] 20% | 0.69 sec | comodulogram: DAR(10, 1)
+[..........                              ] 25% | 0.79 sec | comodulogram: DAR(10, 1)
+[............                            ] 30% | 0.88 sec | comodulogram: DAR(10, 1)
+[..............                          ] 35% | 0.98 sec | comodulogram: DAR(10, 1)
+[................                        ] 40% | 1.14 sec | comodulogram: DAR(10, 1)
+[..................                      ] 45% | 1.27 sec | comodulogram: DAR(10, 1)
+[....................                    ] 50% | 1.40 sec | comodulogram: DAR(10, 1)
+[......................                  ] 55% | 1.50 sec | comodulogram: DAR(10, 1)
+[........................                ] 60% | 1.60 sec | comodulogram: DAR(10, 1)
+[..........................              ] 65% | 1.70 sec | comodulogram: DAR(10, 1)
+[............................            ] 70% | 1.81 sec | comodulogram: DAR(10, 1)
+[..............................          ] 75% | 1.93 sec | comodulogram: DAR(10, 1)
+[................................        ] 80% | 2.07 sec | comodulogram: DAR(10, 1)
+[..................................      ] 85% | 2.17 sec | comodulogram: DAR(10, 1)
+[....................................    ] 90% | 2.28 sec | comodulogram: DAR(10, 1)
+[......................................  ] 95% | 2.39 sec | comodulogram: DAR(10, 1)
+[........................................] 100% | 2.48 sec | comodulogram: DAR(10, 1)
+
+[........................................] 100% | 2.48 sec | comodulogram: DAR(10, 1) /home/tom/work/github/pactools/examples/plot_mne_epoch_masking.py:122: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
 </pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  33.431 seconds)</p>
-<div class="sphx-glr-footer docutils container">
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/plot_mne_epoch_masking.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_mne_epoch_masking.py</span></code></a></div>
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/plot_mne_epoch_masking.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_mne_epoch_masking.ipynb</span></code></a></div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  4.262 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-mne-epoch-masking-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/0789bcbe00d0db709615c2199c1448c7/plot_mne_epoch_masking.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_mne_epoch_masking.py</span></code></a></p>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/1d03446eda919a1c40073436f5fe7156/plot_mne_epoch_masking.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_mne_epoch_masking.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_comodulogram.html" class="btn btn-neutral float-right" title="Comodulogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_grid_search.html" class="btn btn-neutral float-right" title="Grid-search and cross-validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_peak_locking.html" class="btn btn-neutral" title="Peak-locking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_dar_model.html" class="btn btn-neutral float-left" title="Fitting a DAR model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -373,11 +386,11 @@ results.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -390,37 +403,15 @@ results.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

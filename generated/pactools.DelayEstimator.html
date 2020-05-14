@@ -17,45 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
-        <link rel="up" title="API Documentation" href="../api.html"/>
-        <link rel="next" title="pactools.PeakLocking" href="pactools.PeakLocking.html"/>
-        <link rel="prev" title="pactools.Comodulogram" href="pactools.Comodulogram.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pactools.PeakLocking" href="pactools.PeakLocking.html" />
+    <link rel="prev" title="pactools.Comodulogram" href="pactools.Comodulogram.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -108,7 +103,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pactools</a>
@@ -116,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -164,101 +160,80 @@
             
   <div class="section" id="pactools-delayestimator">
 <h1>pactools.DelayEstimator<a class="headerlink" href="#pactools-delayestimator" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pactools.DelayEstimator">
-<em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">DelayEstimator</code><span class="sig-paren">(</span><em>fs</em>, <em>dar_model</em>, <em>low_fq</em>, <em>low_fq_width</em>, <em>max_delay='auto'</em>, <em>refit=True</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/delay_estimator.html#DelayEstimator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.DelayEstimator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pactools.</code><code class="sig-name descname">DelayEstimator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">dar_model</span></em>, <em class="sig-param"><span class="n">low_fq</span></em>, <em class="sig-param"><span class="n">low_fq_width</span></em>, <em class="sig-param"><span class="n">max_delay</span><span class="o">=</span><span class="default_value">'auto'</span></em>, <em class="sig-param"><span class="n">refit</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/delay_estimator.html#DelayEstimator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.DelayEstimator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the optimal delay between the two components in PAC</p>
 <p>In phase-amplitude coupling (PAC), the slow oscillation and the fast
 oscillations may be shifted in time with a constant temporal delay. This
 estimator compute the optimal delay, based on the maximum likelihood of DAR
 models.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fs</strong> : float</p>
-<blockquote>
-<div><p>Sampling frequency</p>
-</div></blockquote>
-<p><strong>dar_model</strong> : DAR instance</p>
-<blockquote>
-<div><p>DAR model used to fit the signal</p>
-</div></blockquote>
-<p><strong>low_fq</strong> : float</p>
-<blockquote>
-<div><p>Filtering frequency (phase signal)</p>
-</div></blockquote>
-<p><strong>low_fq_width</strong> : float</p>
-<blockquote>
-<div><p>Bandwidth of the band-pass filter (phase signal)</p>
-</div></blockquote>
-<p><strong>max_delay</strong> : float or ‘auto’</p>
-<blockquote>
-<div><p>The delay grid will range from -max_delay to max_delay.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fs</strong><span class="classifier">float</span></dt><dd><p>Sampling frequency</p>
+</dd>
+<dt><strong>dar_model</strong><span class="classifier">DAR instance</span></dt><dd><p>DAR model used to fit the signal</p>
+</dd>
+<dt><strong>low_fq</strong><span class="classifier">float</span></dt><dd><p>Filtering frequency (phase signal)</p>
+</dd>
+<dt><strong>low_fq_width</strong><span class="classifier">float</span></dt><dd><p>Bandwidth of the band-pass filter (phase signal)</p>
+</dd>
+<dt><strong>max_delay</strong><span class="classifier">float or ‘auto’</span></dt><dd><p>The delay grid will range from -max_delay to max_delay.
 If ‘auto’, it uses 0.5 / low_fq.</p>
-</div></blockquote>
-<p><strong>refit</strong> : boolean, default True</p>
-<blockquote>
-<div><p>If True, the model will be refitted with the best delay obtained</p>
-</div></blockquote>
-<p><strong>random_state</strong> : None, int or np.random.RandomState instance</p>
-<blockquote class="last">
-<div><p>Seed or random number generator for the surrogate analysis.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt><strong>refit</strong><span class="classifier">boolean, default True</span></dt><dd><p>If True, the model will be refitted with the best delay obtained</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">None, int or np.random.RandomState instance</span></dt><dd><p>Seed or random number generator for the surrogate analysis.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">References</p>
 <p>Dupre la Tour et al. (2017). Non-linear Auto-Regressive Models for
 Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pactools.DelayEstimator.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs</em>, <em>dar_model</em>, <em>low_fq</em>, <em>low_fq_width</em>, <em>max_delay='auto'</em>, <em>refit=True</em>, <em>random_state=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/delay_estimator.html#DelayEstimator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.DelayEstimator.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">dar_model</span></em>, <em class="sig-param"><span class="n">low_fq</span></em>, <em class="sig-param"><span class="n">low_fq_width</span></em>, <em class="sig-param"><span class="n">max_delay</span><span class="o">=</span><span class="default_value">'auto'</span></em>, <em class="sig-param"><span class="n">refit</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/delay_estimator.html#DelayEstimator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.DelayEstimator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
 
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.DelayEstimator.__init__" title="pactools.DelayEstimator.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;dar_model,&nbsp;low_fq,&nbsp;low_fq_width)</td>
-<td></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pactools.DelayEstimator.__init__" title="pactools.DelayEstimator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self, fs, dar_model, low_fq, …[, …])</p></td>
+<td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(low_sig[,&nbsp;high_sig,&nbsp;mask])</td>
-<td>Compute peak-locked time-averaged and time-frequency representations.</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code>(self, low_sig[, high_sig, mask])</p></td>
+<td><p>Compute peak-locked time-averaged and time-frequency representations.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([ax,&nbsp;write_tau])</td>
-<td><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>(self[, ax, write_tau])</p></td>
+<td><p><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <div class="section" id="examples-using-pactools-delayestimator">
-<h2>Examples using <code class="docutils literal"><span class="pre">pactools.DelayEstimator</span></code><a class="headerlink" href="#examples-using-pactools-delayestimator" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip="This example disantangles the two distinct notions of phase shift and temporal delay in phase-a..."><div class="figure" id="id1">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pactools.DelayEstimator</span></code><a class="headerlink" href="#examples-using-pactools-delayestimator" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip="This example disantangles the two distinct notions of phase shift and temporal delay in phase-a..."><div class="figure align-default" id="id1">
 <img alt="../_images/sphx_glr_plot_phase_delay_thumb.png" src="../_images/sphx_glr_plot_phase_delay_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_phase_delay.html#sphx-glr-auto-examples-plot-phase-delay-py"><span class="std std-ref">Phase shift and temporal delay in PAC</span></a></span></p>
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_phase_delay.html#sphx-glr-auto-examples-plot-phase-delay-py"><span class="std std-ref">Phase shift and temporal delay in PAC</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 </div><div class="clearer"></div></div>
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -267,7 +242,7 @@ Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
         <a href="pactools.PeakLocking.html" class="btn btn-neutral float-right" title="pactools.PeakLocking" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pactools.Comodulogram.html" class="btn btn-neutral" title="pactools.Comodulogram" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pactools.Comodulogram.html" class="btn btn-neutral float-left" title="pactools.Comodulogram" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -276,11 +251,11 @@ Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -293,37 +268,15 @@ Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

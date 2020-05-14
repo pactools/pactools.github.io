@@ -17,45 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
-        <link rel="up" title="Gallery of Examples" href="index.html"/>
-        <link rel="next" title="Grid-search and cross-validation" href="plot_grid_search.html"/>
-        <link rel="prev" title="Surrogate analysis" href="plot_surrogate_analysis.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Interface with MNE-python" href="plot_mne_epoch_masking.html" />
+    <link rel="prev" title="Surrogate analysis" href="plot_surrogate_analysis.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,10 +85,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with pactools</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Gallery of Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="plot_peak_locking.html">Peak-locking</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_mne_epoch_masking.html">Interface with MNE-python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_comodulogram.html">Comodulogram</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_surrogate_analysis.html">Surrogate analysis</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Fitting a DAR model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_mne_epoch_masking.html">Interface with MNE-python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_grid_search.html">Grid-search and cross-validation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_spurious_pac.html">Spurious PAC with spikes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_phase_delay.html">Phase shift and temporal delay in PAC</a></li>
@@ -112,7 +107,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pactools</a>
@@ -120,9 +115,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -166,21 +162,25 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="fitting-a-dar-model">
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-dar-model-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="fitting-a-dar-model">
 <span id="sphx-glr-auto-examples-plot-dar-model-py"></span><h1>Fitting a DAR model<a class="headerlink" href="#fitting-a-dar-model" title="Permalink to this headline">¶</a></h1>
 <p>This example creates an artificial signal with phase-amplitude coupling (PAC),
 fits a DAR model and show the modulation extracted in the DAR model.</p>
 <p>It also shows the comodulogram computed with a DAR model.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a>
-<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="View documentation for pactools.simulate_pac"><span class="n">simulate_pac</span></a>
-<span class="kn">from</span> <span class="nn">pactools.dar_model</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="View documentation for pactools.dar_model.DAR"><span class="n">DAR</span></a><span class="p">,</span> <a href="http://pactools.github.io/generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="View documentation for pactools.dar_model.extract_driver"><span class="n">extract_driver</span></a>
+<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class"><span class="n">Comodulogram</span></a>
+<span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="pactools.simulate_pac" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-function"><span class="n">simulate_pac</span></a>
+<span class="kn">from</span> <span class="nn">pactools.dar_model</span> <span class="kn">import</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class"><span class="n">DAR</span></a><span class="p">,</span> <a href="http://pactools.github.io/generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="pactools.dar_model.extract_driver" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-function"><span class="n">extract_driver</span></a>
 </pre></div>
 </div>
 <p>Let’s first create an artificial signal with PAC.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="mf">200.</span>  <span class="c1"># Hz</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="mf">200.</span>  <span class="c1"># Hz</span>
 <span class="n">high_fq</span> <span class="o">=</span> <span class="mf">50.0</span>  <span class="c1"># Hz</span>
 <span class="n">low_fq</span> <span class="o">=</span> <span class="mf">5.0</span>  <span class="c1"># Hz</span>
 <span class="n">low_fq_width</span> <span class="o">=</span> <span class="mf">1.0</span>  <span class="c1"># Hz</span>
@@ -188,91 +188,100 @@ fits a DAR model and show the modulation extracted in the DAR model.</p>
 <span class="n">n_points</span> <span class="o">=</span> <span class="mi">10000</span>
 <span class="n">noise_level</span> <span class="o">=</span> <span class="mf">0.4</span>
 
-<span class="n">signal</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="View documentation for pactools.simulate_pac"><span class="n">simulate_pac</span></a><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal</span></a> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.simulate_pac.html#pactools.simulate_pac" title="pactools.simulate_pac" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-function"><span class="n">simulate_pac</span></a><span class="p">(</span><span class="n">n_points</span><span class="o">=</span><span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">high_fq</span><span class="o">=</span><span class="n">high_fq</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span>
                       <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">noise_level</span><span class="o">=</span><span class="n">noise_level</span><span class="p">,</span>
                       <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Extract a low-frequency band, and fit a DAR model, using BIC order selection.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Prepare the plot for the two figures</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.subplots" title="View documentation for matplotlib.pyplot.subplots"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare the plot for the two figures</span>
+<span class="n">fig</span><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
 <span class="c1"># Extract a low frequency band</span>
-<span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv_imag</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="View documentation for pactools.dar_model.extract_driver"><span class="n">extract_driver</span></a><span class="p">(</span>
-    <span class="n">sigs</span><span class="o">=</span><span class="n">signal</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
-    <span class="n">extract_complex</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">sigdriv</span></a><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">sigin</span></a><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">sigdriv_imag</span></a> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="pactools.dar_model.extract_driver" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-function"><span class="n">extract_driver</span></a><span class="p">(</span>
+    <span class="n">sigs</span><span class="o">=</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal</span></a><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq</span><span class="o">=</span><span class="n">low_fq</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span>
+    <span class="n">extract_complex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="c1"># Create a DAR model</span>
 <span class="c1"># Here we use BIC selection to get optimal hyperparameters (ordar, ordriv)</span>
-<span class="n">dar</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="View documentation for pactools.dar_model.DAR"><span class="n">DAR</span></a><span class="p">(</span><span class="n">ordar</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">)</span>
+<a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class"><span class="n">DAR</span></a><span class="p">(</span><span class="n">ordar</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">)</span>
 <span class="c1"># Fit the DAR model</span>
-<span class="n">dar</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sigin</span><span class="o">=</span><span class="n">sigin</span><span class="p">,</span> <span class="n">sigdriv</span><span class="o">=</span><span class="n">sigdriv</span><span class="p">,</span> <span class="n">sigdriv_imag</span><span class="o">=</span><span class="n">sigdriv_imag</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
+<a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">sigin</span></a><span class="o">=</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">sigin</span></a><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">sigdriv</span></a><span class="o">=</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">sigdriv</span></a><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">sigdriv_imag</span></a><span class="o">=</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">sigdriv_imag</span></a><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
 
 <span class="c1"># Plot the BIC selection</span>
-<span class="n">bic_array</span> <span class="o">=</span> <span class="n">dar</span><span class="o">.</span><span class="n">model_selection_criterions_</span><span class="p">[</span><span class="s1">&#39;bic&#39;</span><span class="p">]</span>
-<span class="n">lines</span> <span class="o">=</span> <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">bic_array</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ordriv=</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;ordar&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;BIC / T&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;BIC order selection&#39;</span><span class="p">)</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dar</span><span class="o">.</span><span class="n">ordar_</span><span class="p">,</span> <span class="n">bic_array</span><span class="p">[</span><span class="n">dar</span><span class="o">.</span><span class="n">ordar_</span><span class="p">,</span> <span class="n">dar</span><span class="o">.</span><span class="n">ordriv_</span><span class="p">],</span> <span class="s1">&#39;ro&#39;</span><span class="p">)</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">bic_array</span></a> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a><span class="o">.</span><span class="n">model_selection_criterions_</span><span class="p">[</span><span class="s1">&#39;bic&#39;</span><span class="p">]</span>
+<span class="n">lines</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">bic_array</span></a><span class="p">)</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ordriv=</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]])</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;ordar&#39;</span><span class="p">)</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;BIC / T&#39;</span><span class="p">)</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;BIC order selection&#39;</span><span class="p">)</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a><span class="o">.</span><span class="n">ordar_</span><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">bic_array</span></a><span class="p">[</span><a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a><span class="o">.</span><span class="n">ordar_</span><span class="p">,</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a><span class="o">.</span><span class="n">ordriv_</span><span class="p">],</span> <span class="s1">&#39;ro&#39;</span><span class="p">)</span>
 
 <span class="c1"># Plot the modulation extracted by the optimal model</span>
-<span class="n">dar</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">dar</span><span class="o">.</span><span class="n">get_title</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+<a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a><span class="o">.</span><span class="n">get_title</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
-<img alt="../_images/sphx_glr_plot_dar_model_001.png" class="align-center" src="../_images/sphx_glr_plot_dar_model_001.png" />
+<img alt="../_images/sphx_glr_plot_dar_model_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_dar_model_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;DAR(10, 1)&#39;)
+</pre></div>
+</div>
 <p>To compute a comodulogram, we perform the same steps for each low frequency:
 * Extract the low frequency
 * Fit a DAR model
 * Potentially with a model selection using the BIC
 * And quantify the PAC accross the spectrum.</p>
-<p>Everything is handled by the class <a class="reference internal" href="../generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram"><code class="xref py py-class docutils literal"><span class="pre">Comodulogram</span></code></a>, by giving
-a (non-fitted) DAR model in the parameter <code class="docutils literal"><span class="pre">method</span></code>.
-Giving <code class="docutils literal"><span class="pre">method='duprelatour'</span></code> will default to
-<code class="docutils literal"><span class="pre">DAR(ordar=10,</span> <span class="pre">ordriv=1,</span> <span class="pre">criterion=None)</span></code>, without BIC selection.</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Here we do not give the default set of parameter. Note that the BIC selection</span>
+<p>Everything is handled by the class <a class="reference internal" href="../generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram"><code class="xref py py-class docutils literal notranslate"><span class="pre">Comodulogram</span></code></a>, by giving
+a (non-fitted) DAR model in the parameter <code class="docutils literal notranslate"><span class="pre">method</span></code>.
+Giving <code class="docutils literal notranslate"><span class="pre">method='duprelatour'</span></code> will default to
+<code class="docutils literal notranslate"><span class="pre">DAR(ordar=10,</span> <span class="pre">ordriv=1,</span> <span class="pre">criterion=None)</span></code>, without BIC selection.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we do not give the default set of parameter. Note that the BIC selection</span>
 <span class="c1"># will be performed independantly for each model (i.e. at each low frequency).</span>
-<span class="n">dar</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="View documentation for pactools.dar_model.DAR"><span class="n">DAR</span></a><span class="p">(</span><span class="n">ordar</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">)</span>
-<span class="n">low_fq_range</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.linspace.html#numpy.linspace" title="View documentation for numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-<span class="n">estimator</span> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="View documentation for pactools.Comodulogram"><span class="n">Comodulogram</span></a><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="o">=</span><span class="n">low_fq_range</span><span class="p">,</span>
-                         <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">dar</span><span class="p">,</span>
-                         <span class="n">progress_bar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.subplots" title="View documentation for matplotlib.pyplot.subplots"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-<span class="n">estimator</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axs</span><span class="o">=</span><span class="p">[</span><span class="n">ax</span><span class="p">])</span>
+<a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class"><span class="n">DAR</span></a><span class="p">(</span><span class="n">ordar</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ordriv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;bic&#39;</span><span class="p">)</span>
+<a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">low_fq_range</span></a> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class"><span class="n">Comodulogram</span></a><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span> <a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">low_fq_range</span></a><span class="o">=</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">low_fq_range</span></a><span class="p">,</span>
+                         <span class="n">low_fq_width</span><span class="o">=</span><span class="n">low_fq_width</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><a href="http://pactools.github.io/generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR" class="sphx-glr-backref-module-pactools-dar_model sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dar</span></a><span class="p">,</span>
+                         <span class="n">progress_bar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a><span class="o">.</span><span class="n">fit</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">signal</span></a><span class="p">)</span>
+<a href="http://pactools.github.io/generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram" class="sphx-glr-backref-module-pactools sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy-1.9.1/reference/generated/numpy.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-np-class"><span class="n">axs</span></a><span class="o">=</span><span class="p">[</span><span class="n">ax</span><span class="p">])</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Comodulogram&#39;</span><span class="p">)</span>
 
-<a href="http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.show" title="View documentation for matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<img alt="../_images/sphx_glr_plot_dar_model_002.png" class="align-center" src="../_images/sphx_glr_plot_dar_model_002.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  21.560 seconds)</p>
-<div class="sphx-glr-footer docutils container">
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/plot_dar_model.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dar_model.py</span></code></a></div>
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/plot_dar_model.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_dar_model.ipynb</span></code></a></div>
+<img alt="../_images/sphx_glr_plot_dar_model_002.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_dar_model_002.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/tom/work/github/pactools/examples/plot_dar_model.py:86: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+</pre></div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Generated by Sphinx-Gallery</a></p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  42.939 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-dar-model-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/05779cb76f55fa5acfb0044714058fd1/plot_dar_model.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dar_model.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/85fd8c6a0a0d3108a575514509c2662b/plot_dar_model.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_dar_model.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_grid_search.html" class="btn btn-neutral float-right" title="Grid-search and cross-validation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_mne_epoch_masking.html" class="btn btn-neutral float-right" title="Interface with MNE-python" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_surrogate_analysis.html" class="btn btn-neutral" title="Surrogate analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_surrogate_analysis.html" class="btn btn-neutral float-left" title="Surrogate analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -281,11 +290,11 @@ Giving <code class="docutils literal"><span class="pre">method='duprelatour'</sp
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -298,37 +307,15 @@ Giving <code class="docutils literal"><span class="pre">method='duprelatour'</sp
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

@@ -17,45 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
-        <link rel="up" title="API Documentation" href="../api.html"/>
-        <link rel="next" title="pactools.utils.fir.BandPassFilter" href="pactools.utils.fir.BandPassFilter.html"/>
-        <link rel="prev" title="pactools.dar_model.StableDAR" href="pactools.dar_model.StableDAR.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pactools.utils.fir.BandPassFilter" href="pactools.utils.fir.BandPassFilter.html" />
+    <link rel="prev" title="pactools.dar_model.StableDAR" href="pactools.dar_model.StableDAR.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -108,7 +103,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pactools</a>
@@ -116,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -164,105 +160,73 @@
             
   <div class="section" id="pactools-dar-model-extract-driver">
 <h1>pactools.dar_model.extract_driver<a class="headerlink" href="#pactools-dar-model-extract-driver" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pactools.dar_model.extract_driver">
-<code class="descclassname">pactools.dar_model.</code><code class="descname">extract_driver</code><span class="sig-paren">(</span><em>sigs</em>, <em>fs</em>, <em>low_fq</em>, <em>n_cycles=None</em>, <em>bandwidth=1.0</em>, <em>fill=2</em>, <em>whitening='after'</em>, <em>ordar=10</em>, <em>normalize=False</em>, <em>extract_complex=True</em>, <em>random_state=None</em>, <em>draw=''</em>, <em>max_low_fq=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/preprocess.html#extract_driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.extract_driver" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pactools.dar_model.</code><code class="sig-name descname">extract_driver</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sigs</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">low_fq</span></em>, <em class="sig-param"><span class="n">n_cycles</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bandwidth</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">whitening</span><span class="o">=</span><span class="default_value">'after'</span></em>, <em class="sig-param"><span class="n">ordar</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">normalize</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">extract_complex</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">draw</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">max_low_fq</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">enf</span><span class="o">=</span><span class="default_value">50.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/preprocess.html#extract_driver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.extract_driver" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the driver with filtering and fill the rest of the signal.</p>
 <p>The driver is extracted with a bandpass filter, subtracted from the signal,
 and the frequency gap is filled with filtered white noise.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sigs</strong> : array, shape (n_epochs, n_points)</p>
-<blockquote>
-<div><p>Input array to filter</p>
-</div></blockquote>
-<p><strong>fs</strong> : float</p>
-<blockquote>
-<div><p>Sampling frequency</p>
-</div></blockquote>
-<p><strong>low_fq</strong> : float</p>
-<blockquote>
-<div><p>Center frequency of bandpass filters.</p>
-</div></blockquote>
-<p><strong>bandwidth</strong> : float</p>
-<blockquote>
-<div><p>Bandwidth of the bandpass filters.
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>sigs</strong><span class="classifier">array, shape (n_epochs, n_points)</span></dt><dd><p>Input array to filter</p>
+</dd>
+<dt><strong>fs</strong><span class="classifier">float</span></dt><dd><p>Sampling frequency</p>
+</dd>
+<dt><strong>low_fq</strong><span class="classifier">float</span></dt><dd><p>Center frequency of bandpass filters.</p>
+</dd>
+<dt><strong>bandwidth</strong><span class="classifier">float</span></dt><dd><p>Bandwidth of the bandpass filters.
 Use it to have a constant bandwidth for all filters.
 Should be None if n_cycles is not None.</p>
-</div></blockquote>
-<p><strong>n_cycles</strong> : float</p>
-<blockquote>
-<div><p>Number of cycles of the bandpass filters.
+</dd>
+<dt><strong>n_cycles</strong><span class="classifier">float</span></dt><dd><p>Number of cycles of the bandpass filters.
 Use it to have a bandwidth proportional to the center frequency.
 Should be None if bandwidth is not None.</p>
-</div></blockquote>
-<p><strong>fill</strong> : in {0, 1, 2}</p>
-<blockquote>
-<div><p>Filling strategy for the full band signal high_sigs:
+</dd>
+<dt><strong>fill</strong><span class="classifier">in {0, 1, 2}</span></dt><dd><p>Filling strategy for the full band signal high_sigs:
 0 : keep the signal unchanged: high_sigs = sigs
 1 : remove the bandpass filtered signal: high_sigs = sigs - low_sigs
 2 : remove and replace by bandpass filtered Gaussian white noise</p>
-</div></blockquote>
-<p><strong>whitening</strong> : in {‘before’, ‘after’, None}</p>
-<blockquote>
-<div><p>Define when the whitening is done compared to the filtering.</p>
-</div></blockquote>
-<p><strong>ordar</strong> : int &gt;= 0</p>
-<blockquote>
-<div><p>Order of the AR model used for whitening</p>
-</div></blockquote>
-<p><strong>normalize</strong> : boolean</p>
-<blockquote>
-<div><p>Whether to scale the signals to have unit norm high_sigs.
+</dd>
+<dt><strong>whitening</strong><span class="classifier">in {‘before’, ‘after’, None}</span></dt><dd><p>Define when the whitening is done compared to the filtering.</p>
+</dd>
+<dt><strong>ordar</strong><span class="classifier">int &gt;= 0</span></dt><dd><p>Order of the AR model used for whitening</p>
+</dd>
+<dt><strong>normalize</strong><span class="classifier">boolean</span></dt><dd><p>Whether to scale the signals to have unit norm high_sigs.
 The low_sigs are scaled with the same scales.</p>
-</div></blockquote>
-<p><strong>extract_complex</strong> : boolean</p>
-<blockquote>
-<div><p>Whether to extract a complex driver (low_sigs and low_sigs_imag)</p>
-</div></blockquote>
-<p><strong>random_state</strong> : None, int or np.random.RandomState instance</p>
-<blockquote>
-<div><p>Seed or random number generator for the white noise filling strategy.</p>
-</div></blockquote>
-<p><strong>draw</strong> : string</p>
-<blockquote>
-<div><p>Add a letter to the string to draw the corresponding figures:</p>
+</dd>
+<dt><strong>extract_complex</strong><span class="classifier">boolean</span></dt><dd><p>Whether to extract a complex driver (low_sigs and low_sigs_imag)</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">None, int or np.random.RandomState instance</span></dt><dd><p>Seed or random number generator for the white noise filling strategy.</p>
+</dd>
+<dt><strong>draw</strong><span class="classifier">string</span></dt><dd><p>Add a letter to the string to draw the corresponding figures:</p>
 <blockquote>
 <div><ul class="simple">
-<li>‘e’ : extraction of the driver</li>
-<li>‘g’ : gap filling</li>
-<li>‘w’ : whitening step</li>
-<li>‘z’ : all</li>
+<li><p>‘e’ : extraction of the driver</p></li>
+<li><p>‘g’ : gap filling</p></li>
+<li><p>‘w’ : whitening step</p></li>
+<li><p>‘z’ : all</p></li>
 </ul>
 </div></blockquote>
-</div></blockquote>
-<p><strong>max_low_fq</strong> : float or None</p>
-<blockquote>
-<div><p>Maximum low_fq over a potential cross-validation scheme.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>low_sigs</strong> : array, shape (n_epochs, n_points)</p>
-<blockquote>
-<div><p>Bandpass filtered signal (aka driver)</p>
-</div></blockquote>
-<p><strong>high_sigs</strong> : array, shape (n_epochs, n_points)</p>
-<blockquote>
-<div><p>Bandstop filtered signal</p>
-</div></blockquote>
-<p><strong>low_sigs_imag</strong> : array, shape (n_epochs, n_points)</p>
-<blockquote class="last">
-<div><p>Imaginary part of the bandpass filtered signal
+</dd>
+<dt><strong>max_low_fq</strong><span class="classifier">float or None</span></dt><dd><p>Maximum low_fq over a potential cross-validation scheme.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>low_sigs</strong><span class="classifier">array, shape (n_epochs, n_points)</span></dt><dd><p>Bandpass filtered signal (aka driver)</p>
+</dd>
+<dt><strong>high_sigs</strong><span class="classifier">array, shape (n_epochs, n_points)</span></dt><dd><p>Bandstop filtered signal</p>
+</dd>
+<dt><strong>low_sigs_imag</strong><span class="classifier">array, shape (n_epochs, n_points)</span></dt><dd><p>Imaginary part of the bandpass filtered signal
 Returned only if extract_complex is True.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">low_sigs_imag</span> <span class="o">=</span> <span class="n">extract_driver</span><span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">low_sigs_imag</span> <span class="o">=</span> <span class="n">extract_driver</span><span class="p">(</span><span class="n">sigs</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -271,9 +235,7 @@ Returned only if extract_complex is True.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -282,7 +244,7 @@ Returned only if extract_complex is True.</p>
         <a href="pactools.utils.fir.BandPassFilter.html" class="btn btn-neutral float-right" title="pactools.utils.fir.BandPassFilter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pactools.dar_model.StableDAR.html" class="btn btn-neutral" title="pactools.dar_model.StableDAR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pactools.dar_model.StableDAR.html" class="btn btn-neutral float-left" title="pactools.dar_model.StableDAR" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -291,11 +253,11 @@ Returned only if extract_complex is True.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -308,37 +270,15 @@ Returned only if extract_complex is True.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

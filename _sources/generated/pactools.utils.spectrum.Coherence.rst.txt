@@ -1,5 +1,5 @@
-pactools\.utils\.spectrum\.Coherence
-====================================
+pactools.utils.spectrum.Coherence
+=================================
 
 .. currentmodule:: pactools.utils.spectrum
 

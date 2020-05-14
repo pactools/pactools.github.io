@@ -17,45 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
-        <link rel="up" title="API Documentation" href="../api.html"/>
-        <link rel="next" title="pactools.utils.spectrum.Bicoherence" href="pactools.utils.spectrum.Bicoherence.html"/>
-        <link rel="prev" title="pactools.utils.spectrum.Spectrum" href="pactools.utils.spectrum.Spectrum.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pactools.utils.spectrum.Bicoherence" href="pactools.utils.spectrum.Bicoherence.html" />
+    <link rel="prev" title="pactools.utils.spectrum.Spectrum" href="pactools.utils.spectrum.Spectrum.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -108,7 +103,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pactools</a>
@@ -116,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -164,74 +160,61 @@
             
   <div class="section" id="pactools-utils-spectrum-coherence">
 <h1>pactools.utils.spectrum.Coherence<a class="headerlink" href="#pactools-utils-spectrum-coherence" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pactools.utils.spectrum.Coherence">
-<em class="property">class </em><code class="descclassname">pactools.utils.spectrum.</code><code class="descname">Coherence</code><span class="sig-paren">(</span><em>block_length=1024</em>, <em>fft_length=None</em>, <em>step=None</em>, <em>wfunc=&lt;function hamming&gt;</em>, <em>fs=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/spectrum.html#Coherence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.spectrum.Coherence" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pactools.utils.spectrum.</code><code class="sig-name descname">Coherence</code><span class="sig-paren">(</span><em class="sig-param">block_length=1024</em>, <em class="sig-param">fft_length=None</em>, <em class="sig-param">step=None</em>, <em class="sig-param">wfunc=&lt;function hamming&gt;</em>, <em class="sig-param">fs=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/spectrum.html#Coherence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.spectrum.Coherence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Coherence estimator</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>block_length</strong> : int</p>
-<blockquote>
-<div><p>Length of each signal block, on which we estimate the spectrum</p>
-</div></blockquote>
-<p><strong>fft_length</strong> : int or None</p>
-<blockquote>
-<div><p>Length of FFT, should be greater or equal to block_length.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>block_length</strong><span class="classifier">int</span></dt><dd><p>Length of each signal block, on which we estimate the spectrum</p>
+</dd>
+<dt><strong>fft_length</strong><span class="classifier">int or None</span></dt><dd><p>Length of FFT, should be greater or equal to block_length.
 If None, it is set to block_length</p>
-</div></blockquote>
-<p><strong>step</strong> : int or None</p>
-<blockquote>
-<div><p>Step between successive blocks
+</dd>
+<dt><strong>step</strong><span class="classifier">int or None</span></dt><dd><p>Step between successive blocks
 If None, it is set to half the block length (i.e. 0.5 overlap)</p>
-</div></blockquote>
-<p><strong>wfunc</strong> : function</p>
-<blockquote>
-<div><p>Function used to compute the weitghting window on each block.
+</dd>
+<dt><strong>wfunc</strong><span class="classifier">function</span></dt><dd><p>Function used to compute the weitghting window on each block.
 Examples: np.ones, np.hamming, np.bartlett, np.blackman, …</p>
-</div></blockquote>
-<p><strong>fs</strong> : float</p>
-<blockquote>
-<div><p>Sampling frequency</p>
-</div></blockquote>
-<p><strong>donorm</strong> : boolean</p>
-<blockquote class="last">
-<div><p>If True, the amplitude is normalized</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<dl class="method">
+</dd>
+<dt><strong>fs</strong><span class="classifier">float</span></dt><dd><p>Sampling frequency</p>
+</dd>
+<dt><strong>donorm</strong><span class="classifier">boolean</span></dt><dd><p>If True, the amplitude is normalized</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
 <dt id="pactools.utils.spectrum.Coherence.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>block_length=1024</em>, <em>fft_length=None</em>, <em>step=None</em>, <em>wfunc=&lt;function hamming&gt;</em>, <em>fs=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/spectrum.html#Coherence.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.spectrum.Coherence.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">block_length=1024</em>, <em class="sig-param">fft_length=None</em>, <em class="sig-param">step=None</em>, <em class="sig-param">wfunc=&lt;function hamming at 0x7fd5ecd21d30&gt;</em>, <em class="sig-param">fs=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/spectrum.html#Coherence.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.spectrum.Coherence.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
 
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.utils.spectrum.Coherence.__init__" title="pactools.utils.spectrum.Coherence.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([block_length,&nbsp;fft_length,&nbsp;step,&nbsp;…])</td>
-<td></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pactools.utils.spectrum.Coherence.__init__" title="pactools.utils.spectrum.Coherence.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self[, block_length, fft_length, …])</p></td>
+<td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">check_params</span></code>()</td>
-<td></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_params</span></code>(self)</p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(sigs_a,&nbsp;sigs_b)</td>
-<td>Computes the coherence for two signals.</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code>(self, sigs_a, sigs_b)</p></td>
+<td><p>Computes the coherence for two signals.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">main_frequency</span></code>()</td>
-<td></td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">main_frequency</span></code>(self)</p></td>
+<td><p>Extract the frequency of the maximum in the spectrum</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">periodogram</span></code>(signals[,&nbsp;hold])</td>
-<td>Computes the estimation (in dB) for each epoch in a signal</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">periodogram</span></code>(self, signals[, hold, mean_psd])</p></td>
+<td><p>Computes the estimation (in dB) for each epoch in a signal</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([fig,&nbsp;ax])</td>
-<td>Not Implemented</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>(self[, fig, ax])</p></td>
+<td><p>Not Implemented</p></td>
 </tr>
 </tbody>
 </table>
@@ -241,9 +224,7 @@ Examples: np.ones, np.hamming, np.bartlett, np.blackman, …</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -252,7 +233,7 @@ Examples: np.ones, np.hamming, np.bartlett, np.blackman, …</p>
         <a href="pactools.utils.spectrum.Bicoherence.html" class="btn btn-neutral float-right" title="pactools.utils.spectrum.Bicoherence" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pactools.utils.spectrum.Spectrum.html" class="btn btn-neutral" title="pactools.utils.spectrum.Spectrum" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pactools.utils.spectrum.Spectrum.html" class="btn btn-neutral float-left" title="pactools.utils.spectrum.Spectrum" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -261,11 +242,11 @@ Examples: np.ones, np.hamming, np.bartlett, np.blackman, …</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -278,37 +259,15 @@ Examples: np.ones, np.hamming, np.bartlett, np.blackman, …</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

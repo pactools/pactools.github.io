@@ -1,5 +1,5 @@
-pactools\.utils\.spectrum\.Bicoherence
-======================================
+pactools.utils.spectrum.Bicoherence
+===================================
 
 .. currentmodule:: pactools.utils.spectrum
 

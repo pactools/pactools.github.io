@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pactools.MaskIterator &mdash; pactools 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pactools.raw_to_mask" href="pactools.raw_to_mask.html" />
+    <link rel="prev" title="pactools.PeakLocking" href="pactools.PeakLocking.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pactools
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started with pactools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../auto_examples/index.html">Gallery of Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../api.html#phase-amplitude-coupling-pac">Phase amplitude coupling (PAC)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#scikit-learn-gridsearchcv-api">scikit-learn GridSearchCV API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#driven-auto-regressive-dar-models">Driven auto-regressive (DAR) models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#utilities">Utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/pactools/pactools">Fork pactools on Github</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pactools</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../api.html">API Documentation</a> &raquo;</li>
+        
+      <li>pactools.MaskIterator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/generated/pactools.MaskIterator.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="pactools-maskiterator">
+<h1>pactools.MaskIterator<a class="headerlink" href="#pactools-maskiterator" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="pactools.MaskIterator">
+<em class="property">class </em><code class="sig-prename descclassname">pactools.</code><code class="sig-name descname">MaskIterator</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">events</span></em>, <em class="sig-param"><span class="n">tmin</span></em>, <em class="sig-param"><span class="n">tmax</span></em>, <em class="sig-param"><span class="n">n_points</span></em>, <em class="sig-param"><span class="n">fs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/mne_api.html#MaskIterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.MaskIterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator that creates the masks one at a time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>events</strong><span class="classifier">array, shape (n_events, 3) | array, shape (n_events,) | None</span></dt><dd><p>MNE events array. To be supplied if data is 2D and output should be
+split by events. In this case, <cite>tmin</cite> and <cite>tmax</cite> must be provided. If
+<cite>ndim == 1</cite>, it is assumed to be event indices, and all events will be
+grouped together. Otherwise, events will be grouped along the third
+dimension.</p>
+</dd>
+<dt><strong>tmin</strong><span class="classifier">float | list of floats, shape (n_windows, ) | None</span></dt><dd><p>If <cite>events</cite> is not provided, it is the start time to use in <cite>raw</cite>.
+If <cite>events</cite> is provided, it is the time (in seconds) to include before
+each event index. If a list of floats is given, then PAC is calculated
+for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>min(raw.times)</cite>.</p>
+</dd>
+<dt><strong>tmax</strong><span class="classifier">float | list of floats, shape (n_windows, ) | None</span></dt><dd><p>If <cite>events</cite> is not provided, it is the stop time to use in <cite>raw</cite>.
+If <cite>events</cite> is provided, it is the time (in seconds) to include after
+each event index. If a list of floats is given, then PAC is calculated
+for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>max(raw.times)</cite>.</p>
+</dd>
+<dt><strong>n_points</strong><span class="classifier">int</span></dt><dd><p>The length of each mask.</p>
+</dd>
+<dt><strong>fs</strong><span class="classifier">float</span></dt><dd><p>The sampling frequency.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <span class="n">MaskIterator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">all_masks</span> <span class="o">=</span> <span class="n">MaskIterator</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n_masks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_masks</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">one_mask</span> <span class="ow">in</span> <span class="n">all_masks</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="pactools.MaskIterator.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">events</span></em>, <em class="sig-param"><span class="n">tmin</span></em>, <em class="sig-param"><span class="n">tmax</span></em>, <em class="sig-param"><span class="n">n_points</span></em>, <em class="sig-param"><span class="n">fs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/mne_api.html#MaskIterator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.MaskIterator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pactools.MaskIterator.__init__" title="pactools.MaskIterator.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self, events, tmin, tmax, n_points, fs)</p></td>
+<td><p>Initialize self.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">next</span></code>(self)</p></td>
+<td><p>Returns mask.</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="examples-using-pactools-maskiterator">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pactools.MaskIterator</span></code><a class="headerlink" href="#examples-using-pactools-maskiterator" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip="It relies on the function raw_to_mask, which takes as input a MNE.Raw instance and an events ar..."><div class="figure align-default" id="id1">
+<img alt="../_images/sphx_glr_plot_mne_epoch_masking_thumb.png" src="../_images/sphx_glr_plot_mne_epoch_masking_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_mne_epoch_masking.html#sphx-glr-auto-examples-plot-mne-epoch-masking-py"><span class="std std-ref">Interface with MNE-python</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="clearer"></div></div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pactools.raw_to_mask.html" class="btn btn-neutral float-right" title="pactools.raw_to_mask" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pactools.PeakLocking.html" class="btn btn-neutral float-left" title="pactools.PeakLocking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Tom Dupre la Tour
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

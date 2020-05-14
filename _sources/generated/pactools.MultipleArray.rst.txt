@@ -1,5 +1,5 @@
-pactools\.MultipleArray
-=======================
+pactools.MultipleArray
+======================
 
 .. currentmodule:: pactools
 
@@ -21,6 +21,13 @@ pactools\.MultipleArray
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+       :nosignatures:
+   
+      ~MultipleArray.shape
    
    
 

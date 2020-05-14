@@ -1,5 +1,9 @@
 :orphan:
 
+
+
+.. _sphx_glr_auto_examples:
+
 .. _examples-index:
 
 Gallery of Examples
@@ -9,13 +13,13 @@ Gallery of Examples
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Note the effect of the bandwidth `low_fq_width` on the number of oscillations in the results. ">
+    <div class="sphx-glr-thumbcontainer" tooltip="Note the effect of the bandwidth low_fq_width on the number of oscillations in the results.">
 
 .. only:: html
 
-    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_peak_locking_thumb.png
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_peak_locking_thumb.png
 
-        :ref:`sphx_glr_auto_examples_plot_peak_locking.py`
+     :ref:`sphx_glr_auto_examples_plot_peak_locking.py`
 
 .. raw:: html
 
@@ -29,33 +33,13 @@ Gallery of Examples
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="It relies on the function ``raw_to_mask``, which takes as input a MNE.Raw instance and an event...">
+    <div class="sphx-glr-thumbcontainer" tooltip="A comodulogram shows the estimated PAC metric on a grid of frequency bands.">
 
 .. only:: html
 
-    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_mne_epoch_masking_thumb.png
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_comodulogram_thumb.png
 
-        :ref:`sphx_glr_auto_examples_plot_mne_epoch_masking.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/plot_mne_epoch_masking
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="A comodulogram shows the estimated PAC metric on a grid of frequency bands. ">
-
-.. only:: html
-
-    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_comodulogram_thumb.png
-
-        :ref:`sphx_glr_auto_examples_plot_comodulogram.py`
+     :ref:`sphx_glr_auto_examples_plot_comodulogram.py`
 
 .. raw:: html
 
@@ -73,9 +57,9 @@ Gallery of Examples
 
 .. only:: html
 
-    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_surrogate_analysis_thumb.png
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_surrogate_analysis_thumb.png
 
-        :ref:`sphx_glr_auto_examples_plot_surrogate_analysis.py`
+     :ref:`sphx_glr_auto_examples_plot_surrogate_analysis.py`
 
 .. raw:: html
 
@@ -89,13 +73,13 @@ Gallery of Examples
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="It also shows the comodulogram computed with a DAR model. ">
+    <div class="sphx-glr-thumbcontainer" tooltip="It also shows the comodulogram computed with a DAR model.">
 
 .. only:: html
 
-    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_dar_model_thumb.png
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_dar_model_thumb.png
 
-        :ref:`sphx_glr_auto_examples_plot_dar_model.py`
+     :ref:`sphx_glr_auto_examples_plot_dar_model.py`
 
 .. raw:: html
 
@@ -109,13 +93,33 @@ Gallery of Examples
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="It relies on the function raw_to_mask, which takes as input a MNE.Raw instance and an events ar...">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_mne_epoch_masking_thumb.png
+
+     :ref:`sphx_glr_auto_examples_plot_mne_epoch_masking.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/plot_mne_epoch_masking
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="It creates an artificial signal with phase-amplitude coupling (PAC), fits a DAR model over a gr...">
 
 .. only:: html
 
-    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_grid_search_thumb.png
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_grid_search_thumb.png
 
-        :ref:`sphx_glr_auto_examples_plot_grid_search.py`
+     :ref:`sphx_glr_auto_examples_plot_grid_search.py`
 
 .. raw:: html
 
@@ -133,9 +137,9 @@ Gallery of Examples
 
 .. only:: html
 
-    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_spurious_pac_thumb.png
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_spurious_pac_thumb.png
 
-        :ref:`sphx_glr_auto_examples_plot_spurious_pac.py`
+     :ref:`sphx_glr_auto_examples_plot_spurious_pac.py`
 
 .. raw:: html
 
@@ -153,9 +157,9 @@ Gallery of Examples
 
 .. only:: html
 
-    .. figure:: /auto_examples/images/thumb/sphx_glr_plot_phase_delay_thumb.png
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_phase_delay_thumb.png
 
-        :ref:`sphx_glr_auto_examples_plot_phase_delay.py`
+     :ref:`sphx_glr_auto_examples_plot_phase_delay.py`
 
 .. raw:: html
 
@@ -168,23 +172,29 @@ Gallery of Examples
    /auto_examples/plot_phase_delay
 .. raw:: html
 
-    <div style='clear:both'></div>
+    <div class="sphx-glr-clear"></div>
 
 
 
-.. container:: sphx-glr-footer
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-gallery
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
-    :download:`Download all examples in Python source code: auto_examples_python.zip <//cal/homes/tdupre/work/src/pactools/doc/auto_examples/auto_examples_python.zip>`
+    :download:`Download all examples in Python source code: auto_examples_python.zip <//home/tom/work/github/pactools/doc/auto_examples/auto_examples_python.zip>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//cal/homes/tdupre/work/src/pactools/doc/auto_examples/auto_examples_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip <//home/tom/work/github/pactools/doc/auto_examples/auto_examples_jupyter.zip>`
 
-.. rst-class:: sphx-glr-signature
 
-    `Generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

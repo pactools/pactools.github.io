@@ -17,45 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
-        <link rel="up" title="API Documentation" href="../api.html"/>
-        <link rel="next" title="pactools.utils.fir.LowPassFilter" href="pactools.utils.fir.LowPassFilter.html"/>
-        <link rel="prev" title="pactools.dar_model.extract_driver" href="pactools.dar_model.extract_driver.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pactools.utils.fir.LowPassFilter" href="pactools.utils.fir.LowPassFilter.html" />
+    <link rel="prev" title="pactools.dar_model.extract_driver" href="pactools.dar_model.extract_driver.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -108,7 +103,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pactools</a>
@@ -116,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -164,71 +160,58 @@
             
   <div class="section" id="pactools-utils-fir-bandpassfilter">
 <h1>pactools.utils.fir.BandPassFilter<a class="headerlink" href="#pactools-utils-fir-bandpassfilter" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pactools.utils.fir.BandPassFilter">
-<em class="property">class </em><code class="descclassname">pactools.utils.fir.</code><code class="descname">BandPassFilter</code><span class="sig-paren">(</span><em>fs</em>, <em>fc</em>, <em>n_cycles=7.0</em>, <em>bandwidth=None</em>, <em>zero_mean=True</em>, <em>extract_complex=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/fir.html#BandPassFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.fir.BandPassFilter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pactools.utils.fir.</code><code class="sig-name descname">BandPassFilter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">fc</span></em>, <em class="sig-param"><span class="n">n_cycles</span><span class="o">=</span><span class="default_value">7.0</span></em>, <em class="sig-param"><span class="n">bandwidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zero_mean</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">extract_complex</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/fir.html#BandPassFilter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.fir.BandPassFilter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Band-pass FIR filter</p>
 <p>Designs a band-pass FIR filter centered on frequency fc.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>fs</strong> : float</p>
-<blockquote>
-<div><p>Sampling frequency</p>
-</div></blockquote>
-<p><strong>fc</strong> : float</p>
-<blockquote>
-<div><p>Center frequency of the bandpass filter</p>
-</div></blockquote>
-<p><strong>n_cycles</strong> : float or None, (default 7.0)</p>
-<blockquote>
-<div><p>Number of oscillation in the wavelet. None if bandwidth is used.</p>
-</div></blockquote>
-<p><strong>bandwidth</strong> : float or None, (default None)</p>
-<blockquote>
-<div><p>Bandwidth of the FIR wavelet filter. None if n_cycles is used.</p>
-</div></blockquote>
-<p><strong>zero_mean</strong> : boolean, (default True)</p>
-<blockquote>
-<div><p>If True, the mean of the FIR is subtracted, i.e. fir.sum() = 0.</p>
-</div></blockquote>
-<p><strong>extract_complex</strong> : boolean, (default False)</p>
-<blockquote class="last">
-<div><p>If True, the wavelet filter is complex and <code class="docutils literal"><span class="pre">transform</span></code> returns two
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fs</strong><span class="classifier">float</span></dt><dd><p>Sampling frequency</p>
+</dd>
+<dt><strong>fc</strong><span class="classifier">float</span></dt><dd><p>Center frequency of the bandpass filter</p>
+</dd>
+<dt><strong>n_cycles</strong><span class="classifier">float or None, (default 7.0)</span></dt><dd><p>Number of oscillation in the wavelet. None if bandwidth is used.</p>
+</dd>
+<dt><strong>bandwidth</strong><span class="classifier">float or None, (default None)</span></dt><dd><p>Bandwidth of the FIR wavelet filter. None if n_cycles is used.</p>
+</dd>
+<dt><strong>zero_mean</strong><span class="classifier">boolean, (default True)</span></dt><dd><p>If True, the mean of the FIR is subtracted, i.e. fir.sum() = 0.</p>
+</dd>
+<dt><strong>extract_complex</strong><span class="classifier">boolean, (default False)</span></dt><dd><p>If True, the wavelet filter is complex and <code class="docutils literal notranslate"><span class="pre">transform</span></code> returns two
 signals, filtered with the real and the imaginary part of the filter.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools.utils</span> <span class="k">import</span> <span class="n">BandPassFilter</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools.utils</span> <span class="kn">import</span> <span class="n">BandPassFilter</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">BandPassFilter</span><span class="p">(</span><span class="n">fs</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="mf">5.</span><span class="p">,</span> <span class="n">bandwidth</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">n_cycles</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">signal_out</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">signal_in</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="method">
+<dl class="py method">
 <dt id="pactools.utils.fir.BandPassFilter.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>fs</em>, <em>fc</em>, <em>n_cycles=7.0</em>, <em>bandwidth=None</em>, <em>zero_mean=True</em>, <em>extract_complex=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/fir.html#BandPassFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.fir.BandPassFilter.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">fc</span></em>, <em class="sig-param"><span class="n">n_cycles</span><span class="o">=</span><span class="default_value">7.0</span></em>, <em class="sig-param"><span class="n">bandwidth</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">zero_mean</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">extract_complex</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/utils/fir.html#BandPassFilter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.utils.fir.BandPassFilter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
 
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.utils.fir.BandPassFilter.__init__" title="pactools.utils.fir.BandPassFilter.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(fs,&nbsp;fc[,&nbsp;n_cycles,&nbsp;bandwidth,&nbsp;…])</td>
-<td></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pactools.utils.fir.BandPassFilter.__init__" title="pactools.utils.fir.BandPassFilter.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self, fs, fc[, n_cycles, …])</p></td>
+<td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([axs,&nbsp;fscale])</td>
-<td>Plots the impulse response and the transfer function of the filter.</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>(self[, axs, fscale, colors])</p></td>
+<td><p>Plots the impulse response and the transfer function of the filter.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin[,&nbsp;out,&nbsp;out_imag])</td>
-<td>Apply this filter to a signal</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code>(self, sigin[, out, out_imag])</p></td>
+<td><p>Apply this filter to a signal</p></td>
 </tr>
 </tbody>
 </table>
@@ -238,9 +221,7 @@ signals, filtered with the real and the imaginary part of the filter.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -249,7 +230,7 @@ signals, filtered with the real and the imaginary part of the filter.</p>
         <a href="pactools.utils.fir.LowPassFilter.html" class="btn btn-neutral float-right" title="pactools.utils.fir.LowPassFilter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pactools.dar_model.extract_driver.html" class="btn btn-neutral" title="pactools.dar_model.extract_driver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pactools.dar_model.extract_driver.html" class="btn btn-neutral float-left" title="pactools.dar_model.extract_driver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -258,11 +239,11 @@ signals, filtered with the real and the imaginary part of the filter.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -275,37 +256,15 @@ signals, filtered with the real and the imaginary part of the filter.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

@@ -1,5 +1,5 @@
-pactools\.AddDriverDelay
-========================
+pactools.AddDriverDelay
+=======================
 
 .. currentmodule:: pactools
 

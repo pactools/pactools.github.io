@@ -17,45 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
-        <link rel="up" title="API Documentation" href="../api.html"/>
-        <link rel="next" title="pactools.simulate_pac" href="pactools.simulate_pac.html"/>
-        <link rel="prev" title="pactools.PeakLocking" href="pactools.PeakLocking.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pactools.simulate_pac" href="pactools.simulate_pac.html" />
+    <link rel="prev" title="pactools.MaskIterator" href="pactools.MaskIterator.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -108,7 +103,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pactools</a>
@@ -116,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -164,9 +160,9 @@
             
   <div class="section" id="pactools-raw-to-mask">
 <h1>pactools.raw_to_mask<a class="headerlink" href="#pactools-raw-to-mask" title="Permalink to this headline">¶</a></h1>
-<dl class="function">
+<dl class="py function">
 <dt id="pactools.raw_to_mask">
-<code class="descclassname">pactools.</code><code class="descname">raw_to_mask</code><span class="sig-paren">(</span><em>raw</em>, <em>ixs</em>, <em>events=None</em>, <em>tmin=None</em>, <em>tmax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/mne_api.html#raw_to_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.raw_to_mask" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pactools.</code><code class="sig-name descname">raw_to_mask</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">ixs</span></em>, <em class="sig-param"><span class="n">events</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tmin</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tmax</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/mne_api.html#raw_to_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.raw_to_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>A function to transform MNE data into pactools input signals.
 It select the one channel on which you to estimate PAC, or two channels
 for cross-channel PAC. It also returns a mask generator, that mask the
@@ -174,80 +170,60 @@ data outside a given window around an event. The mask generator returns
 a number of masks equal to the number of events times the number of
 windows (i.e. the number of pairs (tmin, tmax)).</p>
 <p>Warning: events is stored in indices, tmin and tmax are stored in seconds.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>raw</strong> : an instance of Raw, containing data of shape (n_channels, n_times)</p>
-<blockquote>
-<div><p>The data used to calculate PAC</p>
-</div></blockquote>
-<p><strong>ixs</strong> : int or couple of int</p>
-<blockquote>
-<div><p>The indices for the low/high frequency channels. If only one is given,
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>raw</strong><span class="classifier">an instance of Raw, containing data of shape (n_channels, n_times)</span></dt><dd><p>The data used to calculate PAC</p>
+</dd>
+<dt><strong>ixs</strong><span class="classifier">int or couple of int</span></dt><dd><p>The indices for the low/high frequency channels. If only one is given,
 the same channel is used for both low_sig and high_sig.</p>
-</div></blockquote>
-<p><strong>events</strong> : array, shape (n_events, 3) | array, shape (n_events,) | None</p>
-<blockquote>
-<div><p>MNE events array. To be supplied if data is 2D and output should be
+</dd>
+<dt><strong>events</strong><span class="classifier">array, shape (n_events, 3) | array, shape (n_events,) | None</span></dt><dd><p>MNE events array. To be supplied if data is 2D and output should be
 split by events. In this case, <cite>tmin</cite> and <cite>tmax</cite> must be provided. If
 <cite>ndim == 1</cite>, it is assumed to be event indices, and all events will be
 grouped together. Otherwise, events will be grouped along the third
 dimension.</p>
-</div></blockquote>
-<p><strong>tmin</strong> : float | list of floats, shape (n_windows, ) | None</p>
-<blockquote>
-<div><p>If <cite>events</cite> is not provided, it is the start time to use in <cite>raw</cite>.
+</dd>
+<dt><strong>tmin</strong><span class="classifier">float | list of floats, shape (n_windows, ) | None</span></dt><dd><p>If <cite>events</cite> is not provided, it is the start time to use in <cite>raw</cite>.
 If <cite>events</cite> is provided, it is the time (in seconds) to include before
 each event index. If a list of floats is given, then PAC is calculated
 for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>min(raw.times)</cite>.</p>
-</div></blockquote>
-<p><strong>tmax</strong> : float | list of floats, shape (n_windows, ) | None</p>
-<blockquote class="last">
-<div><p>If <cite>events</cite> is not provided, it is the stop time to use in <cite>raw</cite>.
+</dd>
+<dt><strong>tmax</strong><span class="classifier">float | list of floats, shape (n_windows, ) | None</span></dt><dd><p>If <cite>events</cite> is not provided, it is the stop time to use in <cite>raw</cite>.
 If <cite>events</cite> is provided, it is the time (in seconds) to include after
 each event index. If a list of floats is given, then PAC is calculated
 for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>max(raw.times)</cite>.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>low_sig</strong><span class="classifier">array, shape (1, n_points)</span></dt><dd><p>Input data for the phase signal</p>
+</dd>
+<dt><strong>high_sig</strong><span class="classifier">array or None, shape (1, n_points)</span></dt><dd><p>Input data for the amplitude signal.
+If None, we use low_sig for both signals.</p>
+</dd>
+<dt><strong>mask</strong><span class="classifier">MaskIterator instance</span></dt><dd><p>Object that behaves like a list of mask, without storing them all.
+The PAC will only be evaluated where the mask is False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools</span> <span class="k">import</span> <span class="n">raw_to_mask</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools</span> <span class="kn">import</span> <span class="n">raw_to_mask</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span> <span class="o">=</span> <span class="n">raw_to_mask</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">ixs</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">n_masks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">one_mask</span> <span class="ow">in</span> <span class="n">mask</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 </pre></div>
 </div>
-<p class="rubric">Attributes</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="8%" />
-<col width="92%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><strong>low_sig</strong></td>
-<td>(array, shape (1, n_points)) Input data for the phase signal</td>
-</tr>
-<tr class="row-even"><td><strong>high_sig</strong></td>
-<td>(array or None, shape (1, n_points)) Input data for the amplitude signal. If None, we use low_sig for both signals.</td>
-</tr>
-<tr class="row-odd"><td><strong>mask</strong></td>
-<td>(MaskIterator instance) Object that behaves like a list of mask, without storing them all. The PAC will only be evaluated where the mask is False.</td>
-</tr>
-</tbody>
-</table>
 </dd></dl>
 
 <div class="clearer"></div></div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -256,7 +232,7 @@ for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>max(
         <a href="pactools.simulate_pac.html" class="btn btn-neutral float-right" title="pactools.simulate_pac" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pactools.PeakLocking.html" class="btn btn-neutral" title="pactools.PeakLocking" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pactools.MaskIterator.html" class="btn btn-neutral float-left" title="pactools.MaskIterator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -265,11 +241,11 @@ for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>max(
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -282,37 +258,15 @@ for each pair of <cite>tmin</cite> and <cite>tmax</cite>. Defaults to <cite>max(
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

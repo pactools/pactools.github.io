@@ -1,5 +1,5 @@
-pactools\.dar\_model\.StableDAR
-===============================
+pactools.dar\_model.StableDAR
+=============================
 
 .. currentmodule:: pactools.dar_model
 
@@ -35,6 +35,17 @@ pactools\.dar\_model\.StableDAR
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+       :nosignatures:
+   
+      ~StableDAR.aic
+      ~StableDAR.bic
+      ~StableDAR.logl
+      ~StableDAR.ordar_
+      ~StableDAR.tmax
    
    
 

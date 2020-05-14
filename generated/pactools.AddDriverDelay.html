@@ -17,45 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
-        <link rel="up" title="API Documentation" href="../api.html"/>
-        <link rel="next" title="pactools.MultipleArray" href="pactools.MultipleArray.html"/>
-        <link rel="prev" title="pactools.ExtractDriver" href="pactools.ExtractDriver.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pactools.MultipleArray" href="pactools.MultipleArray.html" />
+    <link rel="prev" title="pactools.ExtractDriver" href="pactools.ExtractDriver.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -108,7 +103,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pactools</a>
@@ -116,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -164,15 +160,15 @@
             
   <div class="section" id="pactools-adddriverdelay">
 <h1>pactools.AddDriverDelay<a class="headerlink" href="#pactools-adddriverdelay" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pactools.AddDriverDelay">
-<em class="property">class </em><code class="descclassname">pactools.</code><code class="descname">AddDriverDelay</code><span class="sig-paren">(</span><em>delay=0</em>, <em>n_decay=30</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/grid_search.html#AddDriverDelay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.AddDriverDelay" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pactools.</code><code class="sig-name descname">AddDriverDelay</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">delay</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">n_decay</span><span class="o">=</span><span class="default_value">30</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/grid_search.html#AddDriverDelay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.AddDriverDelay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transformer which adds a time delay in the driver of a DAR model</p>
 <p class="rubric">Examples</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="k">import</span> <span class="n">pipeline</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools.grid_search</span> <span class="k">import</span> <span class="n">DARSklearn</span><span class="p">,</span> <span class="n">AddDriverDelay</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools.grid_search</span> <span class="k">import</span> <span class="n">MultipleArray</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">GridSearchCV</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">pipeline</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools.grid_search</span> <span class="kn">import</span> <span class="n">DARSklearn</span><span class="p">,</span> <span class="n">AddDriverDelay</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pactools.grid_search</span> <span class="kn">import</span> <span class="n">MultipleArray</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
 <span class="gp">... </span>    <span class="s1">&#39;dar__ordar&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
 <span class="gp">... </span>    <span class="s1">&#39;dar__ordriv&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
@@ -187,54 +183,53 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">gscv</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="method">
+<dl class="py method">
 <dt id="pactools.AddDriverDelay.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>delay=0</em>, <em>n_decay=30</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/grid_search.html#AddDriverDelay.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.AddDriverDelay.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">delay</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">n_decay</span><span class="o">=</span><span class="default_value">30</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/grid_search.html#AddDriverDelay.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.AddDriverDelay.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
 
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.AddDriverDelay.__init__" title="pactools.AddDriverDelay.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([delay,&nbsp;n_decay])</td>
-<td></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pactools.AddDriverDelay.__init__" title="pactools.AddDriverDelay.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self[, delay, n_decay])</p></td>
+<td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(X[,&nbsp;y])</td>
-<td>No fit is needed</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code>(self, X[, y])</p></td>
+<td><p>No fit is needed</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit_transform</span></code>(X[,&nbsp;y])</td>
-<td>Fit to data, then transform it.</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_transform</span></code>(self, X[, y])</p></td>
+<td><p>Fit to data, then transform it.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_params</span></code>([deep])</td>
-<td>Get parameters for this estimator.</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_params</span></code>(self[, deep])</p></td>
+<td><p>Get parameters for this estimator.</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">set_params</span></code>(**params)</td>
-<td>Set the parameters of this estimator.</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_params</span></code>(self, \*\*params)</p></td>
+<td><p>Set the parameters of this estimator.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(X[,&nbsp;y])</td>
-<td>Apply the temporal delay on sigdriv and sigdriv_imag</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code>(self, X[, y])</p></td>
+<td><p>Apply the temporal delay on sigdriv and sigdriv_imag</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <div class="section" id="examples-using-pactools-adddriverdelay">
-<h2>Examples using <code class="docutils literal"><span class="pre">pactools.AddDriverDelay</span></code><a class="headerlink" href="#examples-using-pactools-adddriverdelay" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip="It creates an artificial signal with phase-amplitude coupling (PAC), fits a DAR model over a gr..."><div class="figure" id="id1">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pactools.AddDriverDelay</span></code><a class="headerlink" href="#examples-using-pactools-adddriverdelay" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip="It creates an artificial signal with phase-amplitude coupling (PAC), fits a DAR model over a gr..."><div class="figure align-default" id="id1">
 <img alt="../_images/sphx_glr_plot_grid_search_thumb.png" src="../_images/sphx_glr_plot_grid_search_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_grid_search.html#sphx-glr-auto-examples-plot-grid-search-py"><span class="std std-ref">Grid-search and cross-validation</span></a></span></p>
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_grid_search.html#sphx-glr-auto-examples-plot-grid-search-py"><span class="std std-ref">Grid-search and cross-validation</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
 </div><div class="clearer"></div></div>
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -243,7 +238,7 @@
         <a href="pactools.MultipleArray.html" class="btn btn-neutral float-right" title="pactools.MultipleArray" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pactools.ExtractDriver.html" class="btn btn-neutral" title="pactools.ExtractDriver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pactools.ExtractDriver.html" class="btn btn-neutral float-left" title="pactools.ExtractDriver" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -252,11 +247,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -269,37 +264,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

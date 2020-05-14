@@ -1,5 +1,5 @@
-pactools\.Comodulogram
-======================
+pactools.Comodulogram
+=====================
 
 .. currentmodule:: pactools
 
@@ -18,10 +18,19 @@ pactools\.Comodulogram
       ~Comodulogram.fit
       ~Comodulogram.get_maximum_pac
       ~Comodulogram.plot
+      ~Comodulogram.save
    
    
 
    
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+       :nosignatures:
+   
+      ~Comodulogram.comod_z_score_
+      ~Comodulogram.surrogate_max_
    
    
 

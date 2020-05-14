@@ -17,44 +17,40 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="genindex.html"/>
-        <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="index.html"/>
-        <link rel="next" title="pactools.Comodulogram" href="generated/pactools.Comodulogram.html"/>
-        <link rel="prev" title="Phase shift and temporal delay in PAC" href="auto_examples/plot_phase_delay.html"/> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pactools.Comodulogram" href="generated/pactools.Comodulogram.html" />
+    <link rel="prev" title="Phase shift and temporal delay in PAC" href="auto_examples/plot_phase_delay.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -107,7 +103,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="index.html">pactools</a>
@@ -115,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -163,98 +160,101 @@
 <span id="id1"></span><h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="phase-amplitude-coupling-pac">
 <h2>Phase amplitude coupling (PAC)<a class="headerlink" href="#phase-amplitude-coupling-pac" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram"><code class="xref py py-obj docutils literal"><span class="pre">Comodulogram</span></code></a></td>
-<td>An object to compute the comodulogram for phase-amplitude coupling.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.Comodulogram.html#pactools.Comodulogram" title="pactools.Comodulogram"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Comodulogram</span></code></a></p></td>
+<td><p>An object to compute the comodulogram for phase-amplitude coupling.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pactools.DelayEstimator.html#pactools.DelayEstimator" title="pactools.DelayEstimator"><code class="xref py py-obj docutils literal"><span class="pre">DelayEstimator</span></code></a></td>
-<td>Estimate the optimal delay between the two components in PAC</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pactools.DelayEstimator.html#pactools.DelayEstimator" title="pactools.DelayEstimator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DelayEstimator</span></code></a></p></td>
+<td><p>Estimate the optimal delay between the two components in PAC</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.PeakLocking.html#pactools.PeakLocking" title="pactools.PeakLocking"><code class="xref py py-obj docutils literal"><span class="pre">PeakLocking</span></code></a></td>
-<td>An object to compute time average and time-frequency averaged with peak-locking, to analyze phase-amplitude coupling.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.PeakLocking.html#pactools.PeakLocking" title="pactools.PeakLocking"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PeakLocking</span></code></a></p></td>
+<td><p>An object to compute time average and time-frequency averaged with peak-locking, to analyze phase-amplitude coupling.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pactools.raw_to_mask.html#pactools.raw_to_mask" title="pactools.raw_to_mask"><code class="xref py py-obj docutils literal"><span class="pre">raw_to_mask</span></code></a></td>
-<td>A function to transform MNE data into pactools input signals.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pactools.MaskIterator.html#pactools.MaskIterator" title="pactools.MaskIterator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MaskIterator</span></code></a></p></td>
+<td><p>Iterator that creates the masks one at a time.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.simulate_pac.html#pactools.simulate_pac" title="pactools.simulate_pac"><code class="xref py py-obj docutils literal"><span class="pre">simulate_pac</span></code></a></td>
-<td>Simulate a 1D signal with artificial phase amplitude coupling (PAC).</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.raw_to_mask.html#pactools.raw_to_mask" title="pactools.raw_to_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw_to_mask</span></code></a></p></td>
+<td><p>A function to transform MNE data into pactools input signals.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pactools.simulate_pac.html#pactools.simulate_pac" title="pactools.simulate_pac"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulate_pac</span></code></a></p></td>
+<td><p>Simulate a 1D signal with artificial phase amplitude coupling (PAC).</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="scikit-learn-gridsearchcv-api">
 <h2>scikit-learn GridSearchCV API<a class="headerlink" href="#scikit-learn-gridsearchcv-api" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.DARSklearn.html#pactools.DARSklearn" title="pactools.DARSklearn"><code class="xref py py-obj docutils literal"><span class="pre">DARSklearn</span></code></a></td>
-<td>Different interface to DAR models, to use in scikit-learn’s GridSearchCV</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.DARSklearn.html#pactools.DARSklearn" title="pactools.DARSklearn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DARSklearn</span></code></a></p></td>
+<td><p>Different interface to DAR models, to use in scikit-learn’s GridSearchCV</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pactools.ExtractDriver.html#pactools.ExtractDriver" title="pactools.ExtractDriver"><code class="xref py py-obj docutils literal"><span class="pre">ExtractDriver</span></code></a></td>
-<td>Returns bandpass filtered and a highpass filtered signals</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pactools.ExtractDriver.html#pactools.ExtractDriver" title="pactools.ExtractDriver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ExtractDriver</span></code></a></p></td>
+<td><p>Returns bandpass filtered and a highpass filtered signals</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.AddDriverDelay.html#pactools.AddDriverDelay" title="pactools.AddDriverDelay"><code class="xref py py-obj docutils literal"><span class="pre">AddDriverDelay</span></code></a></td>
-<td>Transformer which adds a time delay in the driver of a DAR model</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.AddDriverDelay.html#pactools.AddDriverDelay" title="pactools.AddDriverDelay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddDriverDelay</span></code></a></p></td>
+<td><p>Transformer which adds a time delay in the driver of a DAR model</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pactools.MultipleArray.html#pactools.MultipleArray" title="pactools.MultipleArray"><code class="xref py py-obj docutils literal"><span class="pre">MultipleArray</span></code></a></td>
-<td>Store a list of arrays into a single object and handle indexing for them</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pactools.MultipleArray.html#pactools.MultipleArray" title="pactools.MultipleArray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultipleArray</span></code></a></p></td>
+<td><p>Store a list of arrays into a single object and handle indexing for them</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="driven-auto-regressive-dar-models">
 <h2>Driven auto-regressive (DAR) models<a class="headerlink" href="#driven-auto-regressive-dar-models" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR"><code class="xref py py-obj docutils literal"><span class="pre">DAR</span></code></a></td>
-<td>A driven auto-regressive (DAR) model, as described in [1].</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.dar_model.DAR.html#pactools.dar_model.DAR" title="pactools.dar_model.DAR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DAR</span></code></a></p></td>
+<td><p>A driven auto-regressive (DAR) model, as described in [1].</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pactools.dar_model.StableDAR.html#pactools.dar_model.StableDAR" title="pactools.dar_model.StableDAR"><code class="xref py py-obj docutils literal"><span class="pre">StableDAR</span></code></a></td>
-<td>A stable driven auto-regressive (DAR) model, as described in [1].</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pactools.dar_model.StableDAR.html#pactools.dar_model.StableDAR" title="pactools.dar_model.StableDAR"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StableDAR</span></code></a></p></td>
+<td><p>A stable driven auto-regressive (DAR) model, as described in [1].</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="pactools.dar_model.extract_driver"><code class="xref py py-obj docutils literal"><span class="pre">extract_driver</span></code></a></td>
-<td>Extract the driver with filtering and fill the rest of the signal.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.dar_model.extract_driver.html#pactools.dar_model.extract_driver" title="pactools.dar_model.extract_driver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_driver</span></code></a></p></td>
+<td><p>Extract the driver with filtering and fill the rest of the signal.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="utilities">
 <h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.utils.fir.BandPassFilter.html#pactools.utils.fir.BandPassFilter" title="pactools.utils.fir.BandPassFilter"><code class="xref py py-obj docutils literal"><span class="pre">fir.BandPassFilter</span></code></a></td>
-<td>Band-pass FIR filter</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.utils.fir.BandPassFilter.html#pactools.utils.fir.BandPassFilter" title="pactools.utils.fir.BandPassFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fir.BandPassFilter</span></code></a></p></td>
+<td><p>Band-pass FIR filter</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pactools.utils.fir.LowPassFilter.html#pactools.utils.fir.LowPassFilter" title="pactools.utils.fir.LowPassFilter"><code class="xref py py-obj docutils literal"><span class="pre">fir.LowPassFilter</span></code></a></td>
-<td>Low-pass FIR filter</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pactools.utils.fir.LowPassFilter.html#pactools.utils.fir.LowPassFilter" title="pactools.utils.fir.LowPassFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fir.LowPassFilter</span></code></a></p></td>
+<td><p>Low-pass FIR filter</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum" title="pactools.utils.spectrum.Spectrum"><code class="xref py py-obj docutils literal"><span class="pre">spectrum.Spectrum</span></code></a></td>
-<td>Spectral estimator following Welch’s method</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum" title="pactools.utils.spectrum.Spectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectrum.Spectrum</span></code></a></p></td>
+<td><p>Spectral estimator following Welch’s method</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence" title="pactools.utils.spectrum.Coherence"><code class="xref py py-obj docutils literal"><span class="pre">spectrum.Coherence</span></code></a></td>
-<td>Coherence estimator</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence" title="pactools.utils.spectrum.Coherence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectrum.Coherence</span></code></a></p></td>
+<td><p>Coherence estimator</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence" title="pactools.utils.spectrum.Bicoherence"><code class="xref py py-obj docutils literal"><span class="pre">spectrum.Bicoherence</span></code></a></td>
-<td>Bicoherence estimator</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence" title="pactools.utils.spectrum.Bicoherence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectrum.Bicoherence</span></code></a></p></td>
+<td><p>Bicoherence estimator</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pactools.utils.peak_finder.peak_finder.html#pactools.utils.peak_finder.peak_finder" title="pactools.utils.peak_finder.peak_finder"><code class="xref py py-obj docutils literal"><span class="pre">peak_finder.peak_finder</span></code></a></td>
-<td>Noise tolerant fast peak finding algorithm</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pactools.utils.peak_finder.peak_finder.html#pactools.utils.peak_finder.peak_finder" title="pactools.utils.peak_finder.peak_finder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">peak_finder.peak_finder</span></code></a></p></td>
+<td><p>Noise tolerant fast peak finding algorithm</p></td>
 </tr>
 </tbody>
 </table>
@@ -263,9 +263,7 @@
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -274,7 +272,7 @@
         <a href="generated/pactools.Comodulogram.html" class="btn btn-neutral float-right" title="pactools.Comodulogram" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="auto_examples/plot_phase_delay.html" class="btn btn-neutral" title="Phase shift and temporal delay in PAC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="auto_examples/plot_phase_delay.html" class="btn btn-neutral float-left" title="Phase shift and temporal delay in PAC" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -283,11 +281,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -300,37 +298,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'./',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="_static/jquery.js"></script>
-      <script type="text/javascript" src="_static/underscore.js"></script>
-      <script type="text/javascript" src="_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

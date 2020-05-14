@@ -1,5 +1,5 @@
-pactools\.utils\.fir\.BandPassFilter
-====================================
+pactools.utils.fir.BandPassFilter
+=================================
 
 .. currentmodule:: pactools.utils.fir
 

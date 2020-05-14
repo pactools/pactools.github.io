@@ -1,5 +1,5 @@
-pactools\.simulate\_pac
-=======================
+pactools.simulate\_pac
+======================
 
 .. currentmodule:: pactools
 

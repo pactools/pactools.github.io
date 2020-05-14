@@ -17,43 +17,38 @@
   
 
   
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../../genindex.html"/>
-        <link rel="search" title="Search" href="../../../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../../../index.html"/>
-        <link rel="up" title="Module code" href="../../index.html"/> 
-
-  
-  <script src="../../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -100,7 +95,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../../index.html">pactools</a>
@@ -108,9 +103,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -140,8 +136,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-        
       </li>
     
   </ul>
@@ -155,12 +149,12 @@
   <h1>Source code for pactools.utils.spectrum</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy</span> <span class="k">as</span> <span class="nn">sp</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">hankel</span>
-<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="k">import</span> <span class="n">hilbert</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">hankel</span>
+<span class="kn">from</span> <span class="nn">scipy.signal</span> <span class="kn">import</span> <span class="n">hilbert</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="kn">from</span> <span class="nn">.maths</span> <span class="k">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">is_power2</span><span class="p">,</span> <span class="n">prime_factors</span><span class="p">,</span> <span class="n">compute_n_fft</span><span class="p">,</span> <span class="n">next_power2</span>
-<span class="kn">from</span> <span class="nn">.viz</span> <span class="k">import</span> <span class="n">compute_vmin_vmax</span>
+<span class="kn">from</span> <span class="nn">.maths</span> <span class="kn">import</span> <span class="n">square</span><span class="p">,</span> <span class="n">is_power2</span><span class="p">,</span> <span class="n">prime_factors</span><span class="p">,</span> <span class="n">compute_n_fft</span><span class="p">,</span> <span class="n">next_power2</span>
+<span class="kn">from</span> <span class="nn">.viz</span> <span class="kn">import</span> <span class="n">compute_vmin_vmax</span>
 
 
 <div class="viewcode-block" id="Spectrum"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum">[docs]</a><span class="k">class</span> <span class="nc">Spectrum</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -190,8 +184,7 @@
 <span class="sd">        If True, the amplitude is normalized</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="Spectrum.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Spectrum.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Spectrum.html#pactools.utils.spectrum.Spectrum.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">donorm</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">block_length</span> <span class="o">=</span> <span class="n">block_length</span>
@@ -229,7 +222,7 @@
 
         <span class="k">return</span> <span class="n">fft_length</span><span class="p">,</span> <span class="n">step</span>
 
-    <span class="k">def</span> <span class="nf">periodogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">periodogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signals</span><span class="p">,</span> <span class="n">hold</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mean_psd</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Computes the estimation (in dB) for each epoch in a signal</span>
 
@@ -243,9 +236,12 @@
 <span class="sd">            estimations, else, the list is emptied and only the current</span>
 <span class="sd">            estimation is stored.</span>
 
+<span class="sd">        mean_psd : boolean, default = False</span>
+<span class="sd">            If True, the PSD is the mean PSD over all epochs.</span>
+
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        psd : array, shape (n_epochs, n_freq)</span>
+<span class="sd">        psd : array, shape (n_epochs, n_freq) or (1, n_freq) if mean_psd</span>
 <span class="sd">            Power spectrum estimated with a Welsh method on each epoch</span>
 <span class="sd">            n_freq = fft_length // 2 + 1</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -268,8 +264,8 @@
             <span class="c1"># iterate on blocks</span>
             <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">while</span> <span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">sig</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
-                <span class="n">psd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
-                    <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sig</span><span class="p">[</span><span class="n">block</span><span class="p">],</span> <span class="n">fft_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">))[:</span><span class="n">n_freq</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="n">psd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sig</span><span class="p">[</span><span class="n">block</span><span class="p">],</span> <span class="n">fft_length</span><span class="p">,</span>
+                                            <span class="mi">0</span><span class="p">))[:</span><span class="n">n_freq</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
                 <span class="n">count</span> <span class="o">=</span> <span class="n">count</span> <span class="o">+</span> <span class="mi">1</span>
                 <span class="n">block</span> <span class="o">=</span> <span class="n">block</span> <span class="o">+</span> <span class="n">step</span>
             <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -283,6 +279,9 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">count</span>
             <span class="n">psd</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*=</span> <span class="n">scale</span>
+
+        <span class="k">if</span> <span class="n">mean_psd</span><span class="p">:</span>
+            <span class="n">psd</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">psd</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">hold</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">psd</span> <span class="o">=</span> <span class="p">[]</span>
@@ -407,8 +406,7 @@
 <span class="sd">    donorm : boolean</span>
 <span class="sd">        If True, the amplitude is normalized</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="Coherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Coherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Coherence.html#pactools.utils.spectrum.Coherence.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Coherence</span><span class="p">,</span>
               <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">block_length</span><span class="o">=</span><span class="n">block_length</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="n">fft_length</span><span class="p">,</span>
@@ -459,13 +457,13 @@
             <span class="k">while</span> <span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n_points</span><span class="p">:</span>
 
                 <span class="k">for</span> <span class="n">i_a</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_signals_a</span><span class="p">):</span>
-                    <span class="n">F_a</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs_a</span><span class="p">[</span><span class="n">i_a</span><span class="p">,</span> <span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span>
-                                 <span class="n">fft_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
+                    <span class="n">F_a</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs_a</span><span class="p">[</span><span class="n">i_a</span><span class="p">,</span> <span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span>
+                                     <span class="n">fft_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
                     <span class="n">norm_a</span><span class="p">[</span><span class="n">i_a</span><span class="p">]</span> <span class="o">+=</span> <span class="n">square</span><span class="p">(</span><span class="n">F_a</span><span class="p">)</span>
 
                     <span class="k">for</span> <span class="n">i_b</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_signals_b</span><span class="p">):</span>
-                        <span class="n">F_b</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs_b</span><span class="p">[</span><span class="n">i_b</span><span class="p">,</span> <span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span>
-                                     <span class="n">fft_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
+                        <span class="n">F_b</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs_b</span><span class="p">[</span><span class="n">i_b</span><span class="p">,</span> <span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span>
+                                         <span class="n">fft_length</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
                         <span class="c1"># compute only once</span>
                         <span class="k">if</span> <span class="n">i_a</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                             <span class="n">norm_b</span><span class="p">[</span><span class="n">i_b</span><span class="p">]</span> <span class="o">+=</span> <span class="n">square</span><span class="p">(</span><span class="n">F_b</span><span class="p">)</span>
@@ -520,8 +518,7 @@
 <span class="sd">    donorm : boolean</span>
 <span class="sd">        If True, the amplitude is normalized</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="Bicoherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Bicoherence.__init__"><a class="viewcode-back" href="../../../generated/pactools.utils.spectrum.Bicoherence.html#pactools.utils.spectrum.Bicoherence.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_length</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">fft_length</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">wfunc</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">hamming</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mf">1.</span><span class="p">):</span>
 
         <span class="nb">super</span><span class="p">(</span><span class="n">Bicoherence</span><span class="p">,</span>
@@ -564,8 +561,8 @@
         <span class="k">for</span> <span class="n">i_epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_epochs</span><span class="p">):</span>
             <span class="n">block</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">block_length</span><span class="p">)</span>
             <span class="k">while</span> <span class="n">block</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">n_points</span><span class="p">:</span>
-                <span class="n">F</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs</span><span class="p">[</span><span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span> <span class="n">fft_length</span><span class="p">,</span>
-                           <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
+                <span class="n">F</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">window</span> <span class="o">*</span> <span class="n">sigs</span><span class="p">[</span><span class="n">i_epoch</span><span class="p">,</span> <span class="n">block</span><span class="p">],</span> <span class="n">fft_length</span><span class="p">,</span>
+                               <span class="mi">0</span><span class="p">)[:</span><span class="n">n_freq</span><span class="p">]</span>
                 <span class="n">F1</span> <span class="o">=</span> <span class="n">F</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
                 <span class="n">F2</span> <span class="o">=</span> <span class="n">F1</span><span class="o">.</span><span class="n">T</span>
                 <span class="n">mask</span> <span class="o">=</span> <span class="n">hankel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_freq</span><span class="p">))</span>
@@ -683,9 +680,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -694,11 +689,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -711,37 +706,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

@@ -1,5 +1,5 @@
-pactools\.utils\.fir\.LowPassFilter
-===================================
+pactools.utils.fir.LowPassFilter
+================================
 
 .. currentmodule:: pactools.utils.fir
 

@@ -17,43 +17,38 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -100,7 +95,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">pactools</a>
@@ -108,9 +103,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -140,8 +136,6 @@
     
       <li class="wy-breadcrumbs-aside">
         
-            
-        
       </li>
     
   </ul>
@@ -158,20 +152,20 @@
 <span class="kn">import</span> <span class="nn">matplotlib</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="k">import</span> <span class="n">interp1d</span><span class="p">,</span> <span class="n">interp2d</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span><span class="p">,</span> <span class="n">interp2d</span>
 
-<span class="kn">from</span> <span class="nn">.dar_model.base_dar</span> <span class="k">import</span> <span class="n">BaseDAR</span>
-<span class="kn">from</span> <span class="nn">.dar_model.dar</span> <span class="k">import</span> <span class="n">DAR</span>
-<span class="kn">from</span> <span class="nn">.dar_model.preprocess</span> <span class="k">import</span> <span class="n">multiple_extract_driver</span>
-<span class="kn">from</span> <span class="nn">.utils.parallel</span> <span class="k">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
-<span class="kn">from</span> <span class="nn">.utils.progress_bar</span> <span class="k">import</span> <span class="n">ProgressBar</span>
-<span class="kn">from</span> <span class="nn">.utils.spectrum</span> <span class="k">import</span> <span class="n">Bicoherence</span><span class="p">,</span> <span class="n">Coherence</span>
-<span class="kn">from</span> <span class="nn">.utils.maths</span> <span class="k">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">argmax_2d</span><span class="p">,</span> <span class="n">next_power2</span>
-<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_random_state</span>
-<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="k">import</span> <span class="n">check_consistent_shape</span><span class="p">,</span> <span class="n">check_is_fitted</span>
-<span class="kn">from</span> <span class="nn">.utils.viz</span> <span class="k">import</span> <span class="n">add_colorbar</span>
-<span class="kn">from</span> <span class="nn">.bandpass_filter</span> <span class="k">import</span> <span class="n">multiple_band_pass</span>
-<span class="kn">from</span> <span class="nn">.mne_api</span> <span class="k">import</span> <span class="n">MaskIterator</span><span class="p">,</span> <span class="n">_check_mne</span>
+<span class="kn">from</span> <span class="nn">.dar_model.base_dar</span> <span class="kn">import</span> <span class="n">BaseDAR</span>
+<span class="kn">from</span> <span class="nn">.dar_model.dar</span> <span class="kn">import</span> <span class="n">DAR</span>
+<span class="kn">from</span> <span class="nn">.dar_model.preprocess</span> <span class="kn">import</span> <span class="n">multiple_extract_driver</span>
+<span class="kn">from</span> <span class="nn">.utils.parallel</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span>
+<span class="kn">from</span> <span class="nn">.utils.progress_bar</span> <span class="kn">import</span> <span class="n">ProgressBar</span>
+<span class="kn">from</span> <span class="nn">.utils.spectrum</span> <span class="kn">import</span> <span class="n">Bicoherence</span><span class="p">,</span> <span class="n">Coherence</span>
+<span class="kn">from</span> <span class="nn">.utils.maths</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">argmax_2d</span><span class="p">,</span> <span class="n">next_power2</span>
+<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="kn">import</span> <span class="n">check_array</span><span class="p">,</span> <span class="n">check_random_state</span>
+<span class="kn">from</span> <span class="nn">.utils.validation</span> <span class="kn">import</span> <span class="n">check_consistent_shape</span><span class="p">,</span> <span class="n">check_is_fitted</span>
+<span class="kn">from</span> <span class="nn">.utils.viz</span> <span class="kn">import</span> <span class="n">add_colorbar</span>
+<span class="kn">from</span> <span class="nn">.bandpass_filter</span> <span class="kn">import</span> <span class="n">multiple_band_pass</span>
+<span class="kn">from</span> <span class="nn">.mne_api</span> <span class="kn">import</span> <span class="n">MaskIterator</span><span class="p">,</span> <span class="n">_check_mne</span>
 
 <span class="n">N_BINS_TORT</span> <span class="o">=</span> <span class="mi">18</span>
 
@@ -276,7 +270,7 @@
 <span class="sd">    &gt;&gt;&gt; comod_array = c.comod_</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Comodulogram.__init__"><a class="viewcode-back" href="../../generated/pactools.Comodulogram.html#pactools.Comodulogram.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+<div class="viewcode-block" id="Comodulogram.__init__"><a class="viewcode-back" href="../../generated/pactools.Comodulogram.html#pactools.Comodulogram.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fs</span><span class="p">,</span> <span class="n">low_fq_range</span><span class="p">,</span> <span class="n">low_fq_width</span><span class="o">=</span><span class="mf">2.</span><span class="p">,</span> <span class="n">high_fq_range</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
                  <span class="n">high_fq_width</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;tort&#39;</span><span class="p">,</span> <span class="n">n_surrogates</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                  <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">progress_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax_special</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                  <span class="n">minimum_shift</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">coherence_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span>
@@ -366,9 +360,9 @@
         <span class="n">check_consistent_shape</span><span class="p">(</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">)</span>
 
         <span class="c1"># check the masks</span>
-        <span class="n">multiple_masks</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span>
-                          <span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">MaskIterator</span><span class="p">)</span> <span class="ow">or</span>
-                          <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">mask</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="n">multiple_masks</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+                          <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">MaskIterator</span><span class="p">)</span>
+                          <span class="ow">or</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">mask</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">3</span><span class="p">))</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">multiple_masks</span><span class="p">:</span>
             <span class="n">mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">mask</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">MaskIterator</span><span class="p">):</span>
@@ -742,8 +736,8 @@
                 <span class="n">save_vars</span><span class="p">[</span><span class="s1">&#39;random_state_state_&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rs</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">()</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">:</span>
                 <span class="n">save_vars</span><span class="p">[</span><span class="s1">&#39;progress_bar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="n">write_hdf5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">save_vars</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;comodulogram&#39;</span><span class="p">,</span>
-                   <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">slash</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span></div>
+        <span class="n">write_hdf5</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">save_vars</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;comodulogram&#39;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+                   <span class="n">slash</span><span class="o">=</span><span class="s1">&#39;replace&#39;</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_comodulogram</span><span class="p">(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">filtered_low</span><span class="p">,</span> <span class="n">filtered_high</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span>
@@ -793,7 +787,9 @@
         <span class="c1"># preproces the phase array</span>
         <span class="k">if</span> <span class="n">estimator</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;tort&#39;</span><span class="p">:</span>
             <span class="n">n_bins</span> <span class="o">=</span> <span class="n">N_BINS_TORT</span>
-            <span class="n">phase_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">n_bins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># make sure edge case for right edge is included</span>
+            <span class="n">eps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">eps</span> <span class="o">*</span> <span class="mi">2</span>
+            <span class="n">phase_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">eps</span><span class="p">,</span> <span class="n">n_bins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
             <span class="c1"># get the indices of the bins to which each value in input belongs</span>
             <span class="n">phase_preprocessed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">phase_bins</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="k">elif</span> <span class="n">estimator</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;penny&#39;</span><span class="p">:</span>
@@ -1109,7 +1105,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># hack to call only once extract</span>
         <span class="n">high_sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">high_sig</span><span class="p">)</span>
-        <span class="n">sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">]</span>
+        <span class="n">sigs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="n">high_sig</span><span class="p">,</span> <span class="n">low_sig</span><span class="p">]</span>
 
     <span class="n">generator</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">delayed</span><span class="p">(</span><span class="n">_driven_comodulogram_column</span><span class="p">)(</span><span class="n">estimator</span><span class="p">,</span> <span class="n">filtered_signals</span><span class="p">,</span>
@@ -1162,10 +1158,10 @@
         <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
             <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low_imag</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">sigin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">[</span><span class="n">n_epochs</span><span class="p">:])</span>
-        <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[:</span><span class="n">n_epochs</span><span class="p">])</span>
+        <span class="n">sigin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_high</span><span class="p">[:</span><span class="n">n_epochs</span><span class="p">])</span>
+        <span class="n">sigdriv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low</span><span class="p">[</span><span class="n">n_epochs</span><span class="p">:])</span>
         <span class="k">if</span> <span class="n">extract_complex</span><span class="p">:</span>
-            <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low_imag</span><span class="p">[:</span><span class="n">n_epochs</span><span class="p">])</span>
+            <span class="n">sigdriv_imag</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">filtered_low_imag</span><span class="p">[</span><span class="n">n_epochs</span><span class="p">:])</span>
 
     <span class="n">sigin</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">sigin</span><span class="p">)</span>
 
@@ -1270,9 +1266,7 @@
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -1281,11 +1275,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -1298,37 +1292,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

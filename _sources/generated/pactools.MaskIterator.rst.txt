@@ -1,0 +1,30 @@
+pactools.MaskIterator
+=====================
+
+.. currentmodule:: pactools
+
+.. autoclass:: MaskIterator
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+       :nosignatures:
+   
+      ~MaskIterator.__init__
+      ~MaskIterator.next
+   
+   
+
+   
+   
+   
+
+.. include:: backreferences/pactools.MaskIterator.examples
+
+.. raw:: html
+
+    <div class="clearer"></div>

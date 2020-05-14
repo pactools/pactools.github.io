@@ -17,43 +17,38 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Module code" href="../index.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -100,7 +95,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">pactools</a>
@@ -108,9 +103,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -139,8 +135,6 @@
     
     
       <li class="wy-breadcrumbs-aside">
-        
-            
         
       </li>
     
@@ -204,8 +198,8 @@
 <span class="sd">        each event index. If a list of floats is given, then PAC is calculated</span>
 <span class="sd">        for each pair of `tmin` and `tmax`. Defaults to `max(raw.times)`.</span>
 
-<span class="sd">    Attributes</span>
-<span class="sd">    ----------</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
 <span class="sd">    low_sig : array, shape (1, n_points)</span>
 <span class="sd">        Input data for the phase signal</span>
 
@@ -246,8 +240,36 @@
     <span class="k">return</span> <span class="n">low_sig</span><span class="p">,</span> <span class="n">high_sig</span><span class="p">,</span> <span class="n">mask</span></div>
 
 
-<span class="k">class</span> <span class="nc">MaskIterator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="MaskIterator"><a class="viewcode-back" href="../../generated/pactools.MaskIterator.html#pactools.MaskIterator">[docs]</a><span class="k">class</span> <span class="nc">MaskIterator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Iterator that creates the masks one at a time.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    events : array, shape (n_events, 3) | array, shape (n_events,) | None</span>
+<span class="sd">        MNE events array. To be supplied if data is 2D and output should be</span>
+<span class="sd">        split by events. In this case, `tmin` and `tmax` must be provided. If</span>
+<span class="sd">        `ndim == 1`, it is assumed to be event indices, and all events will be</span>
+<span class="sd">        grouped together. Otherwise, events will be grouped along the third</span>
+<span class="sd">        dimension.</span>
+
+<span class="sd">    tmin : float | list of floats, shape (n_windows, ) | None</span>
+<span class="sd">        If `events` is not provided, it is the start time to use in `raw`.</span>
+<span class="sd">        If `events` is provided, it is the time (in seconds) to include before</span>
+<span class="sd">        each event index. If a list of floats is given, then PAC is calculated</span>
+<span class="sd">        for each pair of `tmin` and `tmax`. Defaults to `min(raw.times)`.</span>
+
+<span class="sd">    tmax : float | list of floats, shape (n_windows, ) | None</span>
+<span class="sd">        If `events` is not provided, it is the stop time to use in `raw`.</span>
+<span class="sd">        If `events` is provided, it is the time (in seconds) to include after</span>
+<span class="sd">        each event index. If a list of floats is given, then PAC is calculated</span>
+<span class="sd">        for each pair of `tmin` and `tmax`. Defaults to `max(raw.times)`.</span>
+
+<span class="sd">    n_points : int</span>
+<span class="sd">        The length of each mask.</span>
+
+<span class="sd">    fs : float</span>
+<span class="sd">        The sampling frequency.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -258,13 +280,13 @@
 <span class="sd">    ...     pass</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
+<div class="viewcode-block" id="MaskIterator.__init__"><a class="viewcode-back" href="../../generated/pactools.MaskIterator.html#pactools.MaskIterator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">tmin</span><span class="p">,</span> <span class="n">tmax</span><span class="p">,</span> <span class="n">n_points</span><span class="p">,</span> <span class="n">fs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">events</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span> <span class="o">=</span> <span class="n">tmin</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tmax</span> <span class="o">=</span> <span class="n">tmax</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">n_points</span> <span class="o">=</span> <span class="n">n_points</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="nf">_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tmin</span><span class="p">)</span>
@@ -285,13 +307,20 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_n_iter</span> <span class="o">=</span> <span class="n">n_windows</span> <span class="o">*</span> <span class="n">n_events</span>
 
-    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n_iter</span>
 
     <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns mask.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        mask : array | shape (n_points, )</span>
+<span class="sd">            The Boolean mask for the next event.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">event_names</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -317,13 +346,11 @@
                         <span class="n">stop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">event</span> <span class="o">+</span> <span class="n">tmax</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">)</span>
                     <span class="n">mask</span><span class="p">[:,</span> <span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
 
-                <span class="k">yield</span> <span class="n">mask</span>
+                <span class="k">yield</span> <span class="n">mask</span></div>
 </pre></div>
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -332,11 +359,11 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -349,37 +376,15 @@
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

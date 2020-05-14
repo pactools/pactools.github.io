@@ -17,45 +17,40 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="pactools 0.1 documentation" href="../index.html"/>
-        <link rel="up" title="API Documentation" href="../api.html"/>
-        <link rel="next" title="pactools.dar_model.StableDAR" href="pactools.dar_model.StableDAR.html"/>
-        <link rel="prev" title="pactools.MultipleArray" href="pactools.MultipleArray.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pactools.dar_model.StableDAR" href="pactools.dar_model.StableDAR.html" />
+    <link rel="prev" title="pactools.MultipleArray" href="pactools.MultipleArray.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -108,7 +103,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">pactools</a>
@@ -116,9 +111,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -164,134 +160,141 @@
             
   <div class="section" id="pactools-dar-model-dar">
 <h1>pactools.dar_model.DAR<a class="headerlink" href="#pactools-dar-model-dar" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
+<dl class="py class">
 <dt id="pactools.dar_model.DAR">
-<em class="property">class </em><code class="descclassname">pactools.dar_model.</code><code class="descname">DAR</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em>, <em>max_ordar=None</em>, <em>warn_gain_estimation_failure=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/dar.html#DAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.DAR" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pactools.dar_model.</code><code class="sig-name descname">DAR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ordar</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">ordriv</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">criterion</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">normalize</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">ortho</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">center</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">iter_gain</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">eps_gain</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">progress_bar</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_driver_phase</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">max_ordar</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">warn_gain_estimation_failure</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pactools/dar_model/dar.html#DAR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pactools.dar_model.DAR" title="Permalink to this definition">¶</a></dt>
 <dd><p>A driven auto-regressive (DAR) model, as described in [1].</p>
 <p>This model uses the simple parametrization:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[y(t) + \sum_{i=1}^p a_i(t) y(t-i)= \sigma(t)\varepsilon(t)\]</div>
 <p>with:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[a_i(t) = \sum_{k=0}^m a_{ik} x(t)^k\]</div>
 <p>and:</p>
-<div class="math">
+<div class="math notranslate nohighlight">
 \[\log{\sigma(t)} = \sum_{k=0}^m b_{k} x(t)^k\]</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ordar</strong> : int &gt;= 0</p>
-<blockquote>
-<div><p>Order of the autoregressive model (p)</p>
-</div></blockquote>
-<p><strong>ordriv</strong> : int &gt;= 0</p>
-<blockquote>
-<div><p>Order of the taylor expansion for sigdriv (m)</p>
-</div></blockquote>
-<p><strong>criterion</strong> : None or string in (‘bic’, ‘aic’, ‘logl’)</p>
-<blockquote>
-<div><p>If not None, select the criterion used for model selection.</p>
-</div></blockquote>
-<p><strong>normalize</strong> : boolean</p>
-<blockquote>
-<div><p>If True, the basis vectors are normalized to unit energy.</p>
-</div></blockquote>
-<p><strong>ortho</strong> : boolean</p>
-<blockquote>
-<div><p>If True, the basis vectors are orthogonalized.</p>
-</div></blockquote>
-<p><strong>center</strong> : boolean</p>
-<blockquote>
-<div><p>If True, we subtract the mean in sigin</p>
-</div></blockquote>
-<p><strong>iter_gain</strong> : int &gt;=0</p>
-<blockquote>
-<div><p>Maximum number of iteration in gain estimation</p>
-</div></blockquote>
-<p><strong>eps_gain</strong> : float &gt;= 0</p>
-<blockquote>
-<div><p>Threshold to stop iterations in gain estimation</p>
-</div></blockquote>
-<p><strong>use_driver_phase</strong> : boolean</p>
-<blockquote class="last">
-<div><p>If True, we divide the driver by its instantaneous amplitude.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ordar</strong><span class="classifier">int &gt;= 0</span></dt><dd><p>Order of the autoregressive model (p)</p>
+</dd>
+<dt><strong>ordriv</strong><span class="classifier">int &gt;= 0</span></dt><dd><p>Order of the taylor expansion for sigdriv (m)</p>
+</dd>
+<dt><strong>criterion</strong><span class="classifier">None or string in (‘bic’, ‘aic’, ‘logl’)</span></dt><dd><p>If not None, select the criterion used for model selection.</p>
+</dd>
+<dt><strong>normalize</strong><span class="classifier">boolean</span></dt><dd><p>If True, the basis vectors are normalized to unit energy.</p>
+</dd>
+<dt><strong>ortho</strong><span class="classifier">boolean</span></dt><dd><p>If True, the basis vectors are orthogonalized.</p>
+</dd>
+<dt><strong>center</strong><span class="classifier">boolean</span></dt><dd><p>If True, we subtract the mean in sigin</p>
+</dd>
+<dt><strong>iter_gain</strong><span class="classifier">int &gt;=0</span></dt><dd><p>Maximum number of iteration in gain estimation</p>
+</dd>
+<dt><strong>eps_gain</strong><span class="classifier">float &gt;= 0</span></dt><dd><p>Threshold to stop iterations in gain estimation</p>
+</dd>
+<dt><strong>use_driver_phase</strong><span class="classifier">boolean</span></dt><dd><p>If True, we divide the driver by its instantaneous amplitude.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 <p class="rubric">References</p>
 <p>[1] Dupre la Tour, T. , Tallot, L., Grabot, L., Doyere, V., van Wassenhove,
 V., Grenier, Y., &amp; Gramfort, A. (2017). Non-linear Auto-Regressive Models
 for Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
-<dl class="method">
+<dl class="py method">
 <dt id="pactools.dar_model.DAR.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>ordar=1</em>, <em>ordriv=0</em>, <em>criterion=None</em>, <em>normalize=True</em>, <em>ortho=True</em>, <em>center=True</em>, <em>iter_gain=10</em>, <em>eps_gain=0.0001</em>, <em>progress_bar=False</em>, <em>use_driver_phase=False</em>, <em>max_ordar=None</em>, <em>warn_gain_estimation_failure=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.DAR.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">ordar</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">ordriv</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">criterion</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">normalize</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">ortho</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">center</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">iter_gain</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">eps_gain</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">progress_bar</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">use_driver_phase</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">max_ordar</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">warn_gain_estimation_failure</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#pactools.dar_model.DAR.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
+</dd></dl>
 
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-default">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="#pactools.dar_model.DAR.__init__" title="pactools.dar_model.DAR.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([ordar,&nbsp;ordriv,&nbsp;criterion,&nbsp;…])</td>
-<td></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pactools.dar_model.DAR.__init__" title="pactools.dar_model.DAR.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(self[, ordar, ordriv, criterion, …])</p></td>
+<td><p>Initialize self.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code>()</td>
-<td>Creates a (deep) copy of a model</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">copy</span></code>(self)</p></td>
+<td><p>Creates a (deep) copy of a model</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">degrees_of_freedom</span></code>()</td>
-<td>Number of parameters of the fitted model</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">degrees_of_freedom</span></code>(self)</p></td>
+<td><p>Number of parameters of the fitted model</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">fit</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;sigdriv_imag,&nbsp;…])</td>
-<td>Estimate the model from input signals</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code>(self, sigin, sigdriv, fs[, …])</p></td>
+<td><p>Estimate the model from input signals</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">fit_transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;…])</td>
-<td>Same as fit, but returns the residual instead of the model object</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit_transform</span></code>(self, sigin, sigdriv, fs[, …])</p></td>
+<td><p>Same as fit, but returns the residual instead of the model object</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_criterion</span></code>(criterion[,&nbsp;train])</td>
-<td>Get the criterion (logL, AIC, BIC) of the fitted model</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_criterion</span></code>(self, criterion[, train])</p></td>
+<td><p>Get the criterion (logL, AIC, BIC) of the fitted model</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_title</span></code>([name,&nbsp;criterion])</td>
-<td>Get the name and orders of the model</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_title</span></code>(self[, name, criterion])</p></td>
+<td><p>Get the name and orders of the model</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">likelihood_ratio</span></code>(ar0)</td>
-<td>Computation of the likelihood ratio test</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">likelihood_ratio</span></code>(self, ar0)</p></td>
+<td><p>Computation of the likelihood ratio test</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">plot</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;vmin,&nbsp;vmax,&nbsp;ax,&nbsp;…])</td>
-<td>Plot the PSD as a function of the driver</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code>(self[, title, frange, mode, vmin, …])</p></td>
+<td><p>Plot the PSD as a function of the driver</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">plot_lines</span></code>([title,&nbsp;frange,&nbsp;mode,&nbsp;ax,&nbsp;xlim,&nbsp;…])</td>
-<td>Plot the PSD as a function of the driver</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_lines</span></code>(self[, title, frange, mode, ax, …])</p></td>
+<td><p>Plot the PSD as a function of the driver</p></td>
 </tr>
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">transform</span></code>(sigin,&nbsp;sigdriv,&nbsp;fs[,&nbsp;…])</td>
-<td>Whiten a signal with the already fitted model</td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">transform</span></code>(self, sigin, sigdriv, fs[, …])</p></td>
+<td><p>Whiten a signal with the already fitted model</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">aic</span></code></p></td>
+<td><p>Akaike information criterion (AIC) of the model</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bic</span></code></p></td>
+<td><p>Bayesian information criterion (BIC) of the model</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">logl</span></code></p></td>
+<td><p>Log likelihood of the model</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ordar_</span></code></p></td>
+<td><p>AR order of the model, different from self.ordar if a model selection has been performed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">tmax</span></code></p></td>
+<td><p>Scaling of self.logl, self.aic, and self.bic</p></td>
 </tr>
 </tbody>
 </table>
 </dd></dl>
 
 <div class="section" id="examples-using-pactools-dar-model-dar">
-<h2>Examples using <code class="docutils literal"><span class="pre">pactools.dar_model.DAR</span></code><a class="headerlink" href="#examples-using-pactools-dar-model-dar" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip="It also shows the comodulogram computed with a DAR model. "><div class="figure" id="id1">
+<h2>Examples using <code class="docutils literal notranslate"><span class="pre">pactools.dar_model.DAR</span></code><a class="headerlink" href="#examples-using-pactools-dar-model-dar" title="Permalink to this headline">¶</a></h2>
+<div class="sphx-glr-thumbcontainer" tooltip="It also shows the comodulogram computed with a DAR model."><div class="figure align-default" id="id1">
 <img alt="../_images/sphx_glr_plot_dar_model_thumb.png" src="../_images/sphx_glr_plot_dar_model_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_dar_model.html#sphx-glr-auto-examples-plot-dar-model-py"><span class="std std-ref">Fitting a DAR model</span></a></span></p>
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_dar_model.html#sphx-glr-auto-examples-plot-dar-model-py"><span class="std std-ref">Fitting a DAR model</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
 </div>
-</div><div class="sphx-glr-thumbcontainer" tooltip="This example disantangles the two distinct notions of phase shift and temporal delay in phase-a..."><div class="figure" id="id2">
+</div><div class="sphx-glr-thumbcontainer" tooltip="It creates an artificial signal with phase-amplitude coupling (PAC), fits a DAR model over a gr..."><div class="figure align-default" id="id2">
+<img alt="../_images/sphx_glr_plot_grid_search_thumb.png" src="../_images/sphx_glr_plot_grid_search_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_grid_search.html#sphx-glr-auto-examples-plot-grid-search-py"><span class="std std-ref">Grid-search and cross-validation</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example disantangles the two distinct notions of phase shift and temporal delay in phase-a..."><div class="figure align-default" id="id3">
 <img alt="../_images/sphx_glr_plot_phase_delay_thumb.png" src="../_images/sphx_glr_plot_phase_delay_thumb.png" />
-<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_phase_delay.html#sphx-glr-auto-examples-plot-phase-delay-py"><span class="std std-ref">Phase shift and temporal delay in PAC</span></a></span></p>
+<p class="caption"><span class="caption-text"><a class="reference internal" href="../auto_examples/plot_phase_delay.html#sphx-glr-auto-examples-plot-phase-delay-py"><span class="std std-ref">Phase shift and temporal delay in PAC</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
 </div>
 </div><div class="clearer"></div></div>
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -300,7 +303,7 @@ for Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
         <a href="pactools.dar_model.StableDAR.html" class="btn btn-neutral float-right" title="pactools.dar_model.StableDAR" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="pactools.MultipleArray.html" class="btn btn-neutral" title="pactools.MultipleArray" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="pactools.MultipleArray.html" class="btn btn-neutral float-left" title="pactools.MultipleArray" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -309,11 +312,11 @@ for Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2017, Tom Dupre la Tour.
+        &copy; Copyright 2017, Tom Dupre la Tour
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -326,37 +329,15 @@ for Cross-Frequency Coupling in Neural Time Series. bioRxiv, 159731.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

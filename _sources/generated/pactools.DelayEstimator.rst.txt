@@ -1,5 +1,5 @@
-pactools\.DelayEstimator
-========================
+pactools.DelayEstimator
+=======================
 
 .. currentmodule:: pactools
 

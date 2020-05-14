@@ -1,5 +1,5 @@
-pactools\.dar\_model\.extract\_driver
-=====================================
+pactools.dar\_model.extract\_driver
+===================================
 
 .. currentmodule:: pactools.dar_model
 

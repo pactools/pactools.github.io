@@ -1,6 +1,12 @@
+.. only:: html
 
+    .. note::
+        :class: sphx-glr-download-link-note
 
-.. _sphx_glr_auto_examples_plot_surrogate_analysis.py:
+        Click :ref:`here <sphx_glr_download_auto_examples_plot_surrogate_analysis.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_auto_examples_plot_surrogate_analysis.py:
 
 
 Surrogate analysis
@@ -25,8 +31,7 @@ two different methods:
 maxima.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
     import numpy as np
     import matplotlib.pyplot as plt
@@ -40,11 +45,11 @@ maxima.
 
 
 
+
 Let's first create an artificial signal with PAC.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     fs = 200.  # Hz
@@ -65,11 +70,11 @@ Let's first create an artificial signal with PAC.
 
 
 
+
 Then, let's define the range of low frequency, and the PAC metric used.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     low_fq_range = np.linspace(1, 10, 50)
@@ -81,15 +86,16 @@ Then, let's define the range of low frequency, and the PAC metric used.
 
 
 
+
 We also choose the number of comodulograms computed in the surrogate
 analysis. A good rule of thumb is 10 / p_value. Example: 10 / 0.05 = 200.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     n_surrogates = 200
+
 
 
 
@@ -102,11 +108,11 @@ computation can be slow. If you have multiple cores in your CPU, you can
 leverage them using the parameter `n_jobs` > 1.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     n_jobs = 1
+
 
 
 
@@ -119,8 +125,7 @@ then call the method `fit`. Adding the surrogate analysis is as simple as
 adding the `n_surrogates` parameter.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     estimator = Comodulogram(fs=fs, low_fq_range=low_fq_range,
@@ -135,10 +140,14 @@ adding the `n_surrogates` parameter.
 
 .. rst-class:: sphx-glr-script-out
 
- Out::
+ Out:
 
-    [                                        ] 0% | 0.00 sec | comodulogram: DAR(10, 1)     [                                        ] 2% | 2.13 sec | comodulogram: DAR(10, 1)     [.                                       ] 4% | 4.18 sec | comodulogram: DAR(10, 1)     [..                                      ] 6% | 6.21 sec | comodulogram: DAR(10, 1)     [...                                     ] 8% | 8.28 sec | comodulogram: DAR(10, 1)     [....                                    ] 10% | 10.33 sec | comodulogram: DAR(10, 1)     [....                                    ] 12% | 12.39 sec | comodulogram: DAR(10, 1)     [.....                                   ] 14% | 14.45 sec | comodulogram: DAR(10, 1)     [......                                  ] 16% | 16.52 sec | comodulogram: DAR(10, 1)     [.......                                 ] 18% | 18.58 sec | comodulogram: DAR(10, 1)     [........                                ] 20% | 20.85 sec | comodulogram: DAR(10, 1)     [........                                ] 22% | 22.98 sec | comodulogram: DAR(10, 1)     [.........                               ] 24% | 25.02 sec | comodulogram: DAR(10, 1)     [..........                              ] 26% | 27.13 sec | comodulogram: DAR(10, 1)     [...........                             ] 28% | 29.23 sec | comodulogram: DAR(10, 1)     [............                            ] 30% | 31.31 sec | comodulogram: DAR(10, 1)     [............                            ] 32% | 33.41 sec | comodulogram: DAR(10, 1)     [.............                           ] 34% | 35.72 sec | comodulogram: DAR(10, 1)     [..............                          ] 36% | 38.31 sec | comodulogram: DAR(10, 1)     [...............                         ] 38% | 40.51 sec | comodulogram: DAR(10, 1)     [................                        ] 40% | 42.55 sec | comodulogram: DAR(10, 1)     [................                        ] 42% | 44.58 sec | comodulogram: DAR(10, 1)     [.................                       ] 44% | 46.72 sec | comodulogram: DAR(10, 1)     [..................                      ] 46% | 48.78 sec | comodulogram: DAR(10, 1)     [...................                     ] 48% | 51.00 sec | comodulogram: DAR(10, 1)     [....................                    ] 50% | 53.27 sec | comodulogram: DAR(10, 1)     [....................                    ] 52% | 55.70 sec | comodulogram: DAR(10, 1)     [.....................                   ] 54% | 58.19 sec | comodulogram: DAR(10, 1)     [......................                  ] 56% | 60.50 sec | comodulogram: DAR(10, 1)     [.......................                 ] 58% | 62.62 sec | comodulogram: DAR(10, 1)     [........................                ] 60% | 64.70 sec | comodulogram: DAR(10, 1)     [........................                ] 62% | 66.79 sec | comodulogram: DAR(10, 1)     [.........................               ] 64% | 69.15 sec | comodulogram: DAR(10, 1)     [..........................              ] 66% | 71.61 sec | comodulogram: DAR(10, 1)     [...........................             ] 68% | 73.92 sec | comodulogram: DAR(10, 1)     [............................            ] 70% | 76.26 sec | comodulogram: DAR(10, 1)     [............................            ] 72% | 78.55 sec | comodulogram: DAR(10, 1)     [.............................           ] 74% | 80.70 sec | comodulogram: DAR(10, 1)     [..............................          ] 76% | 82.75 sec | comodulogram: DAR(10, 1)     [...............................         ] 78% | 84.83 sec | comodulogram: DAR(10, 1)     [................................        ] 80% | 86.93 sec | comodulogram: DAR(10, 1)     [................................        ] 82% | 88.99 sec | comodulogram: DAR(10, 1)     [.................................       ] 84% | 91.33 sec | comodulogram: DAR(10, 1)     [..................................      ] 86% | 93.52 sec | comodulogram: DAR(10, 1)     [...................................     ] 88% | 95.62 sec | comodulogram: DAR(10, 1)     [....................................    ] 90% | 97.65 sec | comodulogram: DAR(10, 1)     [....................................    ] 92% | 99.68 sec | comodulogram: DAR(10, 1)     [.....................................   ] 94% | 101.74 sec | comodulogram: DAR(10, 1)     [......................................  ] 96% | 104.30 sec | comodulogram: DAR(10, 1)     [....................................... ] 98% | 106.60 sec | comodulogram: DAR(10, 1)     [........................................] 100% | 108.69 sec | comodulogram: DAR(10, 1) 
-    [........................................] 100% | 108.69 sec | comodulogram: DAR(10, 1)
+ .. code-block:: none
+
+    [                                        ] 0% | 0.00 sec | comodulogram: DAR(10, 1)     [                                        ] 2% | 2.92 sec | comodulogram: DAR(10, 1)     [.                                       ] 4% | 5.85 sec | comodulogram: DAR(10, 1)     [..                                      ] 6% | 8.78 sec | comodulogram: DAR(10, 1)     [...                                     ] 8% | 11.76 sec | comodulogram: DAR(10, 1)     [....                                    ] 10% | 14.80 sec | comodulogram: DAR(10, 1)     [....                                    ] 12% | 17.78 sec | comodulogram: DAR(10, 1)     [.....                                   ] 14% | 20.66 sec | comodulogram: DAR(10, 1)     [......                                  ] 16% | 23.62 sec | comodulogram: DAR(10, 1)     [.......                                 ] 18% | 26.81 sec | comodulogram: DAR(10, 1)     [........                                ] 20% | 30.32 sec | comodulogram: DAR(10, 1)     [........                                ] 22% | 35.13 sec | comodulogram: DAR(10, 1)     [.........                               ] 24% | 40.81 sec | comodulogram: DAR(10, 1)     [..........                              ] 26% | 44.83 sec | comodulogram: DAR(10, 1)     [...........                             ] 28% | 48.69 sec | comodulogram: DAR(10, 1)     [............                            ] 30% | 51.91 sec | comodulogram: DAR(10, 1)     [............                            ] 32% | 55.63 sec | comodulogram: DAR(10, 1)     [.............                           ] 34% | 58.93 sec | comodulogram: DAR(10, 1)     [..............                          ] 36% | 62.19 sec | comodulogram: DAR(10, 1)     [...............                         ] 38% | 65.18 sec | comodulogram: DAR(10, 1)     [................                        ] 40% | 68.08 sec | comodulogram: DAR(10, 1)     [................                        ] 42% | 71.60 sec | comodulogram: DAR(10, 1)     [.................                       ] 44% | 75.72 sec | comodulogram: DAR(10, 1)     [..................                      ] 46% | 79.59 sec | comodulogram: DAR(10, 1)     [...................                     ] 48% | 82.82 sec | comodulogram: DAR(10, 1)     [....................                    ] 50% | 86.43 sec | comodulogram: DAR(10, 1)     [....................                    ] 52% | 89.83 sec | comodulogram: DAR(10, 1)     [.....................                   ] 54% | 93.50 sec | comodulogram: DAR(10, 1)     [......................                  ] 56% | 97.07 sec | comodulogram: DAR(10, 1)     [.......................                 ] 58% | 100.72 sec | comodulogram: DAR(10, 1)     [........................                ] 60% | 103.99 sec | comodulogram: DAR(10, 1)     [........................                ] 62% | 107.60 sec | comodulogram: DAR(10, 1)     [.........................               ] 64% | 110.97 sec | comodulogram: DAR(10, 1)     [..........................              ] 66% | 114.53 sec | comodulogram: DAR(10, 1)     [...........................             ] 68% | 118.17 sec | comodulogram: DAR(10, 1)     [............................            ] 70% | 121.28 sec | comodulogram: DAR(10, 1)     [............................            ] 72% | 125.06 sec | comodulogram: DAR(10, 1)     [.............................           ] 74% | 128.19 sec | comodulogram: DAR(10, 1)     [..............................          ] 76% | 131.29 sec | comodulogram: DAR(10, 1)     [...............................         ] 78% | 134.33 sec | comodulogram: DAR(10, 1)     [................................        ] 80% | 137.74 sec | comodulogram: DAR(10, 1)     [................................        ] 82% | 141.35 sec | comodulogram: DAR(10, 1)     [.................................       ] 84% | 144.52 sec | comodulogram: DAR(10, 1)     [..................................      ] 86% | 147.83 sec | comodulogram: DAR(10, 1)     [...................................     ] 88% | 151.08 sec | comodulogram: DAR(10, 1)     [....................................    ] 90% | 154.34 sec | comodulogram: DAR(10, 1)     [....................................    ] 92% | 157.52 sec | comodulogram: DAR(10, 1)     [.....................................   ] 94% | 160.84 sec | comodulogram: DAR(10, 1)     [......................................  ] 96% | 164.17 sec | comodulogram: DAR(10, 1)     [....................................... ] 98% | 167.66 sec | comodulogram: DAR(10, 1)     [........................................] 100% | 170.84 sec | comodulogram: DAR(10, 1) 
+    [........................................] 100% | 170.84 sec | comodulogram: DAR(10, 1) 
+    <pactools.comodulogram.Comodulogram object at 0x7fb6f97287c0>
+
 
 
 Then we plot the significance level on top of the comodulogram.
@@ -164,8 +173,7 @@ This method does not assume the distribution to be Gaussian, nor suffers from
 multiple-testing issues. This is the default method in the `plot` method.
 
 
-
-.. code-block:: python
+.. code-block:: default
 
 
     fig, axs = plt.subplots(1, 2, figsize=(10, 4))
@@ -186,7 +194,17 @@ multiple-testing issues. This is the default method in the `plot` method.
 
 
 .. image:: /auto_examples/images/sphx_glr_plot_surrogate_analysis_001.png
-    :align: center
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    /home/tom/work/github/pactools/examples/plot_surrogate_analysis.py:109: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+      plt.show()
 
 
 
@@ -200,23 +218,34 @@ phase-locked to theta oscillations in human neocortex. science,
 313(5793), 1626-1628.
 
 
-**Total running time of the script:** ( 1 minutes  49.210 seconds)
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 2 minutes  51.227 seconds)
+
+
+.. _sphx_glr_download_auto_examples_plot_surrogate_analysis.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
 
 
 
-.. container:: sphx-glr-footer
-
-
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-python
 
      :download:`Download Python source code: plot_surrogate_analysis.py <plot_surrogate_analysis.py>`
 
 
 
-  .. container:: sphx-glr-download
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
 
      :download:`Download Jupyter notebook: plot_surrogate_analysis.ipynb <plot_surrogate_analysis.ipynb>`
 
-.. rst-class:: sphx-glr-signature
 
-    `Generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_
